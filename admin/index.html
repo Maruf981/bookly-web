@@ -799,6 +799,21 @@
     let currentUserId = null;
     let editingId = null;
 
+
+    function enableEnterSubmit(inputId, buttonId) {
+    document.getElementById(inputId).addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById(buttonId).click();
+      }
+    });
+  }
+
+  enableEnterSubmit("loginPassword", "btnLogin");
+  enableEnterSubmit("regPassword", "btnRegister");
+  enableEnterSubmit("forgotEmail", "btnForgot");
+  enableEnterSubmit("newPasswordInput", "btnSetNewPassword");
+
     function showToast(msg) {
       const t = document.getElementById("toast");
       t.textContent = msg;
