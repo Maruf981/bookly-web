@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <title>Личный кабинет — управление услугами</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --surface: #14171f;
+      --surface-2: #1a1e28;
+      --ink: #eef0f5;
+      --muted: #9aa1b2;
+      --faint: #5b6272;
+      --accent: #e8b23d;
+      --accent-soft: rgba(232, 178, 61, 0.10);
+      --danger: #d9564a;
+      --danger-soft: rgba(217, 86, 74, 0.10);
+      --line: #262b38;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 36px 32px;
+    }
+
+    .login-eyebrow {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .login-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 9px;
+      font-size: 14px;
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: inherit;
+      transition: border-color .15s ease, background .15s ease;
+    }
+
+    .field input::placeholder {
+      color: var(--faint);
+    }
+
+    .field input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .login-error {
+      font-size: 13px;
+      color: var(--danger);
+      margin-top: 12px;
+      display: none;
+    }
+
+    .dash {
+      display: none;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
+    }
+
+    .dash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 26px;
+    }
+
+    .dash-eyebrow {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .dash-title {
+      font-family: Georgia, serif;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .btn-logout {
+      background: none;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: 7px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .bot-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .bot-card-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .bot-status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .bot-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 7px;
+    }
+
+    .bot-status-dot.on {
+      background: var(--accent);
+    }
+
+    .bot-status-dot.off {
+      background: var(--faint);
+    }
+
+    .bot-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .bot-form.flex-col {
+      flex-direction: column;
+    }
+
+    .bot-form input {
+      flex: 1;
+      padding: 11px 13px;
+      border: 1.5px solid var(--line);
+      border-radius: 9px;
+      font-size: 13px;
+      font-family: inherit;
+      background: var(--surface-2);
+      color: var(--ink);
+      transition: border-color .15s ease, background .15s ease;
+    }
+
+    .bot-form input::placeholder {
+      color: var(--faint);
+    }
+
+    .bot-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+
+    .bot-help {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .bot-help a {
+      color: var(--accent);
+    }
+
+    .ledger {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .ledger-head {
+      display: grid;
+      grid-template-columns: 1fr 90px 80px 70px;
+      gap: 10px;
+      padding: 12px 16px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-weight: 700;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 90px 80px 70px;
+      gap: 10px;
+      align-items: center;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .row-name {
+      font-weight: 600;
+    }
+
+    .row-duration {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .row-price {
+      font-family: Georgia, serif;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .icon-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+    }
+
+    .icon-btn.danger:hover {
+      background: var(--danger-soft);
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .icon-btn.edit:hover {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .empty-state {
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .empty-state-icon {
+      font-size: 32px;
+      margin-bottom: 14px;
+      opacity: 0.7;
+    }
+
+    .empty-state-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .empty-state-text {
+      font-size: 13px;
+      color: var(--faint);
+      max-width: 280px;
+      margin: 0 auto 18px;
+      line-height: 1.5;
+    }
+
+    .add-bar {
+      margin-top: 14px;
+    }
+
+    .btn-add {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px dashed var(--line);
+      background: transparent;
+      color: var(--muted);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-add:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px 16px;
+      margin-top: 14px;
+      display: none;
+    }
+
+    .form-card.show {
+      display: block;
+    }
+
+    .input-group {
+      margin-bottom: 12px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--faint);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1.5px solid var(--line);
+      border-radius: 9px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--surface-2);
+      color: var(--ink);
+      transition: border-color .15s ease, background .15s ease;
+    }
+
+    .input-group input::placeholder {
+      color: var(--faint);
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 0;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .btn-save {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 10px 16px;
+      border-radius: 7px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ink);
+      color: #fff;
+      padding: 11px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    /* ---------- Guide modal ---------- */
+
+    .guide-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .guide-overlay.show {
+      display: flex;
+    }
+
+    .guide-modal {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 460px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .guide-header {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .guide-close {
+      position: absolute;
+      top: -4px;
+      right: 0;
+      background: none;
+      border: none;
+      color: var(--faint);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .guide-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .guide-step {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 12px;
+    }
+
+    .guide-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .guide-step-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .guide-step-text {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .guide-step-text code {
+      background: var(--surface-2);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .guide-note {
+      font-size: 12px;
+      color: var(--danger);
+      background: var(--danger-soft);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-wrap" id="loginWrap">
+    <div class="login-card">
+      <div class="login-eyebrow">Личный кабинет</div>
+      <div class="login-title">Войти</div>
+
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="you@business.com" />
+      </div>
+      <div class="field">
+        <label>Пароль</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" />
+      </div>
+
+      <button class="btn-primary" id="btnLogin">Войти</button>
+      <div class="login-error" id="loginError">Неверный email или пароль</div>
+
+      <div style="text-align:center; margin-top:14px; font-size:13px;">
+        <a href="#" id="showForgot" style="color: var(--faint); text-decoration:none;">Забыли пароль?</a>
+      </div>
+
+      <div style="text-align:center; margin-top:10px; font-size:13px; color: var(--muted);">
+        Нет аккаунта? <a href="#" id="showRegister"
+          style="color: var(--accent); font-weight:600; text-decoration:none;">Зарегистрироваться</a>
+      </div>
+    </div>
+
+    <div class="login-card" id="forgotCard" style="display:none; margin-top:16px;">
+      <div class="login-eyebrow">Восстановление доступа</div>
+      <div class="login-title">Сброс пароля</div>
+
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="forgotEmail" placeholder="you@business.com" />
+      </div>
+
+      <button class="btn-primary" id="btnForgot">Отправить ссылку</button>
+      <div class="login-error" id="forgotError"></div>
+
+      <div style="text-align:center; margin-top:16px; font-size:13px; color: var(--muted);">
+        Вспомнили пароль? <a href="#" id="showLoginFromForgot"
+          style="color: var(--accent); font-weight:600; text-decoration:none;">Войти</a>
+      </div>
+    </div>
+
+    <div class="login-card" id="newPasswordCard" style="display:none; margin-top:16px;">
+      <div class="login-eyebrow">Новый пароль</div>
+      <div class="login-title">Придумайте пароль</div>
+
+      <div class="field">
+        <label>Новый пароль</label>
+        <input type="password" id="newPasswordInput" placeholder="Минимум 6 символов" />
+      </div>
+
+      <button class="btn-primary" id="btnSetNewPassword">Сохранить пароль</button>
+      <div class="login-error" id="newPasswordError"></div>
+    </div>
+
+    <div class="login-card" id="registerCard" style="display:none; margin-top:16px;">
+      <div class="login-eyebrow">Новый бизнес</div>
+      <div class="login-title">Регистрация</div>
+
+      <div class="field">
+        <label>Название бизнеса</label>
+        <input type="text" id="regBusinessName" placeholder="Например, СТРОП" />
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="regEmail" placeholder="you@business.com" />
+      </div>
+      <div class="field">
+        <label>Пароль</label>
+        <input type="password" id="regPassword" placeholder="Минимум 6 символов" />
+      </div>
+
+      <button class="btn-primary" id="btnRegister">Создать аккаунт</button>
+      <div class="login-error" id="registerError"></div>
+
+      <div style="text-align:center; margin-top:16px; font-size:13px; color: var(--muted);">
+        Уже есть аккаунт? <a href="#" id="showLogin"
+          style="color: var(--accent); font-weight:600; text-decoration:none;">Войти</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash" id="dash">
+    <div class="dash-header">
+      <div>
+        <div class="dash-eyebrow">Личный кабинет</div>
+        <div class="dash-title">Ваши услуги</div>
+      </div>
+      <button class="btn-logout" id="btnLogout">Выйти</button>
+    </div>
+
+    <div class="bot-card">
+      <div class="bot-card-label">Ваш Telegram-бот</div>
+      <div id="botStatusView"></div>
+    </div>
+
+    <div class="ledger">
+      <div class="ledger-head">
+        <div>Услуга</div>
+        <div>Время</div>
+        <div>Цена</div>
+        <div></div>
+      </div>
+      <div id="rows"></div>
+    </div>
+
+    <div class="add-bar">
+      <button class="btn-add" id="btnShowAdd">+ Добавить услугу</button>
+    </div>
+
+    <div class="form-card" id="formCard">
+      <div class="input-group">
+        <label>Название услуги</label>
+        <input type="text" id="fName" placeholder="Например, Стрижка машинкой" />
+      </div>
+      <div class="form-grid">
+        <div class="input-group">
+          <label>Длительность</label>
+          <input type="text" id="fDuration" placeholder="25 мин" />
+        </div>
+        <div class="input-group">
+          <label>Цена</label>
+          <input type="number" id="fPrice" placeholder="60" />
+        </div>
+        <input type="hidden" id="fId" />
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" id="btnSave">Сохранить</button>
+        <button class="btn-cancel" id="btnCancelForm">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="guide-overlay" id="guideOverlay">
+    <div class="guide-modal">
+      <div class="guide-header">
+        <div class="dash-eyebrow">Пошаговая инструкция</div>
+        <div class="dash-title" style="font-size:18px;">Как подключить своего бота</div>
+        <button class="guide-close" id="guideClose">✕</button>
+      </div>
+
+      <div class="guide-steps">
+        <div class="guide-step">
+          <div class="guide-step-num">1</div>
+          <div>
+            <div class="guide-step-title">Откройте BotFather</div>
+            <div class="guide-step-text">В Telegram найдите официального бота <a href="https://t.me/BotFather"
+                target="_blank">@BotFather</a> — у него синяя галочка подтверждения. Откройте с ним чат.</div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-num">2</div>
+          <div>
+            <div class="guide-step-title">Создайте нового бота</div>
+            <div class="guide-step-text">Отправьте команду <code>/newbot</code>. BotFather спросит имя бота (то, что
+              видят клиенты) — впишите любое, например «СТРОП».</div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-num">3</div>
+          <div>
+            <div class="guide-step-title">Придумайте username</div>
+            <div class="guide-step-text">Затем попросит техническое имя — оно обязательно должно заканчиваться на
+              <code>bot</code>, например <code>strop_booking_bot</code>. Если занято — попробуйте другой вариант.
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-num">4</div>
+          <div>
+            <div class="guide-step-title">Скопируйте токен</div>
+            <div class="guide-step-text">BotFather пришлёт длинную строку — это и есть токен. Скопируйте его целиком и
+              вставьте в поле «Токен от @BotFather» в этом кабинете.</div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-num">5</div>
+          <div>
+            <div class="guide-step-title">Узнайте свой ID для уведомлений</div>
+            <div class="guide-step-text">Откройте <a href="https://t.me/userinfobot" target="_blank">@userinfobot</a>,
+              нажмите «Старт» — он покажет ваш числовой ID. Вставьте его в третье поле, чтобы получать уведомления о
+              новых записях.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-note">
+        ⚠ Никому не показывайте свой токен — он даёт полный доступ к управлению ботом.
+      </div>
+
+      <button class="btn-primary" id="guideDone">Понятно, закрыть</button>
+    </div>
+  </div>
+
+  <script>
+    // ------------------------------------------------------------------
+    // Замени на свои настоящие значения — те же, что в index.html и .env
+    // ------------------------------------------------------------------
+    const SUPABASE_URL = "https://cdtcfjiermvtdbiwvhcf.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_04iT6QXn8vh01kdOUv4mUA_xz-9VF9B";
+    // ------------------------------------------------------------------
+
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentUserId = null;
+    let editingId = null;
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2200);
+    }
+
+    function openGuide() {
+      document.getElementById("guideOverlay").classList.add("show");
+    }
+    function closeGuide() {
+      document.getElementById("guideOverlay").classList.remove("show");
+    }
+    document.getElementById("guideClose").addEventListener("click", closeGuide);
+    document.getElementById("guideDone").addEventListener("click", closeGuide);
+    document.getElementById("guideOverlay").addEventListener("click", (e) => {
+      if (e.target.id === "guideOverlay") closeGuide();
+    });
+
+    document.getElementById("showForgot").addEventListener("click", (e) => {
+      e.preventDefault();
+      document.querySelector(".login-card").style.display = "none";
+      document.getElementById("forgotCard").style.display = "block";
+    });
+
+    document.getElementById("showLoginFromForgot").addEventListener("click", (e) => {
+      e.preventDefault();
+      document.getElementById("forgotCard").style.display = "none";
+      document.querySelector(".login-card").style.display = "block";
+    });
+
+    document.getElementById("btnForgot").addEventListener("click", async () => {
+      const email = document.getElementById("forgotEmail").value.trim();
+      const errorBox = document.getElementById("forgotError");
+      errorBox.style.display = "none";
+
+      if (!email) {
+        errorBox.textContent = "Введите email";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      const { error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + window.location.pathname,
+      });
+
+      if (error) {
+        errorBox.textContent = "Ошибка: " + error.message;
+        errorBox.style.display = "block";
+        return;
+      }
+
+      errorBox.style.color = "var(--accent)";
+      errorBox.textContent = "Ссылка для сброса пароля отправлена на почту. Проверьте входящие.";
+      errorBox.style.display = "block";
+    });
+
+    document.getElementById("showRegister").addEventListener("click", (e) => {
+      e.preventDefault();
+      document.querySelector(".login-card").style.display = "none";
+      document.getElementById("registerCard").style.display = "block";
+    });
+
+    document.getElementById("showLogin").addEventListener("click", (e) => {
+      e.preventDefault();
+      document.getElementById("registerCard").style.display = "none";
+      document.querySelector(".login-card").style.display = "block";
+    });
+
+    document.getElementById("btnRegister").addEventListener("click", async () => {
+      const businessName = document.getElementById("regBusinessName").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const password = document.getElementById("regPassword").value;
+      const errorBox = document.getElementById("registerError");
+      errorBox.style.display = "none";
+
+      if (!businessName || !email || password.length < 6) {
+        errorBox.textContent = "Заполните все поля, пароль от 6 символов";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      const { data, error } = await sb.auth.signUp({
+        email,
+        password,
+        options: { data: { business_name: businessName } },
+      });
+
+      if (error) {
+        errorBox.textContent = "Ошибка регистрации: " + error.message;
+        errorBox.style.display = "block";
+        return;
+      }
+
+      if (data.session) {
+        // Регистрация без подтверждения email — сразу входим
+        currentUserId = data.user.id;
+        document.getElementById("loginWrap").style.display = "none";
+        document.getElementById("dash").style.display = "block";
+        loadServices();
+        loadBotInfo();
+        // Supabase просит подтвердить email, прежде чем войти
+        errorBox.style.color = "var(--accent)";
+        errorBox.textContent = "Аккаунт создан! Проверьте почту, чтобы подтвердить email, затем войдите.";
+        errorBox.style.display = "block";
+      }
+    });
+
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const errorBox = document.getElementById("loginError");
+
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        errorBox.textContent = "Неверный email или пароль";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      currentUserId = data.user.id;
+      document.getElementById("loginWrap").style.display = "none";
+      document.getElementById("dash").style.display = "block";
+      loadServices();
+      loadBotInfo();
+    });
+
+    document.getElementById("btnLogout").addEventListener("click", async () => {
+      await sb.auth.signOut();
+      currentUserId = null;
+      document.getElementById("dash").style.display = "none";
+      document.getElementById("loginWrap").style.display = "flex";
+    });
+
+    async function loadServices() {
+      const { data, error } = await sb
+        .from('services')
+        .select('*')
+        .eq('owner_id', currentUserId)
+        .order('id', { ascending: true });
+
+      const rowsEl = document.getElementById("rows");
+
+      if (error) {
+        rowsEl.innerHTML = `<div class="empty-state">Не удалось загрузить услуги: ${error.message}</div>`;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        rowsEl.innerHTML = `
+  <div class="empty-state">
+    <div class="empty-state-icon">📋</div>
+    <div class="empty-state-title">Пока нет ни одной услуги</div>
+    <div class="empty-state-text">Добавьте первую услугу, чтобы клиенты могли записаться через бота</div>
+    <button class="btn-save" id="btnEmptyAdd">+ Добавить первую услугу</button>
+  </div>
+`;
+        document.getElementById("btnEmptyAdd").addEventListener("click", () => {
+          document.getElementById("btnShowAdd").click();
+        });
+        return;
+      }
+
+      rowsEl.innerHTML = data.map(s => `
+      <div class="row">
+        <div class="row-name">${s.name}</div>
+        <div class="row-duration">${s.duration || "—"}</div>
+        <div class="row-price">${s.price} смн</div>
+        <div class="row-actions">
+          <button class="icon-btn edit" data-action="edit" data-id="${s.id}">✎</button>
+          <button class="icon-btn danger" data-action="delete" data-id="${s.id}">✕</button>
+        </div>
+      </div>
+    `).join("");
+
+      rowsEl.querySelectorAll('[data-action="edit"]').forEach(btn => {
+        btn.addEventListener("click", () => startEdit(Number(btn.dataset.id), data));
+      });
+      rowsEl.querySelectorAll('[data-action="delete"]').forEach(btn => {
+        btn.addEventListener("click", () => deleteService(Number(btn.dataset.id)));
+      });
+    }
+
+    // ---------- Bot token management ----------
+
+    let currentBotRow = null;
+
+    async function loadBotInfo() {
+      const { data, error } = await sb
+        .from('bots')
+        .select('*')
+        .eq('owner_id', currentUserId)
+        .maybeSingle();
+
+      const view = document.getElementById("botStatusView");
+
+      if (error) {
+        view.innerHTML = `<div style="color:var(--danger); font-size:13px;">Не удалось загрузить данные бота: ${error.message}</div>`;
+        return;
+      }
+
+      currentBotRow = data;
+
+      if (data && data.bot_token) {
+        const maskedToken = data.bot_token.slice(0, 6) + "••••••" + data.bot_token.slice(-4);
+        const chatIdLine = data.owner_chat_id
+          ? `<div style="font-size:12px; color:var(--muted); margin-top:6px;">Уведомления приходят на ID: ${data.owner_chat_id}</div>`
+          : `<div style="font-size:12px; color:var(--danger); margin-top:6px;">⚠ Не указан ID для уведомлений — вы не будете получать сообщения о новых записях</div>`;
+        const nameLine = data.business_name
+          ? `<div style="font-size:13px; font-weight:700; margin-bottom:2px;">${data.business_name}</div>`
+          : `<div style="font-size:12px; color:var(--danger); margin-bottom:4px;">⚠ Не указано название бизнеса</div>`;
+
+        view.innerHTML = `
+        <div class="bot-status-row">
+          <div>
+            ${nameLine}
+            <span class="bot-status-dot ${data.is_active ? 'on' : 'off'}"></span>
+            <span style="font-size:13px; font-weight:600;">${data.is_active ? 'Подключён' : 'Отключён'}</span>
+            <div style="font-size:12px; color:var(--faint); margin-top:4px; font-family: Georgia, serif;">${maskedToken}</div>
+            ${chatIdLine}
+          </div>
+          <button class="btn-cancel" id="btnChangeToken">Изменить</button>
+        </div>
+      `;
+        document.getElementById("btnChangeToken").addEventListener("click", showBotForm);
+      } else {
+        view.innerHTML = `
+        <div style="font-size:13px; color:var(--muted); margin-bottom:8px;">
+          Бот ещё не подключён.
+        </div>
+        <div class="bot-form" style="flex-direction:column;">
+          <input type="text" id="botNameInput" placeholder="Название бизнеса (например, СТРОП)" />
+          <input type="text" id="botTokenInput" placeholder="Токен от @BotFather" />
+          <input type="text" id="botChatIdInput" placeholder="Ваш ID для уведомлений (от @userinfobot)" />
+          <button class="btn-save" id="btnSaveToken">Сохранить</button>
+        </div>
+        <div class="bot-help">
+          Не знаете, как получить токен? <a href="#" id="btnOpenGuide1">Открыть пошаговую инструкцию →</a>
+        </div>
+      `;
+        document.getElementById("btnSaveToken").addEventListener("click", saveBotToken);
+        document.getElementById("btnOpenGuide1").addEventListener("click", (e) => { e.preventDefault(); openGuide(); });
+      }
+    }
+
+    function showBotForm() {
+      const view = document.getElementById("botStatusView");
+      const existingName = currentBotRow ? (currentBotRow.business_name || "") : "";
+      const existingToken = currentBotRow ? currentBotRow.bot_token : "";
+      const existingChatId = currentBotRow ? (currentBotRow.owner_chat_id || "") : "";
+      view.innerHTML = `
+      <div class="bot-form" style="flex-direction:column;">
+        <input type="text" id="botNameInput" placeholder="Название бизнеса (например, СТРОП)" value="${existingName}" />
+        <input type="text" id="botTokenInput" placeholder="Токен от @BotFather" value="${existingToken}" />
+        <input type="text" id="botChatIdInput" placeholder="Ваш ID для уведомлений (от @userinfobot)" value="${existingChatId}" />
+        <button class="btn-save" id="btnSaveToken">Сохранить</button>
+      </div>
+      <div class="bot-help">
+        Не знаете, как получить токен? <a href="#" id="btnOpenGuide2">Открыть пошаговую инструкцию →</a>
+      </div>
+    `;
+      document.getElementById("btnSaveToken").addEventListener("click", saveBotToken);
+      document.getElementById("btnOpenGuide2").addEventListener("click", (e) => { e.preventDefault(); openGuide(); });
+    }
+
+    async function saveBotToken() {
+      const businessName = document.getElementById("botNameInput").value.trim();
+      const token = document.getElementById("botTokenInput").value.trim();
+      const chatId = document.getElementById("botChatIdInput").value.trim();
+      if (!businessName) { showToast("Впишите название бизнеса"); return; }
+      if (!token) { showToast("Вставьте токен бота"); return; }
+
+      if (currentBotRow) {
+        const { error } = await sb.from('bots')
+          .update({ business_name: businessName, bot_token: token, owner_chat_id: chatId || null, is_active: true })
+          .eq('id', currentBotRow.id)
+          .eq('owner_id', currentUserId);
+        if (error) { showToast("Ошибка: " + error.message); return; }
+      } else {
+        const { error } = await sb.from('bots')
+          .insert({ owner_id: currentUserId, business_name: businessName, bot_token: token, owner_chat_id: chatId || null, is_active: true });
+        if (error) { showToast("Ошибка: " + error.message); return; }
+      }
+
+      showToast("Сохранено");
+      loadBotInfo();
+    }
+
+    document.getElementById("btnShowAdd").addEventListener("click", () => {
+      editingId = null;
+      document.getElementById("fName").value = "";
+      document.getElementById("fDuration").value = "";
+      document.getElementById("fPrice").value = "";
+      document.getElementById("formCard").classList.add("show");
+    });
+
+    document.getElementById("btnCancelForm").addEventListener("click", () => {
+      document.getElementById("formCard").classList.remove("show");
+    });
+
+    function startEdit(id, currentData) {
+      const service = currentData.find(s => s.id === id);
+      if (!service) return;
+      editingId = id;
+      document.getElementById("fName").value = service.name;
+      document.getElementById("fDuration").value = service.duration || "";
+      document.getElementById("fPrice").value = service.price;
+      document.getElementById("formCard").classList.add("show");
+    }
+
+    document.getElementById("btnSave").addEventListener("click", async () => {
+      const name = document.getElementById("fName").value.trim();
+      const duration = document.getElementById("fDuration").value.trim();
+      const price = Number(document.getElementById("fPrice").value);
+
+      if (!name || !price) {
+        showToast("Впишите название и цену");
+        return;
+      }
+
+      if (editingId) {
+        const { error } = await sb.from('services')
+          .update({ name, duration, price })
+          .eq('id', editingId)
+          .eq('owner_id', currentUserId);
+
+        if (error) { showToast("Ошибка: " + error.message); return; }
+        showToast("Услуга обновлена");
+      } else {
+        const { error } = await sb.from('services')
+          .insert({ name, duration, price, owner_id: currentUserId });
+
+        if (error) { showToast("Ошибка: " + error.message); return; }
+        showToast("Услуга добавлена");
+      }
+
+      document.getElementById("formCard").classList.remove("show");
+      loadServices();
+    });
+
+    async function deleteService(id) {
+      if (!confirm("Удалить эту услугу?")) return;
+
+      const { error } = await sb.from('services')
+        .delete()
+        .eq('id', id)
+        .eq('owner_id', currentUserId);
+
+      if (error) { showToast("Ошибка: " + error.message); return; }
+      showToast("Услуга удалена");
+      loadServices();
+    }
+
+    document.getElementById("btnSetNewPassword").addEventListener("click", async () => {
+      const newPassword = document.getElementById("newPasswordInput").value;
+      const errorBox = document.getElementById("newPasswordError");
+      errorBox.style.display = "none";
+
+      if (newPassword.length < 6) {
+        errorBox.textContent = "Пароль должен быть от 6 символов";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      const { error } = await sb.auth.updateUser({ password: newPassword });
+
+      if (error) {
+        errorBox.textContent = "Ошибка: " + error.message;
+        errorBox.style.display = "block";
+        return;
+      }
+
+      errorBox.style.color = "var(--accent)";
+      errorBox.textContent = "Пароль сохранён! Заходите в кабинет.";
+      errorBox.style.display = "block";
+
+      setTimeout(() => {
+        window.location.href = window.location.origin + window.location.pathname;
+      }, 1500);
+    });
+
+    (async () => {
+      // Если человек перешёл по ссылке восстановления пароля из письма —
+      // Supabase добавляет в адрес специальный признак type=recovery.
+      // В этом случае показываем форму "новый пароль" вместо обычного входа.
+      if (window.location.hash.includes('type=recovery')) {
+        document.getElementById("loginWrap").querySelector(".login-card").style.display = "none";
+        document.getElementById("newPasswordCard").style.display = "block";
+        return;
+      }
+
+      const { data } = await sb.auth.getSession();
+      if (data.session) {
+        currentUserId = data.session.user.id;
+        document.getElementById("loginWrap").style.display = "none";
+        document.getElementById("dash").style.display = "block";
+        loadServices();
+        loadBotInfo();
+      }
+    })();
+  </script>
+
+</body>
+
+</html>
