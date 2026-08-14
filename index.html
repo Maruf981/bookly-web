@@ -532,11 +532,7 @@
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const MASTERS = [
-    { id: 1, name: "Артур", role: "Топ-мастер", initials: "АР" },
-    { id: 2, name: "Диловар", role: "Барбер", initials: "ДЛ" },
-    { id: 3, name: "Сухроб", role: "Барбер", initials: "СХ" },
-  ];
+  let MASTERS = []; // заполнится из базы данных при загрузке страницы
 
   let SERVICES = []; // заполнится из базы данных при загрузке страницы
 
@@ -553,6 +549,20 @@
       document.getElementById("shop-name").textContent = decodeURIComponent(name);
       document.title = decodeURIComponent(name) + " — запись";
     }
+  }
+
+  async function loadMasters() {
+    const { data, error } = await sb.from('masters').select('*').eq('owner_id', OWNER_ID);
+
+    if (error || !data || data.length === 0) {
+      console.error('Не удалось загрузить мастеров:', error ? error.message : 'пусто');
+      return;
+    }
+
+    MASTERS = data;
+    if (!state.master) state.master = MASTERS[0].id;
+    renderMasters();
+    updateBar();
   }
 
   async function loadServices() {
@@ -726,12 +736,11 @@
     window.Telegram.WebApp.expand();
   }
 
-  renderMasters();
   renderDays();
   renderTimes();
   updateBar();
   loadServices(); // подтягивает услуги из Supabase и сама вызывает renderTickets()
-  applyShopInfoFromUrl(); // берёт название бизнеса из ссылки, не из базы (безопаснее)
+  loadMasters(); // подтягивает мастеров из Supabase и сама вызывает renderMasters()
 </script>
 
 </body>
