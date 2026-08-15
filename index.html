@@ -666,7 +666,7 @@
         BUSY = data.map(b => b.time);
       }
 
-      alert('Занято: ' + JSON.stringify(BUSY) + ' | Мастер: ' + MASTERS.find(m => m.id === state.master)?.name + ' | Дата: ' + selectedDate);
+      alert('ДАТА=' + selectedDate + ' ДЕФИСОВ=' + (selectedDate.match(/-/g) || []).length + ' ЗАНЯТО=' + BUSY.length);
 
       renderTimes();
     }
