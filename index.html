@@ -1,656 +1,749 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<title>СТРОП — запись</title>
-<style>
-  :root {
-    --bg: #0b0d12;
-    --surface: #14171f;
-    --surface-2: #1a1e28;
-    --ink: #eef0f5;
-    --muted: #9aa1b2;
-    --faint: #5b6272;
-    --brass: #e8b23d;
-    --brass-dim: #c99a2f;
-    --red: #d9564a;
-    --line: #262b38;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <title>СТРОП — запись</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --surface: #14171f;
+      --surface-2: #1a1e28;
+      --ink: #eef0f5;
+      --muted: #9aa1b2;
+      --faint: #5b6272;
+      --brass: #e8b23d;
+      --brass-dim: #c99a2f;
+      --red: #d9564a;
+      --line: #262b38;
+    }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    display: flex;
-    justify-content: center;
-  }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      justify-content: center;
+    }
 
-  .app {
-    width: 100%;
-    max-width: 460px;
-    min-height: 100vh;
-    background: var(--bg);
-    position: relative;
-    padding-bottom: 96px;
-  }
+    .app {
+      width: 100%;
+      max-width: 460px;
+      min-height: 100vh;
+      background: var(--bg);
+      position: relative;
+      padding-bottom: 96px;
+    }
 
-  /* ---------- Header ---------- */
+    /* ---------- Header ---------- */
 
-  .header {
-    padding: 20px 18px 16px;
-    background: linear-gradient(180deg, #14171f 0%, #0b0d12 100%);
-    border-bottom: 1px solid var(--line);
-    position: relative;
-    overflow: hidden;
-  }
+    .header {
+      padding: 20px 18px 16px;
+      background: linear-gradient(180deg, #14171f 0%, #0b0d12 100%);
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+    }
 
-  .header::after {
-    content: "";
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(232,178,61,0.12) 0%, transparent 70%);
-  }
+    .header::after {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232, 178, 61, 0.12) 0%, transparent 70%);
+    }
 
-  .eyebrow {
-    font-size: 10px;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--brass);
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--brass);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
 
-  .shop-name {
-    font-family: Georgia, "Times New Roman", serif;
-    font-weight: 700;
-    font-size: 26px;
-    letter-spacing: 0.5px;
-    color: var(--ink);
-    line-height: 1;
-  }
+    .shop-name {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: 0.5px;
+      color: var(--ink);
+      line-height: 1;
+    }
 
-  .shop-sub {
-    margin-top: 6px;
-    font-size: 12px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+    .shop-sub {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-  .dot-live {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #6fae5f;
-    display: inline-block;
-    box-shadow: 0 0 0 3px rgba(111,174,95,0.15);
-  }
+    .dot-live {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #6fae5f;
+      display: inline-block;
+      box-shadow: 0 0 0 3px rgba(111, 174, 95, 0.15);
+    }
 
-  /* ---------- Section labels ---------- */
+    /* ---------- Section labels ---------- */
 
-  .section {
-    padding: 16px 18px 4px;
-  }
+    .section {
+      padding: 16px 18px 4px;
+    }
 
-  .section-label {
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--faint);
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
 
-  /* ---------- Master picker ---------- */
+    /* ---------- Master picker ---------- */
 
-  .masters {
-    display: flex;
-    gap: 8px;
-    padding: 0 18px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .masters::-webkit-scrollbar { display: none; }
+    .masters {
+      display: flex;
+      gap: 8px;
+      padding: 0 18px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
 
-  .master {
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 9px 11px;
-    border-radius: 12px;
-    border: 1px solid var(--line);
-    background: var(--surface);
-    min-width: 72px;
-    cursor: pointer;
-    transition: border-color .15s ease;
-  }
+    .masters::-webkit-scrollbar {
+      display: none;
+    }
 
-  .master.active {
-    border-color: var(--brass);
-    background: linear-gradient(180deg, rgba(232,178,61,0.08), var(--surface));
-  }
+    .master {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 11px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      min-width: 72px;
+      cursor: pointer;
+      transition: border-color .15s ease;
+    }
 
-  .avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: Georgia, serif;
-    font-weight: 700;
-    font-size: 12px;
-    color: #fff;
-    background: var(--brass);
-  }
+    .master.active {
+      border-color: var(--brass);
+      background: linear-gradient(180deg, rgba(232, 178, 61, 0.08), var(--surface));
+    }
 
-  .master.active .avatar {
-    box-shadow: 0 0 0 3px rgba(232,178,61,0.20);
-  }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Georgia, serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: #fff;
+      background: var(--brass);
+    }
 
-  .master-name { font-size: 11px; color: var(--ink); font-weight: 600; }
-  .master-role { font-size: 9px; color: var(--faint); }
+    .master.active .avatar {
+      box-shadow: 0 0 0 3px rgba(232, 178, 61, 0.20);
+    }
 
-  /* ---------- Service tickets ---------- */
+    .master-name {
+      font-size: 11px;
+      color: var(--ink);
+      font-weight: 600;
+    }
 
-  .tickets {
-    padding: 2px 18px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+    .master-role {
+      font-size: 9px;
+      color: var(--faint);
+    }
 
-  .ticket {
-    position: relative;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 11px;
-    padding: 12px 13px 12px 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    cursor: pointer;
-    transition: border-color .15s ease, background .15s ease;
-  }
+    /* ---------- Service tickets ---------- */
 
-  .ticket::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 8px;
-    bottom: 8px;
-    width: 3px;
-    border-radius: 2px;
-    background: var(--line);
-  }
+    .tickets {
+      padding: 2px 18px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-  .ticket.selected {
-    border-color: var(--brass);
-    background: linear-gradient(90deg, rgba(232,178,61,0.06), var(--surface) 30%);
-  }
+    .ticket {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 12px 13px 12px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color .15s ease, background .15s ease;
+    }
 
-  .ticket.selected::before { background: var(--brass); }
+    .ticket::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 3px;
+      border-radius: 2px;
+      background: var(--line);
+    }
 
-  .ticket-info { display: flex; flex-direction: column; gap: 3px; }
-  .ticket-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
-  .ticket-meta { font-size: 11px; color: var(--faint); }
+    .ticket.selected {
+      border-color: var(--brass);
+      background: linear-gradient(90deg, rgba(232, 178, 61, 0.06), var(--surface) 30%);
+    }
 
-  .ticket-price {
-    font-family: Georgia, serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--brass);
-    white-space: nowrap;
-  }
+    .ticket.selected::before {
+      background: var(--brass);
+    }
 
-  .check {
-    width: 17px;
-    height: 17px;
-    border-radius: 50%;
-    border: 1.5px solid var(--faint);
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .ticket.selected .check {
-    border-color: var(--brass);
-    background: var(--brass);
-  }
-  .ticket.selected .check::after {
-    content: "";
-    width: 4px;
-    height: 8px;
-    border-right: 2px solid #fff;
-    border-bottom: 2px solid #fff;
-    transform: rotate(45deg) translate(-1px,-1px);
-  }
+    .ticket-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
 
-  /* ---------- Day / time picker ---------- */
+    .ticket-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink);
+    }
 
-  .days {
-    display: flex;
-    gap: 7px;
-    padding: 0 18px;
-    margin-bottom: 10px;
-  }
+    .ticket-meta {
+      font-size: 11px;
+      color: var(--faint);
+    }
 
-  .day {
-    flex: 1;
-    text-align: center;
-    padding: 8px 0;
-    border-radius: 9px;
-    border: 1px solid var(--line);
-    background: var(--surface);
-    cursor: pointer;
-    font-size: 12px;
-    color: var(--muted);
-  }
+    .ticket-price {
+      font-family: Georgia, serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--brass);
+      white-space: nowrap;
+    }
 
-  .day.active {
-    background: var(--brass);
-    color: #fff;
-    font-weight: 700;
-    border-color: var(--brass);
-  }
+    .check {
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      border: 1.5px solid var(--faint);
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-  .times {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 7px;
-    padding: 0 18px;
-  }
+    .ticket.selected .check {
+      border-color: var(--brass);
+      background: var(--brass);
+    }
 
-  .time {
-    text-align: center;
-    padding: 8px 0;
-    border-radius: 9px;
-    border: 1px solid var(--line);
-    background: var(--surface);
-    font-family: Georgia, serif;
-    font-size: 13px;
-    color: var(--ink);
-    cursor: pointer;
-  }
+    .ticket.selected .check::after {
+      content: "";
+      width: 4px;
+      height: 8px;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
 
-  .time.busy {
-    color: var(--faint);
-    text-decoration: line-through;
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
+    /* ---------- Day / time picker ---------- */
 
-  .time.active {
-    background: var(--brass);
-    color: #fff;
-    font-weight: 700;
-    border-color: var(--brass);
-  }
+    .days {
+      display: flex;
+      gap: 7px;
+      padding: 0 18px;
+      margin-bottom: 10px;
+    }
 
-  /* ---------- Sticky bottom bar ---------- */
+    .day {
+      flex: 1;
+      text-align: center;
+      padding: 8px 0;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--muted);
+    }
 
-  .bottombar {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 460px;
-    background: var(--surface);
-    border-top: 1px solid var(--line);
-    padding: 11px 18px calc(11px + env(safe-area-inset-bottom));
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    box-shadow: 0 -4px 14px rgba(0,0,0,0.35);
-  }
+    .day.active {
+      background: var(--brass);
+      color: #fff;
+      font-weight: 700;
+      border-color: var(--brass);
+    }
 
-  .bottombar-info { display: flex; flex-direction: column; gap: 2px; }
-  .bottombar-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--faint); }
-  .bottombar-price { font-family: Georgia, serif; font-size: 17px; font-weight: 700; color: var(--brass); }
+    .times {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      padding: 0 18px;
+    }
 
-  .btn-book {
-    background: var(--red);
-    color: #fbf1ef;
-    border: none;
-    border-radius: 9px;
-    padding: 12px 20px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    cursor: pointer;
-    transition: opacity .15s;
-  }
+    .time {
+      text-align: center;
+      padding: 8px 0;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      font-family: Georgia, serif;
+      font-size: 13px;
+      color: var(--ink);
+      cursor: pointer;
+    }
 
-  .btn-book:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
+    .time.busy {
+      color: var(--faint);
+      text-decoration: line-through;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
 
-  /* ---------- Ticket-stub confirmation modal ---------- */
+    .time.active {
+      background: var(--brass);
+      color: #fff;
+      font-weight: 700;
+      border-color: var(--brass);
+    }
 
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(10,8,5,0.72);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    z-index: 50;
-  }
-  .overlay.show { display: flex; }
+    /* ---------- Sticky bottom bar ---------- */
 
-  .stub {
-    width: 100%;
-    max-width: 320px;
-    background: var(--surface);
-    border-radius: 15px;
-    overflow: hidden;
-    animation: pop .25s ease;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
-  }
+    .bottombar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 460px;
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+      padding: 11px 18px calc(11px + env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.35);
+    }
 
-  @keyframes pop {
-    from { opacity: 0; transform: scale(0.92) translateY(8px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-  }
+    .bottombar-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
 
-  .stub-top {
-    padding: 22px 20px 17px;
-    text-align: center;
-    border-bottom: 1px dashed var(--line);
-    position: relative;
-  }
+    .bottombar-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--faint);
+    }
 
-  .stub-top::before, .stub-top::after {
-    content: "";
-    position: absolute;
-    bottom: -9px;
-    width: 18px;
-    height: 18px;
-    background: var(--bg);
-    border-radius: 50%;
-  }
-  .stub-top::before { left: -9px; }
-  .stub-top::after { right: -9px; }
+    .bottombar-price {
+      font-family: Georgia, serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--brass);
+    }
 
-  .stub-check {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: rgba(232,178,61,0.12);
-    border: 1.5px solid var(--brass);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 12px;
-  }
-  .stub-check::after {
-    content: "";
-    width: 9px;
-    height: 14px;
-    border-right: 2.5px solid var(--brass);
-    border-bottom: 2.5px solid var(--brass);
-    transform: rotate(45deg) translate(-2px,-3px);
-  }
+    .btn-book {
+      background: var(--red);
+      color: #fbf1ef;
+      border: none;
+      border-radius: 9px;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
 
-  .stub-title { font-family: Georgia, serif; font-size: 17px; font-weight: 700; margin-bottom: 3px; color: var(--ink); }
-  .stub-sub { font-size: 11px; color: var(--muted); }
+    .btn-book:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
 
-  .stub-bottom { padding: 15px 20px 20px; }
+    /* ---------- Ticket-stub confirmation modal ---------- */
 
-  .stub-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 7px 0;
-    font-size: 12px;
-    border-bottom: 1px solid var(--line);
-  }
-  .stub-row:last-of-type { border-bottom: none; }
-  .stub-row span:first-child { color: var(--faint); }
-  .stub-row span:last-child { color: var(--ink); font-weight: 600; text-align: right; }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 8, 5, 0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 50;
+    }
 
-  .stub-number {
-    margin-top: 14px;
-    text-align: center;
-    font-family: Georgia, serif;
-    letter-spacing: 3.5px;
-    font-size: 11px;
-    color: var(--faint);
-  }
+    .overlay.show {
+      display: flex;
+    }
 
-  .btn-close {
-    display: block;
-    width: 100%;
-    margin-top: 16px;
-    background: var(--brass);
-    color: #fff;
-    border: none;
-    border-radius: 9px;
-    padding: 12px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-  }
-</style>
+    .stub {
+      width: 100%;
+      max-width: 320px;
+      background: var(--surface);
+      border-radius: 15px;
+      overflow: hidden;
+      animation: pop .25s ease;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .stub-top {
+      padding: 22px 20px 17px;
+      text-align: center;
+      border-bottom: 1px dashed var(--line);
+      position: relative;
+    }
+
+    .stub-top::before,
+    .stub-top::after {
+      content: "";
+      position: absolute;
+      bottom: -9px;
+      width: 18px;
+      height: 18px;
+      background: var(--bg);
+      border-radius: 50%;
+    }
+
+    .stub-top::before {
+      left: -9px;
+    }
+
+    .stub-top::after {
+      right: -9px;
+    }
+
+    .stub-check {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(232, 178, 61, 0.12);
+      border: 1.5px solid var(--brass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+
+    .stub-check::after {
+      content: "";
+      width: 9px;
+      height: 14px;
+      border-right: 2.5px solid var(--brass);
+      border-bottom: 2.5px solid var(--brass);
+      transform: rotate(45deg) translate(-2px, -3px);
+    }
+
+    .stub-title {
+      font-family: Georgia, serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 3px;
+      color: var(--ink);
+    }
+
+    .stub-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .stub-bottom {
+      padding: 15px 20px 20px;
+    }
+
+    .stub-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 0;
+      font-size: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stub-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .stub-row span:first-child {
+      color: var(--faint);
+    }
+
+    .stub-row span:last-child {
+      color: var(--ink);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .stub-number {
+      margin-top: 14px;
+      text-align: center;
+      font-family: Georgia, serif;
+      letter-spacing: 3.5px;
+      font-size: 11px;
+      color: var(--faint);
+    }
+
+    .btn-close {
+      display: block;
+      width: 100%;
+      margin-top: 16px;
+      background: var(--brass);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="app">
+  <div class="app">
 
-  <div class="header">
-    <div class="eyebrow" id="shop-eyebrow">Услуги</div>
-    <div class="shop-name" id="shop-name">Bookly</div>
-    <div class="shop-sub"><span class="dot-live"></span> <span id="shop-sub">Запись онлайн</span></div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">Мастер</div>
-  </div>
-  <div class="masters" id="masters"></div>
-
-  <div class="section">
-    <div class="section-label">Услуга</div>
-  </div>
-  <div class="tickets" id="tickets"></div>
-
-  <div class="section">
-    <div class="section-label">Когда</div>
-  </div>
-  <div class="days" id="days"></div>
-  <div class="times" id="times"></div>
-
-  <div style="height: 24px;"></div>
-</div>
-
-<div class="bottombar">
-  <div class="bottombar-info">
-    <div class="bottombar-label" id="bar-label">Выберите услугу</div>
-    <div class="bottombar-price" id="bar-price">—</div>
-  </div>
-  <button class="btn-book" id="btnBook" disabled>Записаться</button>
-</div>
-
-<div class="overlay" id="overlay">
-  <div class="stub">
-    <div class="stub-top">
-      <div class="stub-check"></div>
-      <div class="stub-title">Вы записаны</div>
-      <div class="stub-sub" id="stub-sub">Ждём вас</div>
+    <div class="header">
+      <div class="eyebrow" id="shop-eyebrow">Услуги</div>
+      <div class="shop-name" id="shop-name">Bookly</div>
+      <div class="shop-sub"><span class="dot-live"></span> <span id="shop-sub">Запись онлайн</span></div>
     </div>
-    <div class="stub-bottom">
-      <div class="stub-row"><span>Мастер</span><span id="s-master">—</span></div>
-      <div class="stub-row"><span>Услуга</span><span id="s-service">—</span></div>
-      <div class="stub-row"><span>Время</span><span id="s-time">—</span></div>
-      <div class="stub-row"><span>Стоимость</span><span id="s-price">—</span></div>
-      <div class="stub-number" id="s-number">№ 000</div>
-      <button class="btn-close" id="btnClose">Готово</button>
+
+    <div class="section">
+      <div class="section-label">Мастер</div>
+    </div>
+    <div class="masters" id="masters"></div>
+
+    <div class="section">
+      <div class="section-label">Услуга</div>
+    </div>
+    <div class="tickets" id="tickets"></div>
+
+    <div class="section">
+      <div class="section-label">Когда</div>
+    </div>
+    <div class="days" id="days"></div>
+    <div class="times" id="times"></div>
+
+    <div style="height: 24px;"></div>
+  </div>
+
+  <div class="bottombar">
+    <div class="bottombar-info">
+      <div class="bottombar-label" id="bar-label">Выберите услугу</div>
+      <div class="bottombar-price" id="bar-price">—</div>
+    </div>
+    <button class="btn-book" id="btnBook" disabled>Записаться</button>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="stub">
+      <div class="stub-top">
+        <div class="stub-check"></div>
+        <div class="stub-title">Вы записаны</div>
+        <div class="stub-sub" id="stub-sub">Ждём вас</div>
+      </div>
+      <div class="stub-bottom">
+        <div class="stub-row"><span>Мастер</span><span id="s-master">—</span></div>
+        <div class="stub-row"><span>Услуга</span><span id="s-service">—</span></div>
+        <div class="stub-row"><span>Время</span><span id="s-time">—</span></div>
+        <div class="stub-row"><span>Стоимость</span><span id="s-price">—</span></div>
+        <div class="stub-number" id="s-number">№ 000</div>
+        <button class="btn-close" id="btnClose">Готово</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  // ------------------------------------------------------------------
-  // DEMO DATA — в реальном проекте этот блок выносится в отдельный файл
-  // и подставляется под конкретный бизнес (барбершоп, стоматология,
-  // автосервис и т.д.) без изменения остального кода.
-  // ------------------------------------------------------------------
+  <script>
+    // ------------------------------------------------------------------
+    // DEMO DATA — в реальном проекте этот блок выносится в отдельный файл
+    // и подставляется под конкретный бизнес (барбершоп, стоматология,
+    // автосервис и т.д.) без изменения остального кода.
+    // ------------------------------------------------------------------
 
-  // ------------------------------------------------------------------
-  // Подключение к Supabase — эти два значения нужно заменить на СВОИ,
-  // взять из Project Settings -> Data API в твоём проекте Supabase.
-  // Это публичный (publishable) ключ — его безопасно использовать
-  // прямо в коде страницы, он не даёт полного доступа к базе.
-  // ------------------------------------------------------------------
-  const SUPABASE_URL = "https://cdtcfjiermvtdbiwvhcf.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_04iT6QXn8vh01kdOUv4mUA_xz-9VF9B";
+    // ------------------------------------------------------------------
+    // Подключение к Supabase — эти два значения нужно заменить на СВОИ,
+    // взять из Project Settings -> Data API в твоём проекте Supabase.
+    // Это публичный (publishable) ключ — его безопасно использовать
+    // прямо в коде страницы, он не даёт полного доступа к базе.
+    // ------------------------------------------------------------------
+    const SUPABASE_URL = "https://cdtcfjiermvtdbiwvhcf.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_04iT6QXn8vh01kdOUv4mUA_xz-9VF9B";
 
-  // ID владельца бизнеса, которому принадлежит этот конкретный бот и Mini App.
-  // Пока у нас один бот = один владелец. Позже, когда появится личный
-  // кабинет с логином, это значение будет подставляться автоматически.
-  // ID владельца бизнеса теперь берётся из ссылки (?owner=...), которую
-  // подставляет бот при открытии Mini App — так одна и та же страница
-  // может обслуживать разных владельцев без правки кода под каждого.
-  const urlParams = new URLSearchParams(window.location.search);
-  const OWNER_ID = urlParams.get('owner') || "2f17bace-b594-4329-8007-4716b49d1171";
+    // ID владельца бизнеса, которому принадлежит этот конкретный бот и Mini App.
+    // Пока у нас один бот = один владелец. Позже, когда появится личный
+    // кабинет с логином, это значение будет подставляться автоматически.
+    // ID владельца бизнеса теперь берётся из ссылки (?owner=...), которую
+    // подставляет бот при открытии Mini App — так одна и та же страница
+    // может обслуживать разных владельцев без правки кода под каждого.
+    const urlParams = new URLSearchParams(window.location.search);
+    const OWNER_ID = urlParams.get('owner') || "2f17bace-b594-4329-8007-4716b49d1171";
 
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  let MASTERS = []; // заполнится из базы данных при загрузке страницы
+    let MASTERS = []; // заполнится из базы данных при загрузке страницы
 
-  let SERVICES = []; // заполнится из базы данных при загрузке страницы
+    let SERVICES = []; // заполнится из базы данных при загрузке страницы
 
-  function getUpcomingDays() {
-  const labels = ["Сегодня", "Завтра"];
-  const weekdayNames = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
-  const days = [];
+    function getUpcomingDays() {
+      const labels = ["Сегодня", "Завтра"];
+      const weekdayNames = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+      const days = [];
 
-  for (let i = 0; i < 6; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
-    const label = labels[i] || weekdayNames[d.getDay()];
-    // Формат ГГГГ-ММ-ДД, без сдвига часового пояса
-    const iso = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-    days.push({ label, date: iso });
-  }
-  return days;
-}
-
-const DAYS_DATA = getUpcomingDays();
-const DAYS = DAYS_DATA.map(d => d.label);
-
-  const TIMES = ["10:00", "11:30", "12:00", "13:00", "14:30", "15:00", "16:30", "18:00"];
-  let BUSY = []; // заполняется динамически при выборе дня и мастера
-
-async function loadBusyTimes() {
-  const selectedDate = DAYS_DATA[state.day].date;
-
-  const { data, error } = await sb
-    .from('bookings')
-    .select('time')
-    .eq('owner_id', OWNER_ID)
-    .eq('master', MASTERS.find(m => m.id === state.master)?.name)
-    .eq('booking_date', selectedDate);
-
-  if (error) {
-    console.error('Не удалось проверить занятость:', error.message);
-    BUSY = [];
-  } else {
-    BUSY = data.map(b => b.time);
-  }
-
-  renderTimes();
-}
-
-  // ------------------------------------------------------------------
-
-  function applyShopInfoFromUrl() {
-    const name = urlParams.get('name');
-    if (name) {
-      document.getElementById("shop-name").textContent = decodeURIComponent(name);
-      document.title = decodeURIComponent(name) + " — запись";
-    }
-  }
-
-  async function loadMasters() {
-    const { data, error } = await sb.from('masters').select('*').eq('owner_id', OWNER_ID);
-
-    if (error || !data || data.length === 0) {
-      console.error('Не удалось загрузить мастеров:', error ? error.message : 'пусто');
-      return;
+      for (let i = 0; i < 6; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+        const label = labels[i] || weekdayNames[d.getDay()];
+        // Формат ГГГГ-ММ-ДД, без сдвига часового пояса
+        const iso = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+        days.push({ label, date: iso });
+      }
+      return days;
     }
 
-    MASTERS = data;
-    if (!state.master) state.master = MASTERS[0].id;
-    loadBusyTimes();
-    renderMasters();
-    updateBar();
-  }
+    const DAYS_DATA = getUpcomingDays();
+    const DAYS = DAYS_DATA.map(d => d.label);
 
-  async function loadServices() {
-    const { data, error } = await sb.from('services').select('*').eq('owner_id', OWNER_ID);
+    const TIMES = ["10:00", "11:30", "12:00", "13:00", "14:30", "15:00", "16:30", "18:00"];
+    let BUSY = []; // заполняется динамически при выборе дня и мастера
 
-    if (error) {
-      console.error('Не удалось загрузить услуги:', error.message);
-      document.getElementById("tickets").innerHTML =
-        `<div style="padding:16px; color: var(--faint); font-size:13px;">Не удалось загрузить услуги. Попробуйте позже.</div>`;
-      return;
+    async function loadBusyTimes() {
+      const selectedDate = DAYS_DATA[state.day].date;
+
+      const { data, error } = await sb
+        .from('bookings')
+        .select('time')
+        .eq('owner_id', OWNER_ID)
+        .eq('master', MASTERS.find(m => m.id === state.master)?.name)
+        .eq('booking_date', selectedDate);
+
+      if (error) {
+        console.error('Не удалось проверить занятость:', error.message);
+        BUSY = [];
+      } else {
+        BUSY = data.map(b => b.time);
+      }
+
+      alert('Занято: ' + JSON.stringify(BUSY) + ' | Мастер: ' + MASTERS.find(m => m.id === state.master)?.name + ' | Дата: ' + selectedDate);
+
+      renderTimes();
     }
 
-    // Приводим данные из базы (name, duration, price) к тому виду,
-    // который ожидает остальной код (name, meta, price)
-    SERVICES = data.map(row => ({
-      id: row.id,
-      name: row.name,
-      meta: row.duration,
-      price: row.price,
-    }));
+    // ------------------------------------------------------------------
 
-    renderTickets();
-    updateBar();
-  }
+    function applyShopInfoFromUrl() {
+      const name = urlParams.get('name');
+      if (name) {
+        document.getElementById("shop-name").textContent = decodeURIComponent(name);
+        document.title = decodeURIComponent(name) + " — запись";
+      }
+    }
 
-  let state = { master: null, service: null, day: 0, time: null };
+    async function loadMasters() {
+      const { data, error } = await sb.from('masters').select('*').eq('owner_id', OWNER_ID);
 
-  function currency(n) { return n + " смн"; }
+      if (error || !data || data.length === 0) {
+        console.error('Не удалось загрузить мастеров:', error ? error.message : 'пусто');
+        return;
+      }
 
-  function renderMasters() {
-    const el = document.getElementById("masters");
-    el.innerHTML = MASTERS.map(m => `
+      MASTERS = data;
+      if (!state.master) state.master = MASTERS[0].id;
+      loadBusyTimes();
+      renderMasters();
+      updateBar();
+    }
+
+    async function loadServices() {
+      const { data, error } = await sb.from('services').select('*').eq('owner_id', OWNER_ID);
+
+      if (error) {
+        console.error('Не удалось загрузить услуги:', error.message);
+        document.getElementById("tickets").innerHTML =
+          `<div style="padding:16px; color: var(--faint); font-size:13px;">Не удалось загрузить услуги. Попробуйте позже.</div>`;
+        return;
+      }
+
+      // Приводим данные из базы (name, duration, price) к тому виду,
+      // который ожидает остальной код (name, meta, price)
+      SERVICES = data.map(row => ({
+        id: row.id,
+        name: row.name,
+        meta: row.duration,
+        price: row.price,
+      }));
+
+      renderTickets();
+      updateBar();
+    }
+
+    let state = { master: null, service: null, day: 0, time: null };
+
+    function currency(n) { return n + " смн"; }
+
+    function renderMasters() {
+      const el = document.getElementById("masters");
+      el.innerHTML = MASTERS.map(m => `
       <div class="master ${state.master === m.id ? "active" : ""}" data-id="${m.id}">
         <div class="avatar">${m.initials}</div>
         <div class="master-name">${m.name}</div>
         <div class="master-role">${m.role}</div>
       </div>
     `).join("");
-    el.querySelectorAll(".master").forEach(node => {
-      node.addEventListener("click", () => {
-        state.master = Number(node.dataset.id);
-        renderMasters();
-        loadBusyTimes();
+      el.querySelectorAll(".master").forEach(node => {
+        node.addEventListener("click", () => {
+          state.master = Number(node.dataset.id);
+          renderMasters();
+          loadBusyTimes();
+        });
       });
-    });
-  }
+    }
 
-  function renderTickets() {
-    const el = document.getElementById("tickets");
-    el.innerHTML = SERVICES.map(s => `
+    function renderTickets() {
+      const el = document.getElementById("tickets");
+      el.innerHTML = SERVICES.map(s => `
       <div class="ticket ${state.service === s.id ? "selected" : ""}" data-id="${s.id}">
         <div class="ticket-info">
           <div class="ticket-name">${s.name}</div>
@@ -662,126 +755,127 @@ async function loadBusyTimes() {
         </div>
       </div>
     `).join("");
-    el.querySelectorAll(".ticket").forEach(node => {
-      node.addEventListener("click", () => {
-        state.service = Number(node.dataset.id);
-        renderTickets();
-        updateBar();
+      el.querySelectorAll(".ticket").forEach(node => {
+        node.addEventListener("click", () => {
+          state.service = Number(node.dataset.id);
+          renderTickets();
+          updateBar();
+        });
       });
-    });
-  }
+    }
 
-  function renderDays() {
-    const el = document.getElementById("days");
-    el.innerHTML = DAYS.map((d, i) => `
+    function renderDays() {
+      const el = document.getElementById("days");
+      el.innerHTML = DAYS.map((d, i) => `
       <div class="day ${state.day === i ? "active" : ""}" data-i="${i}">${d}</div>
     `).join("");
-    el.querySelectorAll(".day").forEach(node => {
-      node.addEventListener("click", () => {
-        state.day = Number(node.dataset.i);
-        state.time = null;
-        renderDays();
-        loadBusyTimes();
-        updateBar();
+      el.querySelectorAll(".day").forEach(node => {
+        node.addEventListener("click", () => {
+          state.day = Number(node.dataset.i);
+          state.time = null;
+          renderDays();
+          loadBusyTimes();
+          updateBar();
+        });
       });
-    });
-  }
+    }
 
-  function renderTimes() {
-    const el = document.getElementById("times");
-    el.innerHTML = TIMES.map(t => {
-      const busy = BUSY.includes(t);
-      const active = state.time === t;
-      return `<div class="time ${busy ? "busy" : ""} ${active ? "active" : ""}" data-t="${t}">${t}</div>`;
-    }).join("");
-    el.querySelectorAll(".time:not(.busy)").forEach(node => {
-      node.addEventListener("click", () => {
-        state.time = node.dataset.t;
-        renderTimes();
-        updateBar();
+    function renderTimes() {
+      const el = document.getElementById("times");
+      el.innerHTML = TIMES.map(t => {
+        const busy = BUSY.includes(t);
+        const active = state.time === t;
+        return `<div class="time ${busy ? "busy" : ""} ${active ? "active" : ""}" data-t="${t}">${t}</div>`;
+      }).join("");
+      el.querySelectorAll(".time:not(.busy)").forEach(node => {
+        node.addEventListener("click", () => {
+          state.time = node.dataset.t;
+          renderTimes();
+          updateBar();
+        });
       });
+    }
+
+    function updateBar() {
+      const service = SERVICES.find(s => s.id === state.service);
+      const label = document.getElementById("bar-label");
+      const price = document.getElementById("bar-price");
+      const btn = document.getElementById("btnBook");
+
+      if (service && state.time) {
+        label.textContent = `${DAYS[state.day]}, ${state.time}`;
+        price.textContent = currency(service.price);
+        btn.disabled = false;
+      } else if (service) {
+        label.textContent = "Выберите время";
+        price.textContent = currency(service.price);
+        btn.disabled = true;
+      } else {
+        label.textContent = "Выберите услугу";
+        price.textContent = "—";
+        btn.disabled = true;
+      }
+    }
+
+    function openStub() {
+      const master = MASTERS.find(m => m.id === state.master);
+      const service = SERVICES.find(s => s.id === state.service);
+      const ticketNumber = String(Math.floor(100 + Math.random() * 900));
+
+      document.getElementById("stub-sub").textContent = `Ждём вас — ${master.name}, ${DAYS[state.day].toLowerCase()} в ${state.time}`;
+      document.getElementById("s-master").textContent = master.name;
+      document.getElementById("s-service").textContent = service.name;
+      document.getElementById("s-time").textContent = `${DAYS[state.day]}, ${state.time}`;
+      document.getElementById("s-price").textContent = currency(service.price);
+      document.getElementById("s-number").textContent = `№ ${ticketNumber}`;
+
+      document.getElementById("overlay").classList.add("show");
+
+      // Запоминаем данные записи, чтобы отправить их боту чуть позже —
+      // именно в момент, когда пользователь нажмёт "Готово". Дело в том,
+      // что Telegram.WebApp.sendData() САМ закрывает Mini App сразу после
+      // вызова — поэтому нельзя звать его тут же при открытии окна,
+      // иначе пользователь не успеет прочитать подтверждение.
+      pendingBookingData = {
+        master: master.name,
+        service: service.name,
+        day: DAYS[state.day],
+        date: DAYS_DATA[state.day].date,
+        time: state.time,
+        price: service.price,
+        ticket: ticketNumber,
+      };
+    }
+
+    let pendingBookingData = null;
+
+    document.getElementById("btnBook").addEventListener("click", openStub);
+    document.getElementById("btnClose").addEventListener("click", () => {
+      document.getElementById("overlay").classList.remove("show");
+
+      // Данные отправляются боту именно здесь — по нажатию "Готово".
+      // sendData() сам закрывает Mini App сразу после отправки, это
+      // штатное поведение Telegram, отдельный close() после неё не нужен.
+      if (window.Telegram && window.Telegram.WebApp && pendingBookingData) {
+        window.Telegram.WebApp.sendData(JSON.stringify(pendingBookingData));
+      } else if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.close();
+      }
     });
-  }
 
-  function updateBar() {
-    const service = SERVICES.find(s => s.id === state.service);
-    const label = document.getElementById("bar-label");
-    const price = document.getElementById("bar-price");
-    const btn = document.getElementById("btnBook");
-
-    if (service && state.time) {
-      label.textContent = `${DAYS[state.day]}, ${state.time}`;
-      price.textContent = currency(service.price);
-      btn.disabled = false;
-    } else if (service) {
-      label.textContent = "Выберите время";
-      price.textContent = currency(service.price);
-      btn.disabled = true;
-    } else {
-      label.textContent = "Выберите услугу";
-      price.textContent = "—";
-      btn.disabled = true;
+    // Telegram Mini App: подстраиваемся под системную тему и раскрываем окно
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
     }
-  }
 
-  function openStub() {
-    const master = MASTERS.find(m => m.id === state.master);
-    const service = SERVICES.find(s => s.id === state.service);
-    const ticketNumber = String(Math.floor(100 + Math.random() * 900));
-
-    document.getElementById("stub-sub").textContent = `Ждём вас — ${master.name}, ${DAYS[state.day].toLowerCase()} в ${state.time}`;
-    document.getElementById("s-master").textContent = master.name;
-    document.getElementById("s-service").textContent = service.name;
-    document.getElementById("s-time").textContent = `${DAYS[state.day]}, ${state.time}`;
-    document.getElementById("s-price").textContent = currency(service.price);
-    document.getElementById("s-number").textContent = `№ ${ticketNumber}`;
-
-    document.getElementById("overlay").classList.add("show");
-
-    // Запоминаем данные записи, чтобы отправить их боту чуть позже —
-    // именно в момент, когда пользователь нажмёт "Готово". Дело в том,
-    // что Telegram.WebApp.sendData() САМ закрывает Mini App сразу после
-    // вызова — поэтому нельзя звать его тут же при открытии окна,
-    // иначе пользователь не успеет прочитать подтверждение.
-   pendingBookingData = {
-      master: master.name,
-      service: service.name,
-      day: DAYS[state.day],
-      date: DAYS_DATA[state.day].date,
-      time: state.time,
-      price: service.price,
-      ticket: ticketNumber,
-    };
-  }
-
-  let pendingBookingData = null;
-
-  document.getElementById("btnBook").addEventListener("click", openStub);
-  document.getElementById("btnClose").addEventListener("click", () => {
-    document.getElementById("overlay").classList.remove("show");
-
-    // Данные отправляются боту именно здесь — по нажатию "Готово".
-    // sendData() сам закрывает Mini App сразу после отправки, это
-    // штатное поведение Telegram, отдельный close() после неё не нужен.
-    if (window.Telegram && window.Telegram.WebApp && pendingBookingData) {
-      window.Telegram.WebApp.sendData(JSON.stringify(pendingBookingData));
-    } else if (window.Telegram && window.Telegram.WebApp) {
-      window.Telegram.WebApp.close();
-    }
-  });
-
-  // Telegram Mini App: подстраиваемся под системную тему и раскрываем окно
-  if (window.Telegram && window.Telegram.WebApp) {
-    window.Telegram.WebApp.ready();
-    window.Telegram.WebApp.expand();
-  }
-
-  renderDays();
-  renderTimes();
-  updateBar();
-  loadServices(); // подтягивает услуги из Supabase и сама вызывает renderTickets()
-  loadMasters(); // подтягивает мастеров из Supabase и сама вызывает renderMasters()
-</script>
+    renderDays();
+    renderTimes();
+    updateBar();
+    loadServices(); // подтягивает услуги из Supabase и сама вызывает renderTickets()
+    loadMasters(); // подтягивает мастеров из Supabase и сама вызывает renderMasters()
+  </script>
 
 </body>
+
 </html>
