@@ -867,12 +867,18 @@
     // ---------- Мои записи ----------
 
     function getClientChatId() {
-      console.log('DEBUG WebApp:', window.Telegram && window.Telegram.WebApp);
-      console.log('DEBUG initDataUnsafe:', window.Telegram && window.Telegram.WebApp && JSON.stringify(window.Telegram.WebApp.initDataUnsafe));
       if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
         return window.Telegram.WebApp.initDataUnsafe.user.id;
       }
       return null;
+    }
+
+    function getDebugInfo() {
+      const hasTelegram = !!window.Telegram;
+      const hasWebApp = !!(window.Telegram && window.Telegram.WebApp);
+      const initData = hasWebApp ? window.Telegram.WebApp.initData : 'нет';
+      const initDataUnsafe = hasWebApp ? JSON.stringify(window.Telegram.WebApp.initDataUnsafe) : 'нет';
+      return `Telegram: ${hasTelegram}, WebApp: ${hasWebApp}\ninitData: ${initData}\ninitDataUnsafe: ${initDataUnsafe}`;
     }
 
     async function loadMyBookings() {
@@ -880,7 +886,7 @@
       const chatId = getClientChatId();
 
       if (!chatId) {
-        listEl.innerHTML = `<div style="color:var(--faint); font-size:13px; text-align:center; padding:20px 0;">Не удалось определить пользователя. Откройте через Telegram.</div>`;
+        listEl.innerHTML = `<div style="color:var(--faint); font-size:11px; text-align:left; padding:12px; white-space:pre-wrap; word-break:break-all;">${getDebugInfo()}</div>`;
         return;
       }
 
