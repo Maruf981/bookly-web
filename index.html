@@ -669,18 +669,14 @@
     let BUSY = []; // заполняется динамически при выборе дня и мастера
 
     async function loadWorkTimes() {
-      console.log('DEBUG OWNER_ID:', OWNER_ID);
       const { data, error } = await sb
         .from('bots')
         .select('work_times')
         .eq('owner_id', OWNER_ID)
         .maybeSingle();
 
-      console.log('DEBUG loadWorkTimes data:', data, 'error:', error);
-
       if (!error && data && data.work_times) {
         TIMES = data.work_times.split(',').map(t => t.trim()).filter(t => t);
-        console.log('DEBUG новые TIMES:', TIMES);
       }
 
       renderTimes();
