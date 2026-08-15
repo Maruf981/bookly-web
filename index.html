@@ -665,8 +665,22 @@
     const DAYS_DATA = getUpcomingDays();
     const DAYS = DAYS_DATA.map(d => d.label);
 
-    const TIMES = ["10:00", "11:30", "12:00", "13:00", "14:30", "15:00", "16:30", "18:00"];
+    let TIMES = ["10:00", "11:30", "12:00", "13:00", "14:30", "15:00", "16:30", "18:00"]; // временное значение, заменится после загрузки из базы
     let BUSY = []; // заполняется динамически при выборе дня и мастера
+
+    async function loadWorkTimes() {
+      const { data, error } = await sb
+        .from('bots')
+        .select('work_times')
+        .eq('owner_id', OWNER_ID)
+        .maybeSingle();
+
+      if (!error && data && data.work_times) {
+        TIMES = data.work_times.split(',').map(t => t.trim()).filter(t => t);
+      }
+
+      renderTimes();
+    }
 
     async function loadBusyTimes() {
       const selectedDate = DAYS_DATA[state.day].date;
@@ -988,8 +1002,8 @@
     }
 
     renderDays();
-    renderTimes();
     updateBar();
+    loadWorkTimes(); // подтягивает время записи из Supabase и сама вызывает renderTimes()
     loadServices(); // подтягивает услуги из Supabase и сама вызывает renderTickets()
     loadMasters(); // подтягивает мастеров из Supabase и сама вызывает renderMasters()
   </script>
