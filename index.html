@@ -666,9 +666,6 @@
         BUSY = data.map(b => b.time);
       }
 
-      const masterName = MASTERS.find(m => m.id === state.master)?.name;
-        alert('ДАТА=' + selectedDate + ' МАСТЕР="' + masterName + '" STATE.MASTER=' + state.master + ' ЗАНЯТО=' + BUSY.length);
-
       renderTimes();
     }
 
