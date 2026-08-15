@@ -867,6 +867,8 @@
     // ---------- Мои записи ----------
 
     function getClientChatId() {
+      console.log('DEBUG WebApp:', window.Telegram && window.Telegram.WebApp);
+      console.log('DEBUG initDataUnsafe:', window.Telegram && window.Telegram.WebApp && JSON.stringify(window.Telegram.WebApp.initDataUnsafe));
       if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
         return window.Telegram.WebApp.initDataUnsafe.user.id;
       }
