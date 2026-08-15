@@ -870,6 +870,11 @@
       if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
         return window.Telegram.WebApp.initDataUnsafe.user.id;
       }
+      // Резервный способ: ID клиента передан прямо в ссылке ботом
+      const chatParam = urlParams.get('chat');
+      if (chatParam) {
+        return Number(chatParam);
+      }
       return null;
     }
 
