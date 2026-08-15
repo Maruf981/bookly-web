@@ -798,10 +798,25 @@
       });
     }
 
+     function isTimeInPast(timeStr) {
+      // Прошедшее время актуально только для "Сегодня" (день с индексом 0)
+      if (state.day !== 0) return false;
+
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      const slotDateTime = new Date();
+      slotDateTime.setHours(hours, minutes, 0, 0);
+
+      const now = new Date();
+      const minMinutesAhead = 30; // не даём записаться меньше чем за 30 минут
+      const diffMinutes = (slotDateTime - now) / (1000 * 60);
+
+      return diffMinutes < minMinutesAhead;
+    }
+
     function renderTimes() {
       const el = document.getElementById("times");
       el.innerHTML = TIMES.map(t => {
-        const busy = BUSY.includes(t);
+        const busy = BUSY.includes(t) || isTimeInPast(t);
         const active = state.time === t;
         return `<div class="time ${busy ? "busy" : ""} ${active ? "active" : ""}" data-t="${t}">${t}</div>`;
       }).join("");
