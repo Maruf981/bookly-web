@@ -646,24 +646,30 @@
 
     let SERVICES = []; // заполнится из базы данных при загрузке страницы
 
-    function getUpcomingDays() {
+    function getUpcomingDays(daysOffList = []) {
       const labels = ["Сегодня", "Завтра"];
       const weekdayNames = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
       const days = [];
 
-      for (let i = 0; i < 6; i++) {
+      // Смотрим на 14 дней вперёд, чтобы после отсеивания выходных
+      // всё равно осталось достаточно дней на выбор
+      for (let i = 0; i < 14 && days.length < 6; i++) {
         const d = new Date();
         d.setDate(d.getDate() + i);
-        const label = labels[i] || weekdayNames[d.getDay()];
-        // Формат ГГГГ-ММ-ДД, без сдвига часового пояса
+
+        if (daysOffList.includes(d.getDay())) continue; // пропускаем выходной день
+
+        const label = i === 0 ? labels[0] : (i === 1 ? labels[1] : weekdayNames[d.getDay()]);
         const iso = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
         days.push({ label, date: iso });
       }
       return days;
     }
 
-    const DAYS_DATA = getUpcomingDays();
-    const DAYS = DAYS_DATA.map(d => d.label);
+    let DAYS_DATA = getUpcomingDays(); // временное значение, обновится после загрузки настроек владельца
+    let DAYS = DAYS_DATA.map(d => d.label);
+
+
 
     let TIMES = ["10:00", "11:30", "12:00", "13:00", "14:30", "15:00", "16:30", "18:00"]; // временное значение, заменится после загрузки из базы
     let BUSY = []; // заполняется динамически при выборе дня и мастера
@@ -671,12 +677,19 @@
     async function loadWorkTimes() {
       const { data, error } = await sb
         .from('bots')
-        .select('work_times')
+        .select('work_times, days_off')
         .eq('owner_id', OWNER_ID)
         .maybeSingle();
 
-      if (!error && data && data.work_times) {
-        TIMES = data.work_times.split(',').map(t => t.trim()).filter(t => t);
+      if (!error && data) {
+        if (data.work_times) {
+          TIMES = data.work_times.split(',').map(t => t.trim()).filter(t => t);
+        }
+
+        const daysOffList = (data.days_off || '').split(',').map(d => d.trim()).filter(d => d).map(Number);
+        DAYS_DATA = getUpcomingDays(daysOffList);
+        DAYS = DAYS_DATA.map(d => d.label);
+        renderDays();
       }
 
       renderTimes();
@@ -1012,7 +1025,7 @@
 
     renderDays();
     updateBar();
-    loadWorkTimes(); // подтягивает время записи из Supabase и сама вызывает renderTimes()
+    loadWorkTimes(); // подтягивает время записи и выходные дни из Supabase, сама вызывает renderDays() и renderTimes()
     loadServices(); // подтягивает услуги из Supabase и сама вызывает renderTickets()
     loadMasters(); // подтягивает мастеров из Supabase и сама вызывает renderMasters()
   </script>
