@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <title>СТРОП — запись</title>
+  <title>Bookly — запись</title>
   <style>
     :root {
       --bg: #0b0d12;
@@ -1023,6 +1023,7 @@
       window.Telegram.WebApp.expand();
     }
 
+    applyShopInfoFromUrl(); // подставляет название бизнеса в заголовок страницы и вкладки браузера
     renderDays();
     updateBar();
     loadWorkTimes(); // подтягивает время записи и выходные дни из Supabase, сама вызывает renderDays() и renderTimes()
