@@ -536,10 +536,47 @@
 
   let SERVICES = []; // заполнится из базы данных при загрузке страницы
 
-  const DAYS = ["Сегодня", "Завтра", "Пт", "Сб"];
+  function getUpcomingDays() {
+  const labels = ["Сегодня", "Завтра"];
+  const weekdayNames = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+  const days = [];
+
+  for (let i = 0; i < 6; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() + i);
+    const label = labels[i] || weekdayNames[d.getDay()];
+    // Формат ГГГГ-ММ-ДД, без сдвига часового пояса
+    const iso = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    days.push({ label, date: iso });
+  }
+  return days;
+}
+
+const DAYS_DATA = getUpcomingDays();
+const DAYS = DAYS_DATA.map(d => d.label);
 
   const TIMES = ["10:00", "11:30", "12:00", "13:00", "14:30", "15:00", "16:30", "18:00"];
-  const BUSY = ["12:00", "15:00"];
+  let BUSY = []; // заполняется динамически при выборе дня и мастера
+
+async function loadBusyTimes() {
+  const selectedDate = DAYS_DATA[state.day].date;
+
+  const { data, error } = await sb
+    .from('bookings')
+    .select('time')
+    .eq('owner_id', OWNER_ID)
+    .eq('master', MASTERS.find(m => m.id === state.master)?.name)
+    .eq('booking_date', selectedDate);
+
+  if (error) {
+    console.error('Не удалось проверить занятость:', error.message);
+    BUSY = [];
+  } else {
+    BUSY = data.map(b => b.time);
+  }
+
+  renderTimes();
+}
 
   // ------------------------------------------------------------------
 
@@ -561,6 +598,7 @@
 
     MASTERS = data;
     if (!state.master) state.master = MASTERS[0].id;
+    loadBusyTimes();
     renderMasters();
     updateBar();
   }
@@ -605,6 +643,7 @@
       node.addEventListener("click", () => {
         state.master = Number(node.dataset.id);
         renderMasters();
+        loadBusyTimes();
       });
     });
   }
@@ -642,7 +681,7 @@
         state.day = Number(node.dataset.i);
         state.time = null;
         renderDays();
-        renderTimes();
+        loadBusyTimes();
         updateBar();
       });
     });
@@ -704,10 +743,11 @@
     // что Telegram.WebApp.sendData() САМ закрывает Mini App сразу после
     // вызова — поэтому нельзя звать его тут же при открытии окна,
     // иначе пользователь не успеет прочитать подтверждение.
-    pendingBookingData = {
+   pendingBookingData = {
       master: master.name,
       service: service.name,
       day: DAYS[state.day],
+      date: DAYS_DATA[state.day].date,
       time: state.time,
       price: service.price,
       ticket: ticketNumber,
