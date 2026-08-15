@@ -927,7 +927,7 @@
         return;
       }
 
-      const { data, error } = await sb
+      const { data: rawData, error } = await sb
         .from('bookings')
         .select('*')
         .eq('owner_id', OWNER_ID)
@@ -939,6 +939,15 @@
         listEl.innerHTML = `<div style="color:var(--faint); font-size:13px; text-align:center; padding:20px 0;">Не удалось загрузить записи.</div>`;
         return;
       }
+
+      function isBookingPast(bookingDate, bookingTime) {
+        const [hours, minutes] = bookingTime.split(':').map(Number);
+        const bookingDateTime = new Date(bookingDate);
+        bookingDateTime.setHours(hours, minutes, 0, 0);
+        return bookingDateTime < new Date();
+      }
+
+      const data = (rawData || []).filter(b => !isBookingPast(b.booking_date, b.time));
 
       if (!data || data.length === 0) {
         listEl.innerHTML = `<div style="color:var(--faint); font-size:13px; text-align:center; padding:20px 0;">У вас пока нет активных записей.</div>`;
