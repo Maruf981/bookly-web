@@ -657,7 +657,8 @@
         .select('time')
         .eq('owner_id', OWNER_ID)
         .eq('master', MASTERS.find(m => m.id === state.master)?.name)
-        .eq('booking_date', selectedDate);
+        .eq('booking_date', selectedDate)
+        .eq('status', 'active');
 
       if (error) {
         console.error('Не удалось проверить занятость:', error.message);
