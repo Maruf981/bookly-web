@@ -681,13 +681,16 @@
         .eq('owner_id', OWNER_ID)
         .maybeSingle();
 
+      console.log('DEBUG loadWorkTimes data:', data, 'error:', error);
       if (!error && data) {
         if (data.work_times) {
           TIMES = data.work_times.split(',').map(t => t.trim()).filter(t => t);
         }
 
         const daysOffList = (data.days_off || '').split(',').map(d => d.trim()).filter(d => d).map(Number);
+        console.log('DEBUG daysOffList:', daysOffList);
         DAYS_DATA = getUpcomingDays(daysOffList);
+        console.log('DEBUG новый DAYS_DATA:', DAYS_DATA);
         DAYS = DAYS_DATA.map(d => d.label);
         renderDays();
       }
