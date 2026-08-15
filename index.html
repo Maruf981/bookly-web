@@ -650,8 +650,7 @@
     let BUSY = []; // заполняется динамически при выборе дня и мастера
 
     async function loadBusyTimes() {
-  alert('loadBusyTimes ВЫЗВАНА, state.master=' + state.master);
-  const selectedDate = DAYS_DATA[state.day].date;
+      const selectedDate = DAYS_DATA[state.day].date;
 
       const { data, error } = await sb
         .from('bookings')
