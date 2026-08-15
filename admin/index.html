@@ -1091,6 +1091,10 @@
           <input type="text" id="botTokenInput" placeholder="Токен от @BotFather" />
           <input type="text" id="botChatIdInput" placeholder="Ваш ID для уведомлений (от @userinfobot)" />
           <input type="text" id="botWorkTimesInput" placeholder="Время записи через запятую" value="10:00,11:30,12:00,13:00,14:30,15:00,16:30,18:00" />
+          <div style="margin-top:4px;">
+            <div style="font-size:11px; color:var(--faint); margin-bottom:6px;">Выходные дни:</div>
+            ${renderDaysOffCheckboxes("")}
+          </div>
           <button class="btn-save" id="btnSaveToken">Сохранить</button>
         </div>
         <div class="bot-help">
@@ -1105,18 +1109,43 @@
       }
     }
 
+    const WEEKDAY_LABELS = [
+      { value: 0, label: 'Вс' },
+      { value: 1, label: 'Пн' },
+      { value: 2, label: 'Вт' },
+      { value: 3, label: 'Ср' },
+      { value: 4, label: 'Чт' },
+      { value: 5, label: 'Пт' },
+      { value: 6, label: 'Сб' },
+    ];
+
+    function renderDaysOffCheckboxes(existingDaysOff) {
+      const selected = existingDaysOff.split(',').map(d => d.trim()).filter(d => d);
+      return WEEKDAY_LABELS.map(d => `
+        <label style="display:inline-flex; align-items:center; gap:5px; margin-right:12px; margin-bottom:6px; font-size:13px; color:var(--muted); cursor:pointer;">
+          <input type="checkbox" class="dayOffCheckbox" value="${d.value}" ${selected.includes(String(d.value)) ? 'checked' : ''} />
+          ${d.label}
+        </label>
+      `).join('');
+    }
+
     function showBotForm() {
       const view = document.getElementById("botStatusView");
       const existingName = currentBotRow ? (currentBotRow.business_name || "") : "";
       const existingToken = currentBotRow ? currentBotRow.bot_token : "";
       const existingChatId = currentBotRow ? (currentBotRow.owner_chat_id || "") : "";
       const existingWorkTimes = currentBotRow ? (currentBotRow.work_times || "10:00,11:30,12:00,13:00,14:30,15:00,16:30,18:00") : "10:00,11:30,12:00,13:00,14:30,15:00,16:30,18:00";
+      const existingDaysOff = currentBotRow ? (currentBotRow.days_off || "") : "";
       view.innerHTML = `
       <div class="bot-form" style="flex-direction:column;">
         <input type="text" id="botNameInput" placeholder="Название бизнеса (например, СТРОП)" value="${existingName}" />
         <input type="text" id="botTokenInput" placeholder="Токен от @BotFather" value="${existingToken}" />
         <input type="text" id="botChatIdInput" placeholder="Ваш ID для уведомлений (от @userinfobot)" value="${existingChatId}" />
         <input type="text" id="botWorkTimesInput" placeholder="Время записи через запятую" value="${existingWorkTimes}" />
+        <div style="margin-top:4px;">
+          <div style="font-size:11px; color:var(--faint); margin-bottom:6px;">Выходные дни:</div>
+          ${renderDaysOffCheckboxes(existingDaysOff)}
+        </div>
         <button class="btn-save" id="btnSaveToken">Сохранить</button>
       </div>
       <div class="bot-help">
@@ -1135,19 +1164,20 @@
       const token = document.getElementById("botTokenInput").value.trim();
       const chatId = document.getElementById("botChatIdInput").value.trim();
       const workTimes = document.getElementById("botWorkTimesInput").value.trim();
+      const daysOff = Array.from(document.querySelectorAll('.dayOffCheckbox:checked')).map(cb => cb.value).join(',');
       if (!businessName) { showToast("Впишите название бизнеса"); return; }
       if (!token) { showToast("Вставьте токен бота"); return; }
       if (!workTimes) { showToast("Впишите хотя бы одно время записи"); return; }
 
       if (currentBotRow) {
         const { error } = await sb.from('bots')
-          .update({ business_name: businessName, bot_token: token, owner_chat_id: chatId || null, work_times: workTimes, is_active: true })
+          .update({ business_name: businessName, bot_token: token, owner_chat_id: chatId || null, work_times: workTimes, days_off: daysOff, is_active: true })
           .eq('id', currentBotRow.id)
           .eq('owner_id', currentUserId);
         if (error) { showToast("Ошибка: " + error.message); return; }
       } else {
         const { error } = await sb.from('bots')
-          .insert({ owner_id: currentUserId, business_name: businessName, bot_token: token, owner_chat_id: chatId || null, work_times: workTimes, is_active: true });
+          .insert({ owner_id: currentUserId, business_name: businessName, bot_token: token, owner_chat_id: chatId || null, work_times: workTimes, days_off: daysOff, is_active: true });
         if (error) { showToast("Ошибка: " + error.message); return; }
       }
 
