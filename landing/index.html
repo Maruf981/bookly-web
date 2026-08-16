@@ -375,6 +375,40 @@
     .demo-phone { width: 240px; }
   }
 
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 18px 0;
+    background: var(--surface);
+  }
+
+  .marquee-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: marqueeScroll 30s linear infinite;
+  }
+
+  .marquee-item {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+    white-space: nowrap;
+    padding: 0 20px;
+  }
+
+  .marquee-dot {
+    color: var(--accent);
+    font-size: 14px;
+  }
+
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+
   /* Network visual */
 
   .net-wrap { position: relative; height: 420px; }
@@ -801,6 +835,41 @@
   </div>
 </div>
 
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">ИИ-ассистент</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Отмена и перенос записи" data-en="Cancel and reschedule">Отмена и перенос записи</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Работает 24/7" data-en="Works 24/7">Работает 24/7</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Гибкое расписание" data-en="Flexible schedule">Гибкое расписание</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Напоминания клиентам" data-en="Client reminders">Напоминания клиентам</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Мгновенные уведомления" data-en="Instant notifications">Мгновенные уведомления</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Бесплатно на старте" data-en="Free to start">Бесплатно на старте</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item">ИИ-ассистент</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Отмена и перенос записи" data-en="Cancel and reschedule">Отмена и перенос записи</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Работает 24/7" data-en="Works 24/7">Работает 24/7</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Гибкое расписание" data-en="Flexible schedule">Гибкое расписание</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Напоминания клиентам" data-en="Client reminders">Напоминания клиентам</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Мгновенные уведомления" data-en="Instant notifications">Мгновенные уведомления</span>
+    <span class="marquee-dot">·</span>
+    <span class="marquee-item" data-ru="Бесплатно на старте" data-en="Free to start">Бесплатно на старте</span>
+  </div>
+</div>
+
+<section class="section-border">
+  <div class="wrap">
+    <div class="section-eyebrow" data-ru="Как это работает"
 
 <section class="section-border">
   <div class="wrap">
