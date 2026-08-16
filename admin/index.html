@@ -127,7 +127,7 @@
       display: none;
     }
 
-   .dash {
+    .dash {
       display: none;
       max-width: 1100px;
       margin: 0 auto;
@@ -696,43 +696,55 @@
       <div id="botStatusView"></div>
     </div>
 
-    <div class="ledger">
-      <div class="ledger-head">
-        <div>Услуга</div>
-        <div>Время</div>
-        <div>Цена</div>
-        <div></div>
-      </div>
-      <div id="rows"></div>
-    </div>
-
-    <div class="add-bar">
-      <button class="btn-add" id="btnShowAdd">+ Добавить услугу</button>
-    </div>
-
-    <div class="form-card" id="formCard">
-      <div class="input-group">
-        <label>Название услуги</label>
-        <input type="text" id="fName" placeholder="Например, Стрижка машинкой" />
-      </div>
-      <div class="form-grid">
-        <div class="input-group">
-          <label>Длительность</label>
-          <input type="text" id="fDuration" placeholder="25 мин" />
+    <div class="two-col-section">
+      <div>
+        <div class="ledger">
+          <div class="ledger-head">
+            <div>Услуга</div>
+            <div>Время</div>
+            <div>Цена</div>
+            <div></div>
+          </div>
+          <div id="rows"></div>
         </div>
-        <div class="input-group">
-          <label>Цена</label>
-          <input type="number" id="fPrice" placeholder="60" />
+
+        <div class="add-bar">
+          <button class="btn-add" id="btnShowAdd">+ Добавить услугу</button>
         </div>
-        <input type="hidden" id="fId" />
+
+        <div class="form-card" id="formCard">
+          <div class="input-group">
+            <label>Название услуги</label>
+            <input type="text" id="fName" placeholder="Например, Стрижка машинкой" />
+          </div>
+          <div class="form-grid">
+            <div class="input-group">
+              <label>Длительность</label>
+              <input type="text" id="fDuration" placeholder="25 мин" />
+            </div>
+            <div class="input-group">
+              <label>Цена</label>
+              <input type="number" id="fPrice" placeholder="60" />
+            </div>
+            <input type="hidden" id="fId" />
+          </div>
+          <div class="form-actions">
+            <button class="btn-save" id="btnSave">Сохранить</button>
+            <button class="btn-cancel" id="btnCancelForm">Отмена</button>
+          </div>
+        </div>
       </div>
-      <div class="form-actions">
-        <button class="btn-save" id="btnSave">Сохранить</button>
-        <button class="btn-cancel" id="btnCancelForm">Отмена</button>
+
+      <div>
+        <div class="dash-eyebrow" style="margin-top:0;">Аналитика</div>
+        <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваша статистика</div>
+
+        <div id="analyticsBlock"
+          style="background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px;"></div>
       </div>
     </div>
 
-   <div class="two-col-section">
+    <div class="two-col-section">
       <div>
         <div class="dash-eyebrow" style="margin-top:28px;">Сотрудники</div>
         <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши сотрудники</div>
@@ -1015,6 +1027,7 @@
       loadServices();
       loadMasters();
       loadClients();
+      loadAnalytics();
       loadBotInfo();
     });
 
@@ -1283,6 +1296,75 @@
         row.addEventListener("click", () => toggleClientHistory(row.dataset.key));
       });
     }
+
+
+async function loadAnalytics() {
+      const { data, error } = await sb
+        .from('bookings')
+        .select('*')
+        .eq('owner_id', currentUserId);
+
+      const blockEl = document.getElementById("analyticsBlock");
+      if (error || !data) {
+        blockEl.innerHTML = `<div style="color:var(--faint); font-size:13px;">Не удалось загрузить аналитику.</div>`;
+        return;
+      }
+
+      const totalVisits = data.length;
+      const cancelledCount = data.filter(b => b.status === 'cancelled').length;
+      const cancelledPercent = totalVisits > 0 ? Math.round((cancelledCount / totalVisits) * 100) : 0;
+
+      const sevenDaysAgoIso = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      const weekVisits = data.filter(b => (b.booking_date || '') >= sevenDaysAgoIso).length;
+
+      const uniqueClients = new Set(data.map(b => b.client_username || b.client_chat_id || b.client_name)).size;
+
+      // Считаем популярность услуг
+      const serviceCounts = {};
+      for (const b of data) {
+        if (!b.service) continue;
+        serviceCounts[b.service] = (serviceCounts[b.service] || 0) + 1;
+      }
+      const topServices = Object.entries(serviceCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+      const maxCount = topServices.length > 0 ? topServices[0][1] : 1;
+
+      blockEl.innerHTML = `
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px; margin-bottom:20px;">
+          <div style="background: var(--surface-2, #1a1e28); border-radius: 9px; padding: 12px;">
+            <div style="font-size:11px; color:var(--faint); margin-bottom:4px;">За неделю</div>
+            <div style="font-size:22px; font-weight:700; color:var(--ink);">${weekVisits}</div>
+          </div>
+          <div style="background: var(--surface-2, #1a1e28); border-radius: 9px; padding: 12px;">
+            <div style="font-size:11px; color:var(--faint); margin-bottom:4px;">Всего визитов</div>
+            <div style="font-size:22px; font-weight:700; color:var(--ink);">${totalVisits}</div>
+          </div>
+          <div style="background: var(--surface-2, #1a1e28); border-radius: 9px; padding: 12px;">
+            <div style="font-size:11px; color:var(--faint); margin-bottom:4px;">Отменено</div>
+            <div style="font-size:22px; font-weight:700; color:var(--ink);">${cancelledPercent}%</div>
+          </div>
+          <div style="background: var(--surface-2, #1a1e28); border-radius: 9px; padding: 12px;">
+            <div style="font-size:11px; color:var(--faint); margin-bottom:4px;">Клиентов</div>
+            <div style="font-size:22px; font-weight:700; color:var(--ink);">${uniqueClients}</div>
+          </div>
+        </div>
+
+        <div style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">Популярные услуги</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          ${topServices.map(([name, count]) => `
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:3px;">
+                <span>${name}</span>
+                <span>${count}</span>
+              </div>
+              <div style="background: var(--surface-2, #1a1e28); border-radius: 6px; height: 8px; overflow:hidden;">
+                <div style="background: var(--accent); height:100%; width:${(count / maxCount) * 100}%;"></div>
+              </div>
+            </div>
+          `).join('') || '<div style="color:var(--faint); font-size:12px;">Пока нет данных</div>'}
+        </div>
+      `;
+    }
+
 
     function toggleClientHistory(key) {
       const historyEl = document.getElementById(`history-${key}`);
@@ -1573,6 +1655,7 @@
         loadServices();
         loadMasters();
         loadClients();
+        loadAnalytics();
         loadBotInfo();
       }
     })();
