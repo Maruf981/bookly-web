@@ -835,144 +835,7 @@
 
     /* FAQ */
 
-    /* FAQ preview + fullscreen overlay */
-
-    .faq-preview {
-      max-width: 480px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color .15s ease;
-    }
-
-    .faq-preview:hover {
-      border-color: var(--accent);
-    }
-
-    .faq-preview-chrome {
-      display: flex;
-      gap: 6px;
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .faq-preview-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--line);
-    }
-
-    .faq-preview-body {
-      padding: 20px 24px;
-    }
-
-    .faq-preview-heading {
-      font-family: Georgia, serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 14px;
-    }
-
-    .faq-preview-row {
-      height: 8px;
-      border-radius: 4px;
-      background: var(--line);
-      margin-bottom: 10px;
-      width: 100%;
-    }
-
-    .faq-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(10, 8, 5, 0);
-      display: none;
-      align-items: flex-start;
-      justify-content: center;
-      z-index: 100;
-      overflow-y: auto;
-      transition: background .35s ease;
-    }
-
-    .faq-overlay.show {
-      display: flex;
-    }
-
-    .faq-overlay.lit {
-      background: rgba(10, 8, 5, 0.85);
-    }
-
-    .faq-overlay-inner {
-      background: var(--bg);
-      width: 100%;
-      min-height: 100vh;
-      max-width: 900px;
-      padding: 50px 24px;
-      position: relative;
-      transform: scale(0.92);
-      opacity: 0;
-      transition: transform .35s ease, opacity .35s ease;
-    }
-
-    .faq-overlay-inner.lit {
-      transform: scale(1);
-      opacity: 1;
-    }
-
-    .faq-overlay-close {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      background: none;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .faq-overlay-title {
-      font-family: Georgia, serif;
-      font-size: 30px;
-      font-weight: 800;
-      color: var(--ink);
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .faq-overlay-body {
-      display: grid;
-      grid-template-columns: 160px 1fr;
-      gap: 40px;
-    }
-
-    .faq-sidebar-item {
-      font-size: 13px;
-      color: var(--muted);
-      padding: 8px 0 8px 14px;
-      border-left: 2px solid transparent;
-    }
-
-    .faq-sidebar-item.active {
-      color: var(--ink);
-      font-weight: 700;
-      border-left-color: var(--accent);
-    }
-
-    @media (max-width: 760px) {
-      .faq-overlay-body {
-        grid-template-columns: 1fr;
-      }
-
-      .faq-overlay-sidebar {
-        display: none;
-      }
-    }
+     
 
     /* FAQ — newspaper style with zoom-in */
 
@@ -983,27 +846,40 @@
     }
 
     .faq-news-item {
-      padding: 22px 4px;
+      padding: 10px 4px;
       border-bottom: 1px solid var(--line);
+    }
+
+    .faq-news-q {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+
+    .faq-news-a {
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.4;
+      max-width: 560px;
+    }
+
+    .faq-newspaper-wrap {
       cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px 20px;
+      max-width: 480px;
+      background: var(--surface);
+      transition: border-color .15s ease;
+    }
+
+    .faq-newspaper-wrap:hover {
+      border-color: var(--accent);
     }
 
     .faq-news-item:last-child {
       border-bottom: none;
-    }
-
-    .faq-news-q {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 8px;
-    }
-
-    .faq-news-a {
-      font-size: 13.5px;
-      color: var(--muted);
-      line-height: 1.6;
-      max-width: 560px;
     }
 
     .faq-zoom-overlay {
@@ -1572,13 +1448,56 @@
     </div>
   </section>
 
+<!-- ===== БЛОК FAQ — НАЧАЛО ===== -->
   <section class="section-border">
     <div class="wrap">
       <div class="section-eyebrow" data-ru="Вопросы" data-en="Questions">Вопросы</div>
       <div class="section-title" data-ru="Частые вопросы" data-en="Frequently asked questions">Частые вопросы</div>
 
-      <div class="faq-newspaper">
-        <div class="faq-news-item" data-answer-ru="Да, подключение бота, личный кабинет и приём записей бесплатны на старте. Никаких скрытых платежей." data-answer-en="Yes — connecting your bot, the dashboard, and receiving bookings are free to start. No hidden fees.">
+      <!-- Маленькая газета: кликабельная обёртка вокруг всего списка -->
+      <div class="faq-newspaper-wrap" id="faqNewsWrap">
+        <div class="faq-newspaper">
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="Это точно бесплатно?" data-en="Is it really free?">Это точно бесплатно?</div>
+            <div class="faq-news-a" data-ru="Да, подключение бота, личный кабинет и приём записей бесплатны на старте. Никаких скрытых платежей." data-en="Yes — connecting your bot, the dashboard, and receiving bookings are free to start. No hidden fees.">Да, подключение бота, личный кабинет и приём записей бесплатны на старте. Никаких скрытых платежей.</div>
+          </div>
+
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="Нужна ли банковская карта для регистрации?" data-en="Do I need a credit card to sign up?">Нужна ли банковская карта для регистрации?</div>
+            <div class="faq-news-a" data-ru="Нет. Регистрация занимает пару минут — только email и пароль, карта не требуется." data-en="No. Sign-up takes a couple of minutes — just email and password, no card required.">Нет. Регистрация занимает пару минут — только email и пароль, карта не требуется.</div>
+          </div>
+
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="Я не программист — смогу ли подключить бота сам?" data-en="I'm not a developer — can I set this up myself?">Я не программист — смогу ли подключить бота сам?</div>
+            <div class="faq-news-a" data-ru="Да. Весь процесс — несколько кликов в Telegram и вставка одного кода в личном кабинете. Пошаговая инструкция есть прямо на этом сайте." data-en="Yes. The whole process is a few clicks in Telegram plus pasting one code into your dashboard. A step-by-step guide is right here on this page.">Да. Весь процесс — несколько кликов в Telegram и вставка одного кода в личном кабинете. Пошаговая инструкция есть прямо на этом сайте.</div>
+          </div>
+
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="Что происходит с моими данными и данными клиентов?" data-en="What happens to my data and my clients' data?">Что происходит с моими данными и данными клиентов?</div>
+            <div class="faq-news-a" data-ru="Данные хранятся в защищённой базе и доступны только вам через ваш личный кабинет. Мы не передаём их третьим лицам." data-en="Your data is stored securely and only accessible to you through your dashboard. We never share it with third parties.">Данные хранятся в защищённой базе и доступны только вам через ваш личный кабинет. Мы не передаём их третьим лицам.</div>
+          </div>
+
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="Могу ли я отключить бота или удалить аккаунт?" data-en="Can I disable my bot or delete my account?">Могу ли я отключить бота или удалить аккаунт?</div>
+            <div class="faq-news-a" data-ru="Да, в любой момент — прямо из личного кабинета, без каких-либо условий и обязательств." data-en="Yes, at any time — right from your dashboard, with no conditions or commitments.">Да, в любой момент — прямо из личного кабинета, без каких-либо условий и обязательств.</div>
+          </div>
+
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="Работает ли это не только в Telegram?" data-en="Does this work outside of Telegram?">Работает ли это не только в Telegram?</div>
+            <div class="faq-news-a" data-ru="Сейчас Bookly работает через Telegram — самый популярный мессенджер для такого рода записи в регионе. Мы уже работаем над поддержкой WhatsApp и других платформ." data-en="Right now Bookly runs through Telegram — the most popular messenger for this kind of booking in the region. We're already working on adding WhatsApp and other platforms.">Сейчас Bookly работает через Telegram — самый популярный мессенджер для такого рода записи в регионе. Мы уже работаем над поддержкой WhatsApp и других платформ.</div>
+          </div>
+        </div>
+      </div>
+      <!-- Маленькая газета: конец -->
+
+    </div>
+  </section>
+
+  <!-- Большая газета: полноэкранный оверлей, показывающий тот же список крупнее -->
+  <div class="faq-zoom-overlay" id="faqZoomOverlay">
+    <div class="faq-zoom-card" id="faqZoomCard">
+      <div class="faq-newspaper faq-newspaper-big">
+        <div class="faq-news-item">
           <div class="faq-news-q" data-ru="Это точно бесплатно?" data-en="Is it really free?">Это точно бесплатно?</div>
           <div class="faq-news-a" data-ru="Да, подключение бота, личный кабинет и приём записей бесплатны на старте. Никаких скрытых платежей." data-en="Yes — connecting your bot, the dashboard, and receiving bookings are free to start. No hidden fees.">Да, подключение бота, личный кабинет и приём записей бесплатны на старте. Никаких скрытых платежей.</div>
         </div>
@@ -1609,122 +1528,8 @@
         </div>
       </div>
     </div>
-  </section>
-
-  <div class="faq-zoom-overlay" id="faqZoomOverlay">
-    <div class="faq-zoom-card" id="faqZoomCard">
-      <div class="faq-zoom-q" id="faqZoomQ"></div>
-      <div class="faq-zoom-a" id="faqZoomA"></div>
-    </div>
   </div>
-  </section>
 
-  <div class="faq-overlay" id="faqOverlay">
-    <div class="faq-overlay-inner">
-      <button class="faq-overlay-close" id="faqOverlayClose">✕</button>
-
-      <div class="faq-overlay-title" data-ru="Frequently asked questions" data-en="Frequently asked questions">
-        Frequently asked questions</div>
-
-      <div class="faq-overlay-body">
-        <div class="faq-overlay-sidebar">
-          <div class="faq-sidebar-item active" data-ru="Общее" data-en="General">Общее</div>
-        </div>
-
-        <div class="faq-overlay-list">
-          <div class="faq-item">
-            <button class="faq-question">
-              <span data-ru="Это точно бесплатно?" data-en="Is it really free?">Это точно бесплатно?</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-inner"
-                data-ru="Да, подключение бота, личный кабинет и приём записей бесплатны на старте. Никаких скрытых платежей."
-                data-en="Yes — connecting your bot, the dashboard, and receiving bookings are free to start. No hidden fees.">
-                Да, подключение бота, личный кабинет и приём записей бесплатны на старте. Никаких скрытых платежей.
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span data-ru="Нужна ли банковская карта для регистрации?"
-                data-en="Do I need a credit card to sign up?">Нужна ли банковская карта для регистрации?</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-inner"
-                data-ru="Нет. Регистрация занимает пару минут — только email и пароль, карта не требуется."
-                data-en="No. Sign-up takes a couple of minutes — just email and password, no card required.">Нет.
-                Регистрация занимает пару минут — только email и пароль, карта не требуется.</div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span data-ru="Я не программист — смогу ли подключить бота сам?"
-                data-en="I'm not a developer — can I set this up myself?">Я не программист — смогу ли подключить бота
-                сам?</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-inner"
-                data-ru="Да. Весь процесс — несколько кликов в Telegram и вставка одного кода в личном кабинете. Пошаговая инструкция есть прямо на этом сайте."
-                data-en="Yes. The whole process is a few clicks in Telegram plus pasting one code into your dashboard. A step-by-step guide is right here on this page.">
-                Да. Весь процесс — несколько кликов в Telegram и вставка одного кода в личном кабинете. Пошаговая
-                инструкция есть прямо на этом сайте.</div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span data-ru="Что происходит с моими данными и данными клиентов?"
-                data-en="What happens to my data and my clients' data?">Что происходит с моими данными и данными
-                клиентов?</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-inner"
-                data-ru="Данные хранятся в защищённой базе и доступны только вам через ваш личный кабинет. Мы не передаём их третьим лицам."
-                data-en="Your data is stored securely and only accessible to you through your dashboard. We never share it with third parties.">
-                Данные хранятся в защищённой базе и доступны только вам через ваш личный кабинет. Мы не передаём их
-                третьим лицам.</div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span data-ru="Могу ли я отключить бота или удалить аккаунт?"
-                data-en="Can I disable my bot or delete my account?">Могу ли я отключить бота или удалить
-                аккаунт?</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-inner"
-                data-ru="Да, в любой момент — прямо из личного кабинета, без каких-либо условий и обязательств."
-                data-en="Yes, at any time — right from your dashboard, with no conditions or commitments.">Да, в любой
-                момент — прямо из личного кабинета, без каких-либо условий и обязательств.</div>
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span data-ru="Работает ли это не только в Telegram?"
-                data-en="Does this work outside of Telegram?">Работает ли это не только в Telegram?</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer-inner"
-                data-ru="Сейчас Bookly работает через Telegram — самый популярный мессенджер для такого рода записи в регионе. Мы уже работаем над поддержкой WhatsApp и других платформ."
-                data-en="Right now Bookly runs through Telegram — the most popular messenger for this kind of booking in the region. We're already working on adding WhatsApp and other platforms.">
-                Сейчас Bookly работает через Telegram — самый популярный мессенджер для такого рода записи в регионе. Мы
-                уже работаем над поддержкой WhatsApp и других платформ.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <section class="section-border">
     <div class="wrap">
@@ -1802,25 +1607,16 @@
         });
       });
     });
-const faqZoomOverlay = document.getElementById("faqZoomOverlay");
+    const faqZoomOverlay = document.getElementById("faqZoomOverlay");
     const faqZoomCard = document.getElementById("faqZoomCard");
-    const faqZoomQ = document.getElementById("faqZoomQ");
-    const faqZoomA = document.getElementById("faqZoomA");
+    const faqNewsWrap = document.getElementById("faqNewsWrap");
 
-    document.querySelectorAll(".faq-news-item").forEach(item => {
-      item.addEventListener("click", () => {
-        const qEl = item.querySelector(".faq-news-q");
-        const aEl = item.querySelector(".faq-news-a");
-
-        faqZoomQ.textContent = qEl.textContent;
-        faqZoomA.textContent = aEl.textContent;
-
-        faqZoomOverlay.classList.add("show");
-        setTimeout(() => {
-          faqZoomOverlay.classList.add("lit");
-          faqZoomCard.classList.add("lit");
-        }, 10);
-      });
+    faqNewsWrap.addEventListener("click", () => {
+      faqZoomOverlay.classList.add("show");
+      setTimeout(() => {
+        faqZoomOverlay.classList.add("lit");
+        faqZoomCard.classList.add("lit");
+      }, 10);
     });
 
     faqZoomOverlay.addEventListener("click", () => {
