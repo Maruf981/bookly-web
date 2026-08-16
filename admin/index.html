@@ -696,45 +696,6 @@
       <button class="btn-add" id="btnShowAdd">+ Добавить услугу</button>
     </div>
 
-    <div class="dash-eyebrow" style="margin-top:28px;">Мастера</div>
-    <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши мастера</div>
-
-    <div class="ledger">
-      <div class="ledger-head">
-        <div>Имя</div>
-        <div>Роль</div>
-        <div>Инициалы</div>
-        <div></div>
-      </div>
-      <div id="masterRows"></div>
-    </div>
-
-    <div class="add-bar">
-      <button class="btn-add" id="btnShowAddMaster">+ Добавить мастера</button>
-    </div>
-
-    <div class="form-card" id="masterFormCard">
-      <div class="input-group">
-        <label>Имя мастера</label>
-        <input type="text" id="mfName" placeholder="Например, Артур" />
-      </div>
-      <div class="form-grid">
-        <div class="input-group">
-          <label>Роль</label>
-          <input type="text" id="mfRole" placeholder="Барбер" />
-        </div>
-        <div class="input-group">
-          <label>Инициалы</label>
-          <input type="text" id="mfInitials" placeholder="АР" maxlength="2" />
-        </div>
-        <input type="hidden" id="mfId" />
-      </div>
-      <div class="form-actions">
-        <button class="btn-save" id="btnSaveMaster">Сохранить</button>
-        <button class="btn-cancel" id="btnCancelMasterForm">Отмена</button>
-      </div>
-    </div>
-
     <div class="form-card" id="formCard">
       <div class="input-group">
         <label>Название услуги</label>
@@ -756,6 +717,46 @@
         <button class="btn-cancel" id="btnCancelForm">Отмена</button>
       </div>
     </div>
+
+    <div class="dash-eyebrow" style="margin-top:28px;">Сотрудники</div>
+    <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши сотрудники</div>
+
+    <div class="ledger">
+      <div class="ledger-head">
+        <div>Имя</div>
+        <div>Роль</div>
+        <div>Инициалы</div>
+        <div></div>
+      </div>
+      <div id="masterRows"></div>
+    </div>
+
+    <div class="add-bar">
+      <button class="btn-add" id="btnShowAddMaster">+ Добавить сотрудника</button>
+    </div>
+
+    <div class="form-card" id="masterFormCard">
+      <div class="input-group">
+        <label>Имя сотрудника</label>
+        <input type="text" id="mfName" placeholder="Например, Артур" />
+      </div>
+      <div class="form-grid">
+        <div class="input-group">
+          <label>Роль</label>
+          <input type="text" id="mfRole" placeholder="Барбер" />
+        </div>
+        <div class="input-group">
+          <label>Инициалы</label>
+          <input type="text" id="mfInitials" placeholder="АР" maxlength="2" />
+        </div>
+        <input type="hidden" id="mfId" />
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" id="btnSaveMaster">Сохранить</button>
+        <button class="btn-cancel" id="btnCancelMasterForm">Отмена</button>
+      </div>
+    </div>
+
   </div>
 
   <div class="toast" id="toast"></div>
@@ -1087,7 +1088,7 @@
           Бот ещё не подключён.
         </div>
         <div class="bot-form" style="flex-direction:column;">
-          <input type="text" id="botNameInput" placeholder="Название бизнеса (например, СТРОП)" />
+          <input type="text" id="botNameInput" placeholder="Название бизнеса (например, Bookly)" />
           <input type="text" id="botTokenInput" placeholder="Токен от @BotFather" />
           <input type="text" id="botChatIdInput" placeholder="Ваш ID для уведомлений (от @userinfobot)" />
           <input type="text" id="botWorkTimesInput" placeholder="Время записи через запятую" value="10:00,11:30,12:00,13:00,14:30,15:00,16:30,18:00" />
@@ -1138,7 +1139,7 @@
       const existingDaysOff = currentBotRow ? (currentBotRow.days_off || "") : "";
       view.innerHTML = `
       <div class="bot-form" style="flex-direction:column;">
-        <input type="text" id="botNameInput" placeholder="Название бизнеса (например, СТРОП)" value="${existingName}" />
+        <input type="text" id="botNameInput" placeholder="Название бизнеса (например, Bookly)" value="${existingName}" />
         <input type="text" id="botTokenInput" placeholder="Токен от @BotFather" value="${existingToken}" />
         <input type="text" id="botChatIdInput" placeholder="Ваш ID для уведомлений (от @userinfobot)" value="${existingChatId}" />
         <input type="text" id="botWorkTimesInput" placeholder="Время записи через запятую" value="${existingWorkTimes}" />
@@ -1205,8 +1206,8 @@
         rowsEl.innerHTML = `
         <div class="empty-state">
           <div class="empty-state-icon">👤</div>
-          <div class="empty-state-title">Пока нет ни одного мастера</div>
-          <div class="empty-state-text">Добавьте первого мастера, чтобы клиенты могли выбрать его при записи</div>
+          <div class="empty-state-title">Пока нет ни одного сотрудника</div>
+          <div class="empty-state-text">Добавьте первого сотрудника, чтобы клиенты могли выбрать его при записи</div>
         </div>
       `;
         return;
@@ -1262,7 +1263,7 @@
       const initials = document.getElementById("mfInitials").value.trim().toUpperCase();
 
       if (!name) {
-        showToast("Впишите имя мастера");
+        showToast("Впишите имя сотрудника");
         return;
       }
 
@@ -1272,12 +1273,12 @@
           .eq('id', editingMasterId)
           .eq('owner_id', currentUserId);
         if (error) { showToast("Ошибка: " + error.message); return; }
-        showToast("Мастер обновлён");
+        showToast("Сотрудник обновлён");
       } else {
         const { error } = await sb.from('masters')
           .insert({ name, role, initials, owner_id: currentUserId });
         if (error) { showToast("Ошибка: " + error.message); return; }
-        showToast("Мастер добавлен");
+        showToast("Сотрудник добавлен");
       }
 
       document.getElementById("masterFormCard").classList.remove("show");
@@ -1285,7 +1286,7 @@
     });
 
     async function deleteMaster(id) {
-      if (!confirm("Удалить этого мастера?")) return;
+      if (!confirm("Удалить этого сотрудника?")) return;
 
       const { error } = await sb.from('masters')
         .delete()
@@ -1293,7 +1294,7 @@
         .eq('owner_id', currentUserId);
 
       if (error) { showToast("Ошибка: " + error.message); return; }
-      showToast("Мастер удалён");
+      showToast("Сотрудник удалён");
       loadMasters();
     }
 
