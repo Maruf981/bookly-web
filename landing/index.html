@@ -69,8 +69,9 @@
     }
 
     .logo span {
-      color: var(--accent);
-    }
+     color: var(--accent);
+     margin-left: -2px;
+     }
 
     .header-actions {
       display: flex;
@@ -1046,8 +1047,17 @@
         flex-shrink: 0;
       }
 
-      .guide-tab span:last-child {
+    .guide-tab span:last-child {
         display: none;
+      }
+
+      .btn-primary {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .demo-wrap {
+        margin-bottom: 40px;
       }
     }
   </style>
@@ -1612,6 +1622,7 @@
     const faqNewsWrap = document.getElementById("faqNewsWrap");
 
     faqNewsWrap.addEventListener("click", () => {
+      if (window.innerWidth <= 760) return;
       faqZoomOverlay.classList.add("show");
       setTimeout(() => {
         faqZoomOverlay.classList.add("lit");
