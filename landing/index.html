@@ -96,6 +96,285 @@
   .hero-actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; }
   .hero-note { font-size: 13px; color: var(--faint); }
 
+  .demo-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 10px;
+  }
+
+  .demo-phone {
+    position: relative;
+    width: 260px;
+    background: var(--bg);
+    border: 8px solid var(--surface);
+    border-radius: 36px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .demo-header {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+    padding: 18px 16px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .demo-eyebrow {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .demo-shopname {
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--ink);
+  }
+
+  .demo-section {
+    padding: 10px 16px 6px;
+  }
+
+  .demo-label {
+    font-size: 9px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--faint);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .demo-emp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    transition: all 0.3s;
+  }
+
+  .demo-emp.active {
+    border-color: var(--accent);
+    background: rgba(232,178,61,0.08);
+  }
+
+  .demo-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 10px;
+    color: #fff;
+  }
+
+  .demo-emp-name {
+    font-size: 9px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .demo-ticket {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 7px;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .demo-ticket.active {
+    border-color: var(--accent);
+  }
+
+  .demo-ticket-bar {
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 3px;
+    border-radius: 2px;
+    background: transparent;
+    transition: background 0.3s;
+  }
+
+  .demo-ticket-bar.active {
+    background: var(--accent);
+  }
+
+  .demo-ticket-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .demo-ticket-meta {
+    font-size: 9px;
+    color: var(--faint);
+    margin-top: 2px;
+  }
+
+  .demo-ticket-price {
+    font-family: Georgia, serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .demo-day {
+    flex: 1;
+    text-align: center;
+    padding: 6px 0;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  .demo-day.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    border-color: var(--accent);
+  }
+
+  .demo-time {
+    text-align: center;
+    padding: 7px 0;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    font-family: Georgia, serif;
+    font-size: 11px;
+    color: var(--ink);
+    transition: all 0.3s;
+  }
+
+  .demo-time.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .demo-bottombar {
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .demo-bottombar-label {
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--faint);
+  }
+
+  .demo-bottombar-price {
+    font-family: Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .demo-book-btn {
+    background: #d9564a;
+    color: #fbf1ef;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    transition: all 0.15s;
+  }
+
+  .demo-success {
+    position: absolute;
+    inset: 0;
+    background: rgba(11,13,18,0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .demo-success.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .demo-success-check {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(232,178,61,0.15);
+    border: 1.5px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .demo-success-check::after {
+    content: "";
+    width: 10px;
+    height: 16px;
+    border-right: 2.5px solid var(--accent);
+    border-bottom: 2.5px solid var(--accent);
+    transform: rotate(45deg) translate(-2px,-3px);
+    position: absolute;
+  }
+
+  .demo-success-title {
+    font-family: Georgia, serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .demo-success-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .demo-cursor {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.85);
+    border: 2px solid #14100a;
+    pointer-events: none;
+    transition: top 0.6s ease, left 0.6s ease;
+    z-index: 10;
+    top: 30px;
+    left: 30px;
+  }
+
+  @media (max-width: 760px) {
+    .demo-phone { width: 240px; }
+  }
+
   /* Network visual */
 
   .net-wrap { position: relative; height: 420px; }
@@ -456,33 +735,68 @@
     <div class="hero-note" data-ru="Бесплатно на старте · без банковской карты" data-en="Free to start · no credit card required">Бесплатно на старте · без банковской карты</div>
   </div>
 
-  <div class="net-wrap">
-    <svg viewBox="0 0 400 420" preserveAspectRatio="xMidYMid meet">
-      <line class="net-line lit" x1="200" y1="210" x2="80" y2="90"/>
-      <line class="net-line lit" x1="200" y1="210" x2="330" y2="70"/>
-      <line class="net-line" x1="200" y1="210" x2="60" y2="300"/>
-      <line class="net-line lit" x1="200" y1="210" x2="320" y2="330"/>
-      <line class="net-line" x1="80" y1="90" x2="330" y2="70"/>
-      <line class="net-line" x1="60" y1="300" x2="320" y2="330"/>
-      <line class="net-line" x1="200" y1="210" x2="200" y2="40"/>
-      <line class="net-line" x1="200" y1="210" x2="200" y2="380"/>
-
-      <circle class="net-node pulse d1" cx="200" cy="210" r="5"/>
-      <circle class="net-node dim pulse d2" cx="80" cy="90" r="3"/>
-      <circle class="net-node dim pulse d3" cx="330" cy="70" r="3"/>
-      <circle class="net-node dim pulse d4" cx="60" cy="300" r="3"/>
-      <circle class="net-node dim pulse d1" cx="320" cy="330" r="3"/>
-      <circle class="net-node dim" cx="200" cy="40" r="2.5"/>
-      <circle class="net-node dim" cx="200" cy="380" r="2.5"/>
-    </svg>
-
-    <div class="net-card card-booking">
-      <div class="label" data-ru="Новая запись" data-en="New booking">Новая запись</div>
-      <div class="val" data-ru="Стрижка · 14:30" data-en="Haircut · 2:30 PM">Стрижка · 14:30</div>
-    </div>
-    <div class="net-card card-notify">
-      <div class="label" data-ru="Уведомление" data-en="Notification">Уведомление</div>
-      <div class="val accent" data-ru="🔔 Отправлено владельцу" data-en="🔔 Sent to owner">🔔 Отправлено владельцу</div>
+  <div class="demo-wrap">
+    <div class="demo-phone">
+      <div class="demo-header">
+        <div class="demo-eyebrow" data-ru="Услуги" data-en="Services">Услуги</div>
+        <div class="demo-shopname">Bookly</div>
+      </div>
+      <div class="demo-section">
+        <div class="demo-label" data-ru="Сотрудник" data-en="Staff">Сотрудник</div>
+        <div style="display:flex; gap:7px;">
+          <div id="demoEmp1" class="demo-emp">
+            <div class="demo-avatar">АР</div>
+            <div class="demo-emp-name">Артур</div>
+          </div>
+          <div id="demoEmp2" class="demo-emp">
+            <div class="demo-avatar">АЛ</div>
+            <div class="demo-emp-name" data-ru="Александр" data-en="Alex">Александр</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-section">
+        <div class="demo-label" data-ru="Услуга" data-en="Service">Услуга</div>
+        <div id="demoSvc" class="demo-ticket">
+          <div class="demo-ticket-bar" id="demoSvcBar"></div>
+          <div>
+            <div class="demo-ticket-name" data-ru="Стрижка машинкой" data-en="Machine haircut">Стрижка машинкой</div>
+            <div class="demo-ticket-meta" data-ru="25 мин" data-en="25 min">25 мин</div>
+          </div>
+          <div class="demo-ticket-price">₽600</div>
+        </div>
+        <div class="demo-ticket">
+          <div>
+            <div class="demo-ticket-name" data-ru="Оформление бороды" data-en="Beard trim">Оформление бороды</div>
+            <div class="demo-ticket-meta" data-ru="20 мин" data-en="20 min">20 мин</div>
+          </div>
+          <div class="demo-ticket-price">₽400</div>
+        </div>
+      </div>
+      <div class="demo-section">
+        <div class="demo-label" data-ru="Когда" data-en="When">Когда</div>
+        <div style="display:flex; gap:5px; margin-bottom:8px;">
+          <div class="demo-day active" data-ru="Сегодня" data-en="Today">Сегодня</div>
+          <div class="demo-day" data-ru="Завтра" data-en="Tomorrow">Завтра</div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+          <div class="demo-time">14:30</div>
+          <div id="demoTime" class="demo-time">15:00</div>
+          <div class="demo-time">16:30</div>
+        </div>
+      </div>
+      <div class="demo-bottombar">
+        <div>
+          <div class="demo-bottombar-label" data-ru="Сегодня, 15:00" data-en="Today, 3:00 PM">Сегодня, 15:00</div>
+          <div class="demo-bottombar-price">₽600</div>
+        </div>
+        <div id="demoBookBtn" class="demo-book-btn" data-ru="Записаться" data-en="Book now">Записаться</div>
+      </div>
+      <div id="demoSuccess" class="demo-success">
+        <div class="demo-success-check"></div>
+        <div class="demo-success-title" data-ru="Вы записаны" data-en="You're booked">Вы записаны</div>
+        <div class="demo-success-sub" data-ru="Сегодня в 15:00" data-en="Today at 3:00 PM">Сегодня в 15:00</div>
+      </div>
+      <div id="demoCursor" class="demo-cursor"></div>
     </div>
   </div>
 </div>
@@ -820,6 +1134,52 @@
       el.textContent = el.getAttribute(`data-${currentLang}`);
     });
   });
+
+  const demoCursor = document.getElementById("demoCursor");
+  const demoEmp = document.getElementById("demoEmp1");
+  const demoSvc = document.getElementById("demoSvc");
+  const demoSvcBar = document.getElementById("demoSvcBar");
+  const demoTime = document.getElementById("demoTime");
+  const demoBookBtn = document.getElementById("demoBookBtn");
+  const demoSuccess = document.getElementById("demoSuccess");
+
+  function moveDemoCursor(x, y) {
+    demoCursor.style.left = x + "px";
+    demoCursor.style.top = y + "px";
+  }
+
+  function clickDemo(el) {
+    el.style.transform = "scale(0.95)";
+    setTimeout(() => { el.style.transform = "scale(1)"; }, 150);
+  }
+
+  function resetDemo() {
+    demoEmp.classList.remove("active");
+    demoSvc.classList.remove("active");
+    demoSvcBar.classList.remove("active");
+    demoTime.classList.remove("active");
+    demoSuccess.classList.remove("show");
+  }
+
+  function runLandingDemo() {
+    resetDemo();
+    moveDemoCursor(30, 30);
+    setTimeout(() => moveDemoCursor(38, 100), 800);
+    setTimeout(() => { clickDemo(demoEmp); demoEmp.classList.add("active"); }, 1400);
+    setTimeout(() => moveDemoCursor(80, 200), 2200);
+    setTimeout(() => { clickDemo(demoSvc); demoSvc.classList.add("active"); demoSvcBar.classList.add("active"); }, 2800);
+    setTimeout(() => moveDemoCursor(140, 345), 3600);
+    setTimeout(() => { clickDemo(demoTime); demoTime.classList.add("active"); }, 4200);
+    setTimeout(() => moveDemoCursor(215, 405), 5000);
+    setTimeout(() => clickDemo(demoBookBtn), 5600);
+    setTimeout(() => demoSuccess.classList.add("show"), 5900);
+    setTimeout(runLandingDemo, 8500);
+  }
+
+  if (demoCursor) {
+    setTimeout(runLandingDemo, 500);
+  }
+
 </script>
 
 </body>
