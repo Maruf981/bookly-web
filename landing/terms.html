@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bookly — Условия использования</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --surface: #14171f;
+    --ink: #eef0f5;
+    --muted: #9aa1b2;
+    --faint: #5b6272;
+    --accent: #e8b23d;
+    --line: #262b38;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+  header {
+    border-bottom: 1px solid var(--line);
+    padding: 18px 0;
+  }
+  .header-row { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-size: 19px; font-weight: 800; letter-spacing: -0.4px; }
+  .logo span { color: var(--accent); }
+  .lang-toggle {
+    font-size: 12px; font-weight: 700;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: transparent; color: var(--muted);
+    padding: 6px 10px; cursor: pointer;
+  }
+  main { padding: 60px 0; }
+  h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .updated { font-size: 13px; color: var(--faint); margin-bottom: 40px; }
+  h2 { font-size: 18px; font-weight: 700; margin: 32px 0 12px; color: var(--accent); }
+  p { font-size: 14.5px; color: var(--muted); margin-bottom: 14px; }
+  .back-link { display: inline-block; margin-top: 40px; font-size: 13px; color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-row">
+    <div class="logo">Bookly<span>.</span></div>
+    <button class="lang-toggle" id="langToggle">EN</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 data-ru="Условия использования" data-en="Terms of use">Условия использования</h1>
+  <div class="updated" data-ru="Обновлено: август 2026" data-en="Updated: August 2026">Обновлено: август 2026</div>
+
+  <h2 data-ru="Описание сервиса" data-en="Service description">Описание сервиса</h2>
+  <p data-ru="Bookly — платформа для автоматизации записи клиентов через Telegram-ботов. Сервис предоставляет владельцам бизнеса инструменты для создания собственного бота, управления услугами, расписанием и клиентами." data-en="Bookly is a platform for automating client bookings through Telegram bots. The service provides business owners with tools to create their own bot and manage services, schedules, and clients.">Bookly — платформа для автоматизации записи клиентов через Telegram-ботов. Сервис предоставляет владельцам бизнеса инструменты для создания собственного бота, управления услугами, расписанием и клиентами.</p>
+
+  <h2 data-ru="Обязанности владельца бизнеса" data-en="Business owner responsibilities">Обязанности владельца бизнеса</h2>
+  <p data-ru="Владелец бизнеса самостоятельно отвечает за актуальность информации об услугах и ценах, а также за качество и своевременность оказываемых услуг. Bookly не участвует в оказании услуг и не несёт ответственности за действия владельцев бизнеса." data-en="The business owner is solely responsible for the accuracy of service and pricing information, as well as for the quality and timeliness of services provided. Bookly is not involved in providing the services and is not responsible for business owners' actions.">Владелец бизнеса самостоятельно отвечает за актуальность информации об услугах и ценах, а также за качество и своевременность оказываемых услуг. Bookly не участвует в оказании услуг и не несёт ответственности за действия владельцев бизнеса.</p>
+
+  <h2 data-ru="Обязанности клиента" data-en="Client responsibilities">Обязанности клиента</h2>
+  <p data-ru="При записи через бота клиент обязуется предоставлять корректную информацию и своевременно предупреждать об отмене или переносе визита." data-en="When booking through the bot, the client agrees to provide accurate information and to notify in advance of any cancellation or rescheduling.">При записи через бота клиент обязуется предоставлять корректную информацию и своевременно предупреждать об отмене или переносе визита.</p>
+
+  <h2 data-ru="Ограничение ответственности" data-en="Limitation of liability">Ограничение ответственности</h2>
+  <p data-ru="Bookly предоставляет только техническую платформу для записи и не несёт ответственности за качество услуг, оказываемых бизнесами, использующими сервис." data-en="Bookly provides only the technical booking platform and is not responsible for the quality of services provided by businesses using the platform.">Bookly предоставляет только техническую платформу для записи и не несёт ответственности за качество услуг, оказываемых бизнесами, использующими сервис.</p>
+
+  <h2 data-ru="Изменения условий" data-en="Changes to terms">Изменения условий</h2>
+  <p data-ru="Мы можем время от времени обновлять данные условия. Актуальная версия всегда доступна на этой странице." data-en="We may update these terms from time to time. The current version is always available on this page.">Мы можем время от времени обновлять данные условия. Актуальная версия всегда доступна на этой странице.</p>
+
+  <h2 data-ru="Связаться с нами" data-en="Contact us">Связаться с нами</h2>
+  <p data-ru="По всем вопросам, связанным с использованием сервиса, пишите нам в Telegram." data-en="For any questions regarding the use of the service, message us on Telegram.">По всем вопросам, связанным с использованием сервиса, пишите нам в Telegram.</p>
+
+  <a href="../index.html" class="back-link" data-ru="← Вернуться на главную" data-en="← Back to home">← Вернуться на главную</a>
+</main>
+
+<script>
+  let currentLang = "ru";
+  document.getElementById("langToggle").addEventListener("click", () => {
+    currentLang = currentLang === "ru" ? "en" : "ru";
+    document.documentElement.lang = currentLang;
+    document.getElementById("langToggle").textContent = currentLang === "ru" ? "EN" : "RU";
+    document.querySelectorAll("[data-ru][data-en]").forEach(el => {
+      el.textContent = el.getAttribute(`data-${currentLang}`);
+    });
+  });
+</script>
+
+</body>
+</html>
