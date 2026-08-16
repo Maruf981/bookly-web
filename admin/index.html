@@ -1229,7 +1229,7 @@
       // Группируем записи по клиенту (используем client_chat_id, а если его нет — client_username)
       const clientsMap = new Map();
       for (const booking of data) {
-        const key = booking.client_chat_id || booking.client_username || booking.client_name;
+        const key = booking.client_username || booking.client_chat_id || booking.client_name;
         if (!clientsMap.has(key)) {
           clientsMap.set(key, {
             name: booking.client_name || 'Клиент',
