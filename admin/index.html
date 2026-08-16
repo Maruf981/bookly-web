@@ -735,6 +735,19 @@
       <button class="btn-add" id="btnShowAddMaster">+ Добавить сотрудника</button>
     </div>
 
+    <div class="dash-eyebrow" style="margin-top:28px;">Клиенты</div>
+    <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши клиенты</div>
+
+    <div class="ledger">
+      <div class="ledger-head">
+        <div>Клиент</div>
+        <div>Визитов</div>
+        <div>Последний визит</div>
+        <div></div>
+      </div>
+      <div id="clientRows"></div>
+    </div>
+
     <div class="form-card" id="masterFormCard">
       <div class="input-group">
         <label>Имя сотрудника</label>
@@ -981,6 +994,7 @@
       document.getElementById("dash").style.display = "block";
       loadServices();
       loadMasters();
+      loadClients();
       loadBotInfo();
     });
 
@@ -1184,6 +1198,60 @@
 
       showToast("Сохранено");
       loadBotInfo();
+    }
+
+
+    async function loadClients() {
+      const { data, error } = await sb
+        .from('bookings')
+        .select('*')
+        .eq('owner_id', currentUserId)
+        .order('booking_date', { ascending: false });
+
+      const rowsEl = document.getElementById("clientRows");
+
+      if (error) {
+        rowsEl.innerHTML = `<div class="empty-state"><div class="empty-state-title">Ошибка</div><div class="empty-state-text">${error.message}</div></div>`;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        rowsEl.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">👥</div>
+          <div class="empty-state-title">Пока нет ни одного клиента</div>
+          <div class="empty-state-text">Клиенты появятся здесь после первой записи</div>
+        </div>
+      `;
+        return;
+      }
+
+      // Группируем записи по клиенту (используем client_chat_id, а если его нет — client_username)
+      const clientsMap = new Map();
+      for (const booking of data) {
+        const key = booking.client_chat_id || booking.client_username || booking.client_name;
+        if (!clientsMap.has(key)) {
+          clientsMap.set(key, {
+            name: booking.client_name || 'Клиент',
+            username: booking.client_username || '',
+            visits: 0,
+            lastVisit: booking.booking_date,
+            lastService: booking.service,
+          });
+        }
+        clientsMap.get(key).visits += 1;
+      }
+
+      const clients = Array.from(clientsMap.values());
+
+      rowsEl.innerHTML = clients.map(c => `
+      <div class="row">
+        <div class="row-name">${c.name} ${c.username ? `<span style="color:var(--faint); font-weight:400;">(${c.username})</span>` : ''}</div>
+        <div class="row-duration">${c.visits}</div>
+        <div class="row-duration">${c.lastVisit} · ${c.lastService}</div>
+        <div></div>
+      </div>
+    `).join("");
     }
 
     // ---------- Masters management ----------
