@@ -177,18 +177,18 @@
       font-size: 12px;
       cursor: pointer;
     }
+.bot-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
 
     .bot-card {
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 16px;
-      margin-bottom: 18px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-      overflow: hidden;
-      position: relative;
     }
 
     .bot-card-decoration {
@@ -196,11 +196,13 @@
     }
 
     @media (min-width: 900px) {
-      .bot-card {
-        grid-template-columns: 1fr 260px;
+      .bot-section {
+        grid-template-columns: 33% 1fr;
       }
       .bot-card-decoration {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
 
@@ -715,14 +717,13 @@
   <div class="dash" id="dash">
     <div class="dash-header">
       <div>
-        <div class="dash-eyebrow">Личный кабинет</div>
-        <div class="dash-title">Ваши услуги</div>
+        <div class="dash-title" style="font-size:28px;">Личный кабинет</div>
       </div>
       <button class="btn-logout" id="btnLogout">Выйти</button>
     </div>
 
-    <div class="bot-card">
-      <div>
+    <div class="bot-section">
+      <div class="bot-card">
         <div class="bot-card-label">Ваш Telegram-бот</div>
         <div id="botStatusView"></div>
       </div>
