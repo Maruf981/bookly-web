@@ -359,12 +359,58 @@
   }
   .cta-band .section-title { margin: 0 auto 22px; }
 
-  footer {
+ footer {
     border-top: 1px solid var(--line);
-    padding: 24px;
-    text-align: center;
-    font-size: 12.5px;
+    padding: 48px 0 24px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 32px;
+  }
+
+  .footer-col a {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+
+  .footer-col-title {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     color: var(--faint);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .footer-text {
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 260px;
+    line-height: 1.5;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    font-size: 12px;
+    color: var(--faint);
+    text-align: center;
+  }
+
+  @media (max-width: 760px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
   }
 
   @media (max-width: 760px) {
@@ -714,7 +760,22 @@
 </div>
 
 <footer>
-  <span data-ru="Bookly — записи, которые ведёт бот" data-en="Bookly — bookings, handled by a bot">Bookly — записи, которые ведёт бот</span>
+  <div class="wrap footer-grid">
+    <div class="footer-col">
+      <div class="logo" style="margin-bottom:10px;">Bookly<span>.</span></div>
+      <p class="footer-text" data-ru="Bookly — записи, которые ведёт бот" data-en="Bookly — bookings, handled by a bot">Bookly — записи, которые ведёт бот</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title" data-ru="Информация" data-en="Information">Информация</div>
+      <a href="privacy.html" data-ru="Политика конфиденциальности" data-en="Privacy policy">Политика конфиденциальности</a>
+      <a href="terms.html" data-ru="Условия использования" data-en="Terms of use">Условия использования</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title" data-ru="Связаться с нами" data-en="Contact us">Связаться с нами</div>
+      <a href="https://t.me/my81_all_bot" target="_blank" data-ru="Написать в Telegram" data-en="Message on Telegram">Написать в Telegram</a>
+    </div>
+  </div>
+  <div class="wrap footer-bottom" data-ru="© 2026 Bookly. Все права защищены." data-en="© 2026 Bookly. All rights reserved.">© 2026 Bookly. Все права защищены.</div>
 </footer>
 
 <script>
