@@ -1296,6 +1296,11 @@
       const client = window.__clientsData.find(c => c.key === key);
       if (!client) return;
 
+      renderClientHistory(client, historyEl);
+      historyEl.style.display = "block";
+    }
+
+    function renderClientHistory(client, historyEl) {
       const sortedBookings = [...client.bookings].sort((a, b) => (b.booking_date || '').localeCompare(a.booking_date || ''));
       const todayIso = new Date().toISOString().slice(0, 10);
 
@@ -1332,13 +1337,15 @@
       historyEl.querySelectorAll(".mark-status-btn").forEach(btn => {
         btn.addEventListener("click", async (e) => {
           e.stopPropagation();
-          const { data: updateData, error } = await sb.from('bookings').update({ status: btn.dataset.status }).eq('id', btn.dataset.id).eq('owner_id', currentUserId).select();
-          console.log('DEBUG update result, error:', error, 'data:', updateData);
-          loadClients();
+          await sb.from('bookings').update({ status: btn.dataset.status }).eq('id', btn.dataset.id).eq('owner_id', currentUserId);
+
+          // Обновляем статус локально, без перезагрузки и сворачивания списка
+          const bookingInMemory = client.bookings.find(b => String(b.id) === String(btn.dataset.id));
+          if (bookingInMemory) bookingInMemory.status = btn.dataset.status;
+
+          renderClientHistory(client, historyEl);
         });
       });
-
-      historyEl.style.display = "block";
     }
 
     // ---------- Masters management ----------
