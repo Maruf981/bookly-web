@@ -1332,7 +1332,8 @@
       historyEl.querySelectorAll(".mark-status-btn").forEach(btn => {
         btn.addEventListener("click", async (e) => {
           e.stopPropagation();
-          await sb.from('bookings').update({ status: btn.dataset.status }).eq('id', btn.dataset.id).eq('owner_id', currentUserId);
+          const { error } = await sb.from('bookings').update({ status: btn.dataset.status }).eq('id', btn.dataset.id).eq('owner_id', currentUserId);
+          console.log('DEBUG update result, error:', error);
           loadClients();
         });
       });
