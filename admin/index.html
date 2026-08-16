@@ -1291,11 +1291,11 @@
 
     document.getElementById("btnOpenBusinessSettings").addEventListener("click", () => {
       document.getElementById("businessSettingsCollapsed").style.display = "none";
-      document.getElementById("businessSettingsExpanded").classList.add("show");
+      document.getElementById("businessSettingsExpanded").style.display = "block";
     });
 
     document.getElementById("btnCancelBusinessSettings").addEventListener("click", () => {
-      document.getElementById("businessSettingsExpanded").classList.remove("show");
+      document.getElementById("businessSettingsExpanded").style.display = "none";
       document.getElementById("businessSettingsCollapsed").style.display = "flex";
     });
 
@@ -1314,7 +1314,7 @@
       if (error) { showToast("Ошибка: " + error.message); return; }
 
       showToast("Сохранено");
-      document.getElementById("businessSettingsExpanded").classList.remove("show");
+      document.getElementById("businessSettingsExpanded").style.display = "none";
       document.getElementById("businessSettingsCollapsed").style.display = "flex";
       loadBusinessSettings();
     });
