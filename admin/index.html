@@ -1297,13 +1297,45 @@
       if (!client) return;
 
       const sortedBookings = [...client.bookings].sort((a, b) => (b.booking_date || '').localeCompare(a.booking_date || ''));
+      const todayIso = new Date().toISOString().slice(0, 10);
 
-      historyEl.innerHTML = sortedBookings.map(b => `
-        <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:12.5px; color:var(--muted);">
-          <span>${b.booking_date} · ${b.service}${b.master ? ' · ' + b.master : ''}</span>
-          <span style="color:${b.status === 'cancelled' ? 'var(--danger)' : 'var(--accent)'};">${b.status === 'cancelled' ? 'Отменена' : 'Активна'}</span>
-        </div>
-      `).join("");
+      historyEl.innerHTML = sortedBookings.map(b => {
+        const isPast = (b.booking_date || '') < todayIso;
+        const statusLabels = {
+          cancelled: { text: 'Отменена', color: 'var(--danger)' },
+          completed: { text: 'Посетил(а)', color: 'var(--accent)' },
+          no_show: { text: 'Не пришёл(ла)', color: 'var(--danger)' },
+        };
+
+        let statusHtml;
+        if (statusLabels[b.status]) {
+          statusHtml = `<span style="color:${statusLabels[b.status].color};">${statusLabels[b.status].text}</span>`;
+        } else if (b.status === 'active' && isPast) {
+          statusHtml = `
+            <span style="display:flex; gap:6px;">
+              <button class="mark-status-btn" data-id="${b.id}" data-status="completed" style="background:none; border:1px solid var(--accent); color:var(--accent); padding:3px 8px; border-radius:6px; font-size:11px; cursor:pointer;">✓ Посетил</button>
+              <button class="mark-status-btn" data-id="${b.id}" data-status="no_show" style="background:none; border:1px solid var(--danger); color:var(--danger); padding:3px 8px; border-radius:6px; font-size:11px; cursor:pointer;">✗ Не пришёл</button>
+            </span>
+          `;
+        } else {
+          statusHtml = `<span style="color:var(--accent);">Активна</span>`;
+        }
+
+        return `
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:12.5px; color:var(--muted);">
+            <span>${b.booking_date} · ${b.service}${b.master ? ' · ' + b.master : ''}</span>
+            ${statusHtml}
+          </div>
+        `;
+      }).join("");
+
+      historyEl.querySelectorAll(".mark-status-btn").forEach(btn => {
+        btn.addEventListener("click", async (e) => {
+          e.stopPropagation();
+          await sb.from('bookings').update({ status: btn.dataset.status }).eq('id', btn.dataset.id).eq('owner_id', currentUserId);
+          loadClients();
+        });
+      });
 
       historyEl.style.display = "block";
     }
