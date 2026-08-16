@@ -249,6 +249,20 @@
       color: var(--accent);
     }
 
+
+    .two-col-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 900px) {
+      .two-col-section {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+
     .ledger {
       background: var(--surface);
       border: 1px solid var(--line);
@@ -718,34 +732,40 @@
       </div>
     </div>
 
-    <div class="dash-eyebrow" style="margin-top:28px;">Сотрудники</div>
-    <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши сотрудники</div>
+   <div class="two-col-section">
+      <div>
+        <div class="dash-eyebrow" style="margin-top:28px;">Сотрудники</div>
+        <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши сотрудники</div>
 
-    <div class="ledger">
-      <div class="ledger-head">
-        <div>Имя</div>
-        <div>Роль</div>
-        <div>Инициалы</div>
-        <div></div>
+        <div class="ledger">
+          <div class="ledger-head">
+            <div>Имя</div>
+            <div>Роль</div>
+            <div>Инициалы</div>
+            <div></div>
+          </div>
+          <div id="masterRows"></div>
+        </div>
+
+        <div class="add-bar">
+          <button class="btn-add" id="btnShowAddMaster">+ Добавить сотрудника</button>
+        </div>
       </div>
-      <div id="masterRows"></div>
-    </div>
 
-    <div class="add-bar">
-      <button class="btn-add" id="btnShowAddMaster">+ Добавить сотрудника</button>
-    </div>
+      <div>
+        <div class="dash-eyebrow" style="margin-top:28px;">Клиенты</div>
+        <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши клиенты</div>
 
-    <div class="dash-eyebrow" style="margin-top:28px;">Клиенты</div>
-    <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши клиенты</div>
-
-    <div class="ledger">
-      <div class="ledger-head">
-        <div>Клиент</div>
-        <div>Визитов</div>
-        <div>Последний визит</div>
-        <div></div>
+        <div class="ledger">
+          <div class="ledger-head">
+            <div>Клиент</div>
+            <div>Визитов</div>
+            <div>Последний визит</div>
+            <div></div>
+          </div>
+          <div id="clientRows"></div>
+        </div>
       </div>
-      <div id="clientRows"></div>
     </div>
 
     <div class="form-card" id="masterFormCard">
