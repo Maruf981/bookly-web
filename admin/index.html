@@ -1562,10 +1562,16 @@
           statusHtml = `<span style="color:var(--accent);">Активна</span>`;
         }
 
-        return `
-          <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:12.5px; color:var(--muted);">
-            <span>${b.booking_date} · ${b.service}${b.master ? ' · ' + b.master : ''}</span>
-            ${statusHtml}
+       return `
+          <div style="padding:6px 0; border-bottom: 1px dashed var(--line);">
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:12.5px; color:var(--muted); margin-bottom:6px;">
+              <span>${b.booking_date} · ${b.service}${b.master ? ' · ' + b.master : ''}</span>
+              ${statusHtml}
+            </div>
+            <div style="display:flex; gap:6px;">
+              <input type="text" class="note-input" data-id="${b.id}" placeholder="Заметка о клиенте..." value="${b.notes || ''}" style="flex:1; padding:6px 9px; border:1px solid var(--line); border-radius:6px; font-size:11.5px; background:var(--surface-2); color:var(--ink); font-family:inherit;" />
+              <button class="save-note-btn" data-id="${b.id}" style="background:none; border:1px solid var(--accent); color:var(--accent); padding:5px 10px; border-radius:6px; font-size:11px; cursor:pointer;">✓</button>
+            </div>
           </div>
         `;
       }).join("");
@@ -1580,6 +1586,23 @@
           if (bookingInMemory) bookingInMemory.status = btn.dataset.status;
 
           renderClientHistory(client, historyEl);
+        });
+      });
+
+      historyEl.querySelectorAll(".save-note-btn").forEach(btn => {
+        btn.addEventListener("click", async (e) => {
+          e.stopPropagation();
+          const input = historyEl.querySelector(`.note-input[data-id="${btn.dataset.id}"]`);
+          const noteText = input.value.trim();
+
+          const { error } = await sb.from('bookings').update({ notes: noteText }).eq('id', btn.dataset.id).eq('owner_id', currentUserId);
+
+          if (error) { showToast("Ошибка: " + error.message); return; }
+
+          const bookingInMemory = client.bookings.find(b => String(b.id) === String(btn.dataset.id));
+          if (bookingInMemory) bookingInMemory.notes = noteText;
+
+          showToast("Заметка сохранена");
         });
       });
     }
