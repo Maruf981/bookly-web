@@ -547,7 +547,13 @@
 
     <div class="header">
       <div class="eyebrow" id="shop-eyebrow">Услуги</div>
-      <div class="shop-name" id="shop-name">Bookly</div>
+      <div class="shop-name" id="shop-name" style="display:flex; align-items:center; gap:8px;">
+        <svg width="20" height="20" viewBox="0 0 44 44" style="flex-shrink:0;">
+          <path d="M10 8 L10 36 L18 30 L18 8 Z" fill="var(--brass)" />
+          <path d="M26 8 L26 30 L34 36 L34 8 Z" fill="none" stroke="var(--brass)" stroke-width="2.5" />
+        </svg>
+        <span id="shop-name-text">Bookly</span>
+      </div>
       <div class="shop-sub"><span class="dot-live"></span> <span id="shop-sub">Запись онлайн</span></div>
       <button id="btnMyBookings"
         style="margin-top:12px; background:none; border:1px solid var(--line); color:var(--brass); padding:8px 14px; border-radius:8px; font-size:12px; cursor:pointer;">📋
@@ -721,7 +727,7 @@
     function applyShopInfoFromUrl() {
       const name = urlParams.get('name');
       if (name) {
-        document.getElementById("shop-name").textContent = decodeURIComponent(name);
+        document.getElementById("shop-name-text").textContent = decodeURIComponent(name);
         document.title = decodeURIComponent(name) + " — запись";
       }
     }
@@ -825,7 +831,7 @@
       });
     }
 
-     function isTimeInPast(timeStr) {
+    function isTimeInPast(timeStr) {
       const dayData = DAYS_DATA[state.day];
       if (!dayData) return false;
 
@@ -997,7 +1003,7 @@
         window.Telegram.WebApp.sendData(JSON.stringify({ type: 'booking_action', action, bookingId }));
       }
     }
-    
+
 
     document.getElementById("btnMyBookings").addEventListener("click", () => {
       document.getElementById("myBookingsOverlay").classList.add("show");
