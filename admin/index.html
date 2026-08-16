@@ -1252,26 +1252,60 @@
         const key = booking.client_username || booking.client_chat_id || booking.client_name;
         if (!clientsMap.has(key)) {
           clientsMap.set(key, {
+            key,
             name: booking.client_name || 'Клиент',
             username: booking.client_username || '',
             visits: 0,
             lastVisit: booking.booking_date,
             lastService: booking.service,
+            bookings: [],
           });
         }
-        clientsMap.get(key).visits += 1;
+        const client = clientsMap.get(key);
+        client.visits += 1;
+        client.bookings.push(booking);
       }
 
       const clients = Array.from(clientsMap.values());
+      window.__clientsData = clients; // сохраняем для разворачивания карточек
 
       rowsEl.innerHTML = clients.map(c => `
-      <div class="row">
+      <div class="row client-row" data-key="${c.key}" style="cursor:pointer;">
         <div class="row-name">${c.name} ${c.username ? `<span style="color:var(--faint); font-weight:400;">(${c.username})</span>` : ''}</div>
         <div class="row-duration">${c.visits}</div>
         <div class="row-duration">${c.lastVisit} · ${c.lastService}</div>
-        <div></div>
+        <div style="color:var(--faint);">▾</div>
       </div>
+      <div class="client-history" id="history-${c.key}" style="display:none; padding: 4px 16px 14px; border-bottom: 1px solid var(--line);"></div>
     `).join("");
+
+      document.querySelectorAll(".client-row").forEach(row => {
+        row.addEventListener("click", () => toggleClientHistory(row.dataset.key));
+      });
+    }
+
+    function toggleClientHistory(key) {
+      const historyEl = document.getElementById(`history-${key}`);
+      const isOpen = historyEl.style.display !== "none";
+
+      if (isOpen) {
+        historyEl.style.display = "none";
+        return;
+      }
+
+      const client = window.__clientsData.find(c => c.key === key);
+      if (!client) return;
+
+      const sortedBookings = [...client.bookings].sort((a, b) => (b.booking_date || '').localeCompare(a.booking_date || ''));
+
+      historyEl.innerHTML = sortedBookings.map(b => `
+        <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:12.5px; color:var(--muted);">
+          <span>${b.booking_date} · ${b.service}${b.master ? ' · ' + b.master : ''}</span>
+          <span style="color:${b.status === 'cancelled' ? 'var(--danger)' : 'var(--accent)'};">${b.status === 'cancelled' ? 'Отменена' : 'Активна'}</span>
+        </div>
+      `).join("");
+
+      historyEl.style.display = "block";
     }
 
     // ---------- Masters management ----------
