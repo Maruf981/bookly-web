@@ -1338,6 +1338,10 @@
           ? `<div style="font-size:13px; font-weight:700; margin-bottom:2px;">${data.business_name}</div>`
           : `<div style="font-size:12px; color:var(--danger); margin-bottom:4px;">⚠ Не указано название бизнеса</div>`;
 
+        const calendarStatusLine = data.google_calendar_connected
+          ? `<div style="font-size:12px; color:var(--accent); margin-top:8px;">✓ Google Calendar подключён</div>`
+          : `<button id="btnConnectGoogle" style="margin-top:10px; background:none; border:1px solid var(--line); color:var(--muted); padding:7px 12px; border-radius:7px; font-size:12px; cursor:pointer;">📅 Подключить Google Calendar</button>`;
+
         view.innerHTML = `
         <div class="bot-status-row">
           <div>
@@ -1346,11 +1350,19 @@
             <span style="font-size:13px; font-weight:600;">${data.is_active ? 'Подключён' : 'Отключён'}</span>
             <div style="font-size:12px; color:var(--faint); margin-top:4px; font-family: Georgia, serif;">${maskedToken}</div>
             ${chatIdLine}
+            ${calendarStatusLine}
           </div>
           <button class="btn-cancel" id="btnChangeToken" style="align-self:flex-end; margin-top:10px; border-color:var(--accent); color:var(--accent);">Изменить</button>
         </div>
       `;
         document.getElementById("btnChangeToken").addEventListener("click", showBotForm);
+
+        const connectGoogleBtn = document.getElementById("btnConnectGoogle");
+        if (connectGoogleBtn) {
+          connectGoogleBtn.addEventListener("click", () => {
+            window.open(`https://my-bot-project-eoc1.onrender.com/oauth/google/start?owner_id=${currentUserId}`, '_blank');
+          });
+        }
       } else {
         view.innerHTML = `
         <div style="font-size:13px; color:var(--muted); margin-bottom:8px;">
