@@ -838,12 +838,21 @@
           </div>
           <div class="input-group">
             <label>Валюта</label>
-            <select id="bsCurrencyInput"
-              style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
+            <select id="bsCurrencyInput" style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
               <option value="смн">Сомони (смн)</option>
               <option value="₽">Рубли (₽)</option>
               <option value="$">Доллары ($)</option>
               <option value="₸">Тенге (₸)</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Часовой пояс</label>
+            <select id="bsTimezoneInput" style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
+              <option value="3">Москва (UTC+3)</option>
+              <option value="5">Душанбе, Ташкент (UTC+5)</option>
+              <option value="6">Алматы, Бишкек (UTC+6)</option>
+              <option value="0">Лондон (UTC+0)</option>
+              <option value="-5">Нью-Йорк (UTC-5)</option>
             </select>
           </div>
           <div class="input-group">
@@ -1318,7 +1327,7 @@
     async function loadBusinessSettings() {
       const { data } = await sb
         .from('bots')
-        .select('business_name, work_times, days_off, currency')
+        .select('business_name, work_times, days_off, currency, timezone_offset')
         .eq('owner_id', currentUserId)
         .maybeSingle();
 
@@ -1326,6 +1335,7 @@
       const workTimes = data?.work_times || '';
       const daysOff = data?.days_off || '';
       const currency = data?.currency || 'смн';
+      const timezoneOffset = data?.timezone_offset != null ? String(data.timezone_offset) : '5';
 
       document.getElementById("bsName").textContent = businessName;
 
@@ -1339,6 +1349,7 @@
       document.getElementById("bsNameInput").value = businessName === 'Название не задано' ? '' : businessName;
       document.getElementById("bsWorkTimesInput").value = workTimes;
       document.getElementById("bsCurrencyInput").value = currency;
+      document.getElementById("bsTimezoneInput").value = timezoneOffset;
       document.getElementById("bsDaysOffCheckboxes").innerHTML = renderDaysOffCheckboxes(daysOff).replace(/class="dayOffCheckbox"/g, 'class="dayOffCheckbox bsDayOffCheckbox"');
     }
 
@@ -1356,13 +1367,14 @@
       const businessName = document.getElementById("bsNameInput").value.trim();
       const workTimes = document.getElementById("bsWorkTimesInput").value.trim();
       const currency = document.getElementById("bsCurrencyInput").value;
+      const timezoneOffset = Number(document.getElementById("bsTimezoneInput").value);
       const daysOff = Array.from(document.querySelectorAll('.bsDayOffCheckbox:checked')).map(cb => cb.value).join(',');
 
       if (!businessName) { showToast("Впишите название бизнеса"); return; }
       if (!workTimes) { showToast("Впишите хотя бы одно время записи"); return; }
 
       const { error } = await sb.from('bots')
-        .update({ business_name: businessName, work_times: workTimes, days_off: daysOff, currency: currency })
+        .update({ business_name: businessName, work_times: workTimes, days_off: daysOff, currency: currency, timezone_offset: timezoneOffset })
         .eq('owner_id', currentUserId);
 
       if (error) { showToast("Ошибка: " + error.message); return; }
