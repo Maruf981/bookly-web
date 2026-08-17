@@ -660,15 +660,14 @@
       line-height: 1.5;
     }
 
-    @media (max-width: 600px) {
-      .bot-status-row {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
+   @media (max-width: 600px) {
+      .bot-card {
+        max-width: 340px;
+        margin: 0 auto;
       }
 
-      .bot-status-row > div {
-        width: fit-content;
+      .bot-status-row {
+        flex-direction: column;
       }
 
       .bot-status-row button {
@@ -835,6 +834,15 @@
           <div class="input-group">
             <label>Название бизнеса</label>
             <input type="text" id="bsNameInput" placeholder="Например, СТРОП" />
+          </div>
+          <div class="input-group">
+            <label>Валюта</label>
+            <select id="bsCurrencyInput" style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
+              <option value="смн">Сомони (смн)</option>
+              <option value="₽">Рубли (₽)</option>
+              <option value="$">Доллары ($)</option>
+              <option value="₸">Тенге (₸)</option>
+            </select>
           </div>
           <div class="input-group">
             <label>Время записи через запятую</label>
@@ -1305,16 +1313,17 @@
     }
 
 
-    async function loadBusinessSettings() {
+   async function loadBusinessSettings() {
       const { data } = await sb
         .from('bots')
-        .select('business_name, work_times, days_off')
+        .select('business_name, work_times, days_off, currency')
         .eq('owner_id', currentUserId)
         .maybeSingle();
 
       const businessName = data?.business_name || 'Название не задано';
       const workTimes = data?.work_times || '';
       const daysOff = data?.days_off || '';
+      const currency = data?.currency || 'смн';
 
       document.getElementById("bsName").textContent = businessName;
 
@@ -1327,6 +1336,7 @@
 
       document.getElementById("bsNameInput").value = businessName === 'Название не задано' ? '' : businessName;
       document.getElementById("bsWorkTimesInput").value = workTimes;
+      document.getElementById("bsCurrencyInput").value = currency;
       document.getElementById("bsDaysOffCheckboxes").innerHTML = renderDaysOffCheckboxes(daysOff).replace(/class="dayOffCheckbox"/g, 'class="dayOffCheckbox bsDayOffCheckbox"');
     }
 
@@ -1343,13 +1353,14 @@
     document.getElementById("btnSaveBusinessSettings").addEventListener("click", async () => {
       const businessName = document.getElementById("bsNameInput").value.trim();
       const workTimes = document.getElementById("bsWorkTimesInput").value.trim();
+      const currency = document.getElementById("bsCurrencyInput").value;
       const daysOff = Array.from(document.querySelectorAll('.bsDayOffCheckbox:checked')).map(cb => cb.value).join(',');
 
       if (!businessName) { showToast("Впишите название бизнеса"); return; }
       if (!workTimes) { showToast("Впишите хотя бы одно время записи"); return; }
 
       const { error } = await sb.from('bots')
-        .update({ business_name: businessName, work_times: workTimes, days_off: daysOff })
+        .update({ business_name: businessName, work_times: workTimes, days_off: daysOff, currency: currency })
         .eq('owner_id', currentUserId);
 
       if (error) { showToast("Ошибка: " + error.message); return; }
@@ -1359,7 +1370,6 @@
       document.getElementById("businessSettingsCollapsed").style.display = "flex";
       loadBusinessSettings();
     });
-
 
     const WEEKDAY_LABELS = [
       { value: 0, label: 'Вс' },

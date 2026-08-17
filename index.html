@@ -9,18 +9,18 @@
   <title>Bookly — запись</title>
   <style>
     :root {
-  --bg: #0b0d12;
-  --surface: #14171f;
-  --surface-2: #1a1e28;
-  --ink: #eef0f5;
-  --muted: #9aa1b2;
-  --faint: #5b6272;
-  --brass: #e8b23d;
-  --brass-dim: #c99a2f;
-  --red: #d9564a;
-  --danger: #d9564a;
-  --line: #262b38;
-}
+      --bg: #0b0d12;
+      --surface: #14171f;
+      --surface-2: #1a1e28;
+      --ink: #eef0f5;
+      --muted: #9aa1b2;
+      --faint: #5b6272;
+      --brass: #e8b23d;
+      --brass-dim: #c99a2f;
+      --red: #d9564a;
+      --danger: #d9564a;
+      --line: #262b38;
+    }
 
     * {
       box-sizing: border-box;
@@ -680,17 +680,20 @@
 
     let TIMES = ["10:00", "11:30", "12:00", "13:00", "14:30", "15:00", "16:30", "18:00"]; // временное значение, заменится после загрузки из базы
     let BUSY = []; // заполняется динамически при выборе дня и мастера
-
     async function loadWorkTimes() {
       const { data, error } = await sb
         .from('bots')
-        .select('work_times, days_off')
+        .select('work_times, days_off, currency')
         .eq('owner_id', OWNER_ID)
         .maybeSingle();
 
       if (!error && data) {
         if (data.work_times) {
           TIMES = data.work_times.split(',').map(t => t.trim()).filter(t => t);
+        }
+
+        if (data.currency) {
+          CURRENCY = data.currency;
         }
 
         const daysOffList = (data.days_off || '').split(',').map(d => d.trim()).filter(d => d).map(Number);
@@ -700,6 +703,7 @@
       }
 
       renderTimes();
+      updateBar();
     }
 
     async function loadBusyTimes() {
@@ -772,8 +776,9 @@
     }
 
     let state = { master: null, service: null, day: 0, time: null };
+    let CURRENCY = "₽";
 
-    function currency(n) { return n + " смн"; }
+    function currency(n) { return n + " " + CURRENCY; }
 
     function renderMasters() {
       const el = document.getElementById("masters");
