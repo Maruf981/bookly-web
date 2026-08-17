@@ -4,6 +4,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0b0d12" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <title>Личный кабинет — управление услугами</title>
   <style>
@@ -1948,6 +1953,16 @@
         loadBusinessSettings();
       }
     })();
+
+    // Регистрируем service worker, чтобы браузер предложил "Установить"
+    // личный кабинет как приложение на телефон или компьютер
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => {
+          console.error('Не удалось зарегистрировать service worker:', err.message);
+        });
+      });
+    }
   </script>
 
 </body>
