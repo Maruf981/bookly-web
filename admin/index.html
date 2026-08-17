@@ -33,6 +33,7 @@
       font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     .login-wrap {
@@ -667,20 +668,31 @@
       }
 
       .bot-status-row > div {
-        width: 100%;
+        width: fit-content;
       }
 
       .bot-status-row button {
         margin-top: 14px;
       }
 
-      .ledger {
-        overflow-x: auto;
-      }
-
       .ledger-head,
       .row {
-        min-width: 480px;
+        grid-template-columns: 1.2fr 60px 55px 45px;
+        gap: 6px;
+        padding: 10px 12px;
+        font-size: 12px;
+      }
+
+      .row-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .icon-btn {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
       }
     }
   </style>
