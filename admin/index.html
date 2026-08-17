@@ -649,7 +649,7 @@
       font-size: 12px;
     }
 
-    .guide-note {
+   .guide-note {
       font-size: 12px;
       color: var(--danger);
       background: var(--danger-soft);
@@ -657,6 +657,31 @@
       padding: 10px 12px;
       margin-bottom: 16px;
       line-height: 1.5;
+    }
+
+    @media (max-width: 600px) {
+      .bot-status-row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .bot-status-row > div {
+        width: 100%;
+      }
+
+      .bot-status-row button {
+        margin-top: 14px;
+      }
+
+      .ledger {
+        overflow-x: auto;
+      }
+
+      .ledger-head,
+      .row {
+        min-width: 480px;
+      }
     }
   </style>
 </head>
