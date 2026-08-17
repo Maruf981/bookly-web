@@ -208,10 +208,11 @@
       margin-bottom: 18px;
     }
 
-   @media (min-width: 900px) {
+    @media (min-width: 900px) {
       .bot-card-decoration {
         overflow: hidden;
       }
+
       .bot-card-decoration svg {
         max-height: 140px;
         width: auto;
@@ -650,7 +651,7 @@
       font-size: 12px;
     }
 
-   .guide-note {
+    .guide-note {
       font-size: 12px;
       color: var(--danger);
       background: var(--danger-soft);
@@ -660,7 +661,7 @@
       line-height: 1.5;
     }
 
-   @media (max-width: 600px) {
+    @media (max-width: 600px) {
       .bot-card {
         max-width: 340px;
         margin: 0 auto;
@@ -837,7 +838,8 @@
           </div>
           <div class="input-group">
             <label>Валюта</label>
-            <select id="bsCurrencyInput" style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
+            <select id="bsCurrencyInput"
+              style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
               <option value="смн">Сомони (смн)</option>
               <option value="₽">Рубли (₽)</option>
               <option value="$">Доллары ($)</option>
@@ -906,7 +908,7 @@
 
     <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
-   <div class="two-col-section">
+    <div class="two-col-section">
       <div>
         <div class="dash-eyebrow" style="margin-top:28px;">Сотрудники</div>
         <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши сотрудники</div>
@@ -1313,7 +1315,7 @@
     }
 
 
-   async function loadBusinessSettings() {
+    async function loadBusinessSettings() {
       const { data } = await sb
         .from('bots')
         .select('business_name, work_times, days_off, currency')
@@ -1583,12 +1585,19 @@
       historyEl.style.display = "block";
     }
 
+    function isBookingPastForAdmin(bookingDate, bookingTime) {
+      if (!bookingDate || !bookingTime) return false;
+      const [year, month, day] = bookingDate.split('-').map(Number);
+      const [hours, minutes] = bookingTime.split(':').map(Number);
+      const bookingDateTime = new Date(year, month - 1, day, hours, minutes, 0, 0);
+      return bookingDateTime < new Date();
+    }
+
     function renderClientHistory(client, historyEl) {
       const sortedBookings = [...client.bookings].sort((a, b) => (b.booking_date || '').localeCompare(a.booking_date || ''));
-      const todayIso = new Date().toISOString().slice(0, 10);
 
       historyEl.innerHTML = sortedBookings.map(b => {
-        const isPast = (b.booking_date || '') < todayIso;
+        const isPast = isBookingPastForAdmin(b.booking_date, b.time);
         const statusLabels = {
           cancelled: { text: 'Отменена', color: 'var(--danger)' },
           completed: { text: 'Посетил(а)', color: 'var(--accent)' },
@@ -1609,7 +1618,7 @@
           statusHtml = `<span style="color:var(--accent);">Активна</span>`;
         }
 
-       return `
+        return `
           <div style="padding:6px 0; border-bottom: 1px dashed var(--line);">
             <div style="display:flex; justify-content:space-between; align-items:center; font-size:12.5px; color:var(--muted); margin-bottom:6px;">
               <span>${b.booking_date} · ${b.service}${b.master ? ' · ' + b.master : ''}</span>
