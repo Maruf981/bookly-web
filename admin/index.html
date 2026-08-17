@@ -1289,11 +1289,18 @@
         return;
       }
 
+      const { data: botData } = await sb
+        .from('bots')
+        .select('currency')
+        .eq('owner_id', currentUserId)
+        .maybeSingle();
+      const currentCurrency = botData?.currency || '₽';
+
       rowsEl.innerHTML = data.map(s => `
       <div class="row">
         <div class="row-name">${s.name}</div>
         <div class="row-duration">${s.duration || "—"}</div>
-        <div class="row-price">${s.price} смн</div>
+        <div class="row-price">${s.price} ${currentCurrency}</div>
         <div class="row-actions">
           <button class="icon-btn edit" data-action="edit" data-id="${s.id}">✎</button>
           <button class="icon-btn danger" data-action="delete" data-id="${s.id}">✕</button>
