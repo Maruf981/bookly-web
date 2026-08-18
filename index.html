@@ -646,6 +646,7 @@
     // может обслуживать разных владельцев без правки кода под каждого.
     const urlParams = new URLSearchParams(window.location.search);
     const OWNER_ID = urlParams.get('owner') || "2f17bace-b594-4329-8007-4716b49d1171";
+    const BRANCH_ID = urlParams.get('branch') || "1";
 
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -684,7 +685,7 @@
       const { data, error } = await sb
         .from('bots')
         .select('work_times, days_off, currency')
-        .eq('owner_id', OWNER_ID)
+        .eq('branch_id', BRANCH_ID)
         .maybeSingle();
 
       if (!error && data) {
@@ -712,7 +713,7 @@
       const { data, error } = await sb
         .from('bookings')
         .select('time')
-        .eq('owner_id', OWNER_ID)
+        .eq('branch_id', BRANCH_ID)
         .eq('master', MASTERS.find(m => m.id === state.master)?.name)
         .eq('booking_date', selectedDate)
         .eq('status', 'active');
@@ -738,7 +739,7 @@
     }
 
     async function loadMasters() {
-      const { data, error } = await sb.from('masters').select('*').eq('owner_id', OWNER_ID);
+      const { data, error } = await sb.from('masters').select('*').eq('branch_id', BRANCH_ID);
 
       if (error || !data || data.length === 0) {
         console.error('Не удалось загрузить мастеров:', error ? error.message : 'пусто');
@@ -753,7 +754,7 @@
     }
 
     async function loadServices() {
-      const { data, error } = await sb.from('services').select('*').eq('owner_id', OWNER_ID);
+      const { data, error } = await sb.from('services').select('*').eq('branch_id', BRANCH_ID);
 
       if (error) {
         console.error('Не удалось загрузить услуги:', error.message);
@@ -960,7 +961,7 @@
       const { data: rawData, error } = await sb
         .from('bookings')
         .select('*')
-        .eq('owner_id', OWNER_ID)
+        .eq('branch_id', BRANCH_ID)
         .eq('client_chat_id', chatId)
         .eq('status', 'active')
         .order('booking_date', { ascending: true });
