@@ -231,8 +231,12 @@
       padding: 16px;
     }
 
-    .plan-card:hover .plan-price {
-      color: #3ecf8e;
+    .plan-price.active-plan {
+      color: #3ecf8e !important;
+    }
+
+    .plan-card.card-focused {
+      border-color: var(--accent) !important;
     }
 
     .bot-card-decoration {
@@ -1053,31 +1057,25 @@
         </div>
 
         <div class="bot-card plan-card" data-plan-card="Рост">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div
-              style="font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
-              Рост</div>
-            <span class="plan-info-btn" data-plan-info="Рост"
-              style="cursor:pointer; color:var(--faint); font-size:14px; border:1px solid var(--line); border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center;">i</span>
-          </div>
-          <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$19<span
+          <div
+            style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
+            Рост</div>
+          <div class="plan-price" style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px; transition:color .15s ease;">$19<span
               style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
-          <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:14px;">До 3 филиалов<br>Без
+          <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:10px;">До 3 филиалов<br>Без
             лимита сотрудников<br>Google Calendar</div>
-          <button class="btn-save select-plan-btn" data-plan="Рост" style="width:100%;">Выбрать</button>
+          <div class="plan-info-btn" data-plan-info="Рост" style="cursor:pointer; color:var(--accent); font-size:12px; margin-bottom:14px;">Подробно о тарифе</div>
+          <button class="btn-cancel select-plan-btn" data-plan="Рост" style="width:100%;">Выбрать</button>
         </div>
         <div class="bot-card plan-card" data-plan-card="Бизнес">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div
-              style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
-              Бизнес</div>
-            <span class="plan-info-btn" data-plan-info="Бизнес"
-              style="cursor:pointer; color:var(--faint); font-size:14px; border:1px solid var(--line); border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center;">i</span>
-          </div>
-          <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$39<span
+          <div
+            style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
+            Бизнес</div>
+          <div class="plan-price" style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px; transition:color .15s ease;">$39<span
               style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
-          <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:14px;">Без лимита
+          <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:10px;">Без лимита
             филиалов<br>Без лимита сотрудников<br>Всё включено</div>
+          <div class="plan-info-btn" data-plan-info="Бизнес" style="cursor:pointer; color:var(--accent); font-size:12px; margin-bottom:14px;">Подробно о тарифе</div>
           <button class="btn-cancel select-plan-btn" data-plan="Бизнес" style="width:100%;">Выбрать</button>
         </div>
       </div>
@@ -1373,6 +1371,13 @@
       if (pricingSection) {
         pricingSection.style.display = (mainBranch && currentBranchId === mainBranch.id) ? "block" : "none";
       }
+
+      const activePlanName = mainBranch ? (mainBranch.plan === 'trial' ? null : mainBranch.plan) : null;
+      document.querySelectorAll(".plan-card").forEach(card => {
+        const priceEl = card.querySelector(".plan-price");
+        if (!priceEl) return;
+        priceEl.classList.toggle("active-plan", card.dataset.planCard === activePlanName);
+      });
       
 
       const listEl = document.getElementById("branchList");
@@ -1412,6 +1417,12 @@
       const infoBtn = e.target.closest(".plan-info-btn");
       if (!infoBtn) return;
       document.getElementById("planDetailsOverlay").classList.add("show");
+    });
+        document.querySelectorAll(".plan-card").forEach(card => {
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("card-focused"));
+        card.classList.add("card-focused");
+      });
     });
     document.getElementById("planDetailsClose").addEventListener("click", () => {
       document.getElementById("planDetailsOverlay").classList.remove("show");
