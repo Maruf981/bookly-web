@@ -798,6 +798,7 @@
     <div class="dash-header">
       <div>
         <div class="dash-title" style="font-size:28px;">Личный кабинет</div>
+        <div id="trialBadge" style="font-size:12px; color:var(--accent); margin-top:6px;"></div>
       </div>
       <div style="display:flex; align-items:center; gap:10px;">
         <div style="position:relative;">
@@ -1019,6 +1020,29 @@
       </div>
     </div>
 
+    <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
+
+    <div class="dash-eyebrow" style="margin-top:28px;">Тариф</div>
+    <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Выберите план</div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
+      <div class="bot-card">
+        <div style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Старт</div>
+        <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$9<span style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8;">1 филиал<br>До 5 сотрудников<br>Напоминания клиентам</div>
+      </div>
+      <div class="bot-card" style="border-color:var(--accent);">
+        <div style="font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Рост</div>
+        <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$19<span style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8;">До 3 филиалов<br>Без лимита сотрудников<br>Google Calendar</div>
+      </div>
+      <div class="bot-card">
+        <div style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Бизнес</div>
+        <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$39<span style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8;">Без лимита филиалов<br>Без лимита сотрудников<br>Всё включено</div>
+      </div>
+    </div>
+
     <div class="form-card" id="masterFormCard">
       <div class="input-group">
         <label>Имя сотрудника</label>
@@ -1172,9 +1196,32 @@
 
     let allBranches = [];
 
+    function renderTrialBadge() {
+      const currentBranch = allBranches.find(b => b.id === currentBranchId);
+      const badgeEl = document.getElementById("trialBadge");
+      if (!currentBranch || !badgeEl) return;
+
+      if (currentBranch.plan && currentBranch.plan !== 'trial') {
+        badgeEl.textContent = `Тариф: ${currentBranch.plan}`;
+        return;
+      }
+
+      const startedAt = currentBranch.trial_started_at ? new Date(currentBranch.trial_started_at) : new Date();
+      const daysPassed = Math.floor((Date.now() - startedAt.getTime()) / (1000 * 60 * 60 * 24));
+      const daysLeft = Math.max(0, 7 - daysPassed);
+
+      if (daysLeft > 0) {
+        badgeEl.textContent = `Пробный период: осталось ${daysLeft} дн.`;
+      } else {
+        badgeEl.textContent = `Пробный период закончился — выберите тариф`;
+        badgeEl.style.color = "var(--danger)";
+      }
+    }
+
     function renderBranchSwitcher() {
       const currentBranch = allBranches.find(b => b.id === currentBranchId);
       document.getElementById("branchSwitcherLabel").textContent = currentBranch ? currentBranch.name : "Филиал";
+      renderTrialBadge();
 
       const listEl = document.getElementById("branchList");
       listEl.innerHTML = allBranches.map(b => `
