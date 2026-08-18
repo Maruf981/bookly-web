@@ -1270,8 +1270,6 @@
     });
 
     document.getElementById("btnLogout").addEventListener("click", async () => {
-
-    document.getElementById("btnLogout").addEventListener("click", async () => {
       await sb.auth.signOut();
       currentUserId = null;
       document.getElementById("dash").style.display = "none";
