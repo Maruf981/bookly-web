@@ -803,10 +803,10 @@
           </button>
           <div id="branchDropdown" style="display:none; position:absolute; top:calc(100% + 6px); right:0; min-width:240px; background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden; z-index:20; box-shadow:0 8px 24px rgba(0,0,0,0.35);">
             <div id="branchList"></div>
-            <div id="btnAddBranch" style="padding:10px 14px; border-top:1px solid var(--line); color:var(--accent); font-size:13px; cursor:pointer;">+ Добавить филиал</div>
+          <div id="btnAddBranch" style="padding:12px 14px; border-top:1px solid var(--line); color:var(--accent); font-size:13px; font-weight:600; cursor:pointer; transition:background .15s ease;" onmouseover="this.style.background='var(--accent-soft)'" onmouseout="this.style.background='transparent'">+ Добавить филиал</div>
           </div>
         </div>
-        <button class="btn-logout" id="btnLogout">Выйти</button>
+      <button class="btn-logout" id="btnLogout" style="border-color:var(--accent); color:var(--accent);">Выйти</button>
       </div>
     </div>
 
@@ -1106,7 +1106,7 @@
     </div>
   </div>
 
-    <div class="guide-overlay" id="addBranchOverlay">
+  <div class="guide-overlay" id="addBranchOverlay">
     <div class="guide-modal" style="max-width: 360px;">
       <div class="guide-header">
         <div class="dash-eyebrow">Новый филиал</div>
@@ -1115,11 +1115,28 @@
       </div>
       <div class="input-group">
         <label>Название</label>
-        <input type="text" id="newBranchNameInput" placeholder="Например, Филиал Bookly" />
+        <input type="text" id="newBranchNameInput" placeholder="Например, Филиал на Рудаки" />
       </div>
       <div class="form-actions">
         <button class="btn-save" id="btnConfirmAddBranch">Создать</button>
         <button class="btn-cancel" id="btnCancelAddBranch">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="guide-overlay" id="deleteBranchOverlay">
+    <div class="guide-modal" style="max-width: 360px;">
+      <div class="guide-header">
+        <div class="dash-eyebrow" style="color:var(--danger);">Удаление филиала</div>
+        <div class="dash-title" style="font-size:18px;" id="deleteBranchText">Удалить филиал?</div>
+        <button class="guide-close" id="deleteBranchClose">✕</button>
+      </div>
+      <div class="guide-note">
+        Все услуги, сотрудники и записи этого филиала будут удалены безвозвратно.
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" id="btnConfirmDeleteBranch" style="background:var(--danger);">Удалить</button>
+        <button class="btn-cancel" id="btnCancelDeleteBranch">Отмена</button>
       </div>
     </div>
   </div>
@@ -1175,17 +1192,34 @@
       });
     }
 
-    async function deleteBranch(branchId) {
+    let branchIdPendingDelete = null;
+
+    function deleteBranch(branchId) {
       const branch = allBranches.find(b => b.id === branchId);
       if (!branch) return;
+      branchIdPendingDelete = branchId;
+      document.getElementById("deleteBranchText").textContent = `Удалить "${branch.name}"?`;
+      document.getElementById("deleteBranchOverlay").classList.add("show");
+    }
 
-      if (!confirm(`Удалить филиал "${branch.name}" и все его данные (услуги, сотрудников, записи)? Это необратимо.`)) return;
+    document.getElementById("deleteBranchClose").addEventListener("click", () => {
+      document.getElementById("deleteBranchOverlay").classList.remove("show");
+    });
+    document.getElementById("btnCancelDeleteBranch").addEventListener("click", () => {
+      document.getElementById("deleteBranchOverlay").classList.remove("show");
+    });
+
+    document.getElementById("btnConfirmDeleteBranch").addEventListener("click", async () => {
+      const branchId = branchIdPendingDelete;
+      if (!branchId) return;
 
       await sb.from('bookings').delete().eq('branch_id', branchId);
       await sb.from('services').delete().eq('branch_id', branchId);
       await sb.from('masters').delete().eq('branch_id', branchId);
       await sb.from('bots').delete().eq('branch_id', branchId);
       const { error } = await sb.from('branches').delete().eq('id', branchId);
+
+      document.getElementById("deleteBranchOverlay").classList.remove("show");
 
       if (error) { showToast("Ошибка: " + error.message); return; }
 
@@ -1201,7 +1235,7 @@
       }
       renderBranchSwitcher();
       showToast("Филиал удалён");
-    }
+    });
 
     async function switchBranch(branchId) {
       if (branchId === currentBranchId) {
