@@ -843,7 +843,8 @@
           </div>
           <div class="input-group">
             <label>Валюта</label>
-            <select id="bsCurrencyInput" style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
+            <select id="bsCurrencyInput"
+              style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
               <option value="$">Доллар США ($)</option>
               <option value="€">Евро (€)</option>
               <option value="£">Фунт стерлингов (£)</option>
@@ -868,7 +869,8 @@
           </div>
           <div class="input-group">
             <label>Часовой пояс</label>
-            <select id="bsTimezoneInput" style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
+            <select id="bsTimezoneInput"
+              style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:9px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
               <option value="-12">UTC-12</option>
               <option value="-11">UTC-11 — Самоа</option>
               <option value="-10">UTC-10 — Гавайи</option>
@@ -1103,7 +1105,19 @@
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentUserId = null;
+    let currentBranchId = null;
     let editingId = null;
+
+    async function loadBranches() {
+      const { data, error } = await sb
+        .from('branches')
+        .select('*')
+        .eq('owner_id', currentUserId)
+        .order('id', { ascending: true });
+
+      if (error || !data || data.length === 0) return [];
+      return data;
+    }
 
 
     function enableEnterSubmit(inputId, buttonId) {
@@ -1243,6 +1257,8 @@
       }
 
       currentUserId = data.user.id;
+      const branches = await loadBranches();
+      currentBranchId = branches.length > 0 ? branches[0].id : null;
       document.getElementById("loginWrap").style.display = "none";
       document.getElementById("dash").style.display = "block";
       loadServices();
@@ -1252,6 +1268,8 @@
       loadBotInfo();
       loadBusinessSettings();
     });
+
+    document.getElementById("btnLogout").addEventListener("click", async () => {
 
     document.getElementById("btnLogout").addEventListener("click", async () => {
       await sb.auth.signOut();
@@ -1264,7 +1282,7 @@
       const { data, error } = await sb
         .from('services')
         .select('*')
-        .eq('owner_id', currentUserId)
+        .eq('branch_id', currentBranchId)
         .order('id', { ascending: true });
 
       const rowsEl = document.getElementById("rows");
@@ -1324,7 +1342,7 @@
       const { data, error } = await sb
         .from('bots')
         .select('*')
-        .eq('owner_id', currentUserId)
+        .eq('branch_id', currentBranchId)
         .maybeSingle();
 
       const view = document.getElementById("botStatusView");
@@ -1395,7 +1413,7 @@
       const { data } = await sb
         .from('bots')
         .select('business_name, work_times, days_off, currency, timezone_offset')
-        .eq('owner_id', currentUserId)
+        .eq('branch_id', currentBranchId)
         .maybeSingle();
 
       const businessName = data?.business_name || 'Название не задано';
@@ -1442,7 +1460,7 @@
 
       const { error } = await sb.from('bots')
         .update({ business_name: businessName, work_times: workTimes, days_off: daysOff, currency: currency, timezone_offset: timezoneOffset })
-        .eq('owner_id', currentUserId);
+        .eq('branch_id', currentBranchId);
 
       if (error) { showToast("Ошибка: " + error.message); return; }
 
@@ -1506,7 +1524,7 @@
         if (error) { showToast("Ошибка: " + error.message); return; }
       } else {
         const { error } = await sb.from('bots')
-          .insert({ owner_id: currentUserId, business_name: businessName, bot_token: token, owner_chat_id: chatId || null, work_times: "10:00,11:30,12:00,13:00,14:30,15:00,16:30,18:00", is_active: true });
+          .insert({ owner_id: currentUserId, branch_id: currentBranchId, business_name: businessName, bot_token: token, owner_chat_id: chatId || null, work_times: "10:00,11:30,12:00,13:00,14:30,15:00,16:30,18:00", is_active: true });
         if (error) { showToast("Ошибка: " + error.message); return; }
       }
 
@@ -1520,7 +1538,7 @@
       const { data, error } = await sb
         .from('bookings')
         .select('*')
-        .eq('owner_id', currentUserId)
+        .eq('branch_id', currentBranchId)
         .order('booking_date', { ascending: false });
 
       const rowsEl = document.getElementById("clientRows");
@@ -1584,7 +1602,7 @@
       const { data, error } = await sb
         .from('bookings')
         .select('*')
-        .eq('owner_id', currentUserId);
+        .eq('branch_id', currentBranchId);
 
       const blockEl = document.getElementById("analyticsBlock");
       if (error || !data) {
@@ -1748,7 +1766,7 @@
       const { data, error } = await sb
         .from('masters')
         .select('*')
-        .eq('owner_id', currentUserId)
+        .eq('branch_id', currentBranchId)
         .order('id', { ascending: true });
 
       const rowsEl = document.getElementById("masterRows");
@@ -1832,7 +1850,7 @@
         showToast("Сотрудник обновлён");
       } else {
         const { error } = await sb.from('masters')
-          .insert({ name, role, initials, owner_id: currentUserId });
+          .insert({ name, role, initials, owner_id: currentUserId, branch_id: currentBranchId });
         if (error) { showToast("Ошибка: " + error.message); return; }
         showToast("Сотрудник добавлен");
       }
@@ -1896,7 +1914,7 @@
         showToast("Услуга обновлена");
       } else {
         const { error } = await sb.from('services')
-          .insert({ name, duration, price, owner_id: currentUserId });
+          .insert({ name, duration, price, owner_id: currentUserId, branch_id: currentBranchId });
 
         if (error) { showToast("Ошибка: " + error.message); return; }
         showToast("Услуга добавлена");
@@ -1962,6 +1980,8 @@
       const { data } = await sb.auth.getSession();
       if (data.session) {
         currentUserId = data.session.user.id;
+        const branches = await loadBranches();
+        currentBranchId = branches.length > 0 ? branches[0].id : null;
         document.getElementById("loginWrap").style.display = "none";
         document.getElementById("dash").style.display = "block";
         loadServices();
