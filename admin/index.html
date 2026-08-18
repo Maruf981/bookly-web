@@ -1031,42 +1031,36 @@
 
     <div id="pricingSection">
       <div class="dash-eyebrow" style="margin-top:28px;">Тариф</div>
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-        <div class="dash-title" style="font-size:18px;">Выберите план</div>
-        <button id="btnShowPlanDetails" class="btn-cancel" style="font-size:12px;">Подробнее об условиях</button>
-      </div>
+        <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Выберите план</div>
 
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
-        <div class="bot-card">
-          <div
-            style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
-            Старт</div>
-          <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$9<span
-              style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
-          <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:14px;">1 филиал<br>До 5
-            сотрудников<br>Напоминания клиентам</div>
-          <button class="btn-cancel select-plan-btn" data-plan="Старт" style="width:100%;">Выбрать</button>
+              <div class="bot-card plan-card" data-plan-card="Старт">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Старт</div>
+          <span class="plan-info-btn" data-plan-info="Старт" style="cursor:pointer; color:var(--faint); font-size:14px; border:1px solid var(--line); border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center;">i</span>
         </div>
-        <div class="bot-card" style="border-color:var(--accent);">
-          <div
-            style="font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
-            Рост</div>
-          <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$19<span
-              style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
-          <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:14px;">До 3 филиалов<br>Без
-            лимита сотрудников<br>Google Calendar</div>
-          <button class="btn-save select-plan-btn" data-plan="Рост" style="width:100%;">Выбрать</button>
+        <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$9<span style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:14px;">1 филиал<br>До 5 сотрудников<br>Напоминания клиентам</div>
+        <button class="btn-cancel select-plan-btn" data-plan="Старт" style="width:100%;">Выбрать</button>
+      </div>
+      <div class="bot-card plan-card" data-plan-card="Рост">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div style="font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Рост</div>
+          <span class="plan-info-btn" data-plan-info="Рост" style="cursor:pointer; color:var(--faint); font-size:14px; border:1px solid var(--line); border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center;">i</span>
         </div>
-        <div class="bot-card">
-          <div
-            style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
-            Бизнес</div>
-          <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$39<span
-              style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
-          <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:14px;">Без лимита
-            филиалов<br>Без лимита сотрудников<br>Всё включено</div>
-          <button class="btn-cancel select-plan-btn" data-plan="Бизнес" style="width:100%;">Выбрать</button>
+        <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$19<span style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:14px;">До 3 филиалов<br>Без лимита сотрудников<br>Google Calendar</div>
+        <button class="btn-save select-plan-btn" data-plan="Рост" style="width:100%;">Выбрать</button>
+      </div>
+      <div class="bot-card plan-card" data-plan-card="Бизнес">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Бизнес</div>
+          <span class="plan-info-btn" data-plan-info="Бизнес" style="cursor:pointer; color:var(--faint); font-size:14px; border:1px solid var(--line); border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center;">i</span>
         </div>
+        <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$39<span style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:14px;">Без лимита филиалов<br>Без лимита сотрудников<br>Всё включено</div>
+        <button class="btn-cancel select-plan-btn" data-plan="Бизнес" style="width:100%;">Выбрать</button>
+      </div>
       </div>
     </div>
 
@@ -1350,6 +1344,12 @@
       }
     }
 
+    function highlightPlanCard(planName) {
+      document.querySelectorAll(".plan-card").forEach(card => {
+        card.style.borderColor = card.dataset.planCard === planName ? "var(--accent)" : "var(--line)";
+      });
+    }
+
     function renderBranchSwitcher() {
       const currentBranch = allBranches.find(b => b.id === currentBranchId);
       document.getElementById("branchSwitcherLabel").textContent = currentBranch ? currentBranch.name : "Филиал";
@@ -1360,6 +1360,7 @@
       if (pricingSection) {
         pricingSection.style.display = (mainBranch && currentBranchId === mainBranch.id) ? "block" : "none";
       }
+      highlightPlanCard(mainBranch ? (mainBranch.plan === 'trial' ? 'Старт' : mainBranch.plan) : 'Старт');
 
       const listEl = document.getElementById("branchList");
       listEl.innerHTML = allBranches.map(b => `
@@ -1394,7 +1395,11 @@
     document.getElementById("deleteBranchClose").addEventListener("click", () => {
       document.getElementById("deleteBranchOverlay").classList.remove("show");
     });
-    document.getElementById("btnShowPlanDetails").addEventListener("click", () => {
+    document.addEventListener("click", (e) => {
+      const infoBtn = e.target.closest(".plan-info-btn");
+      if (!infoBtn) return;
+      const planName = infoBtn.dataset.planInfo;
+      highlightPlanCard(planName);
       document.getElementById("planDetailsOverlay").classList.add("show");
     });
     document.getElementById("planDetailsClose").addEventListener("click", () => {
