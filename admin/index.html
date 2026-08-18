@@ -1106,6 +1106,24 @@
     </div>
   </div>
 
+    <div class="guide-overlay" id="addBranchOverlay">
+    <div class="guide-modal" style="max-width: 360px;">
+      <div class="guide-header">
+        <div class="dash-eyebrow">Новый филиал</div>
+        <div class="dash-title" style="font-size:18px;">Как назвать филиал?</div>
+        <button class="guide-close" id="addBranchClose">✕</button>
+      </div>
+      <div class="input-group">
+        <label>Название</label>
+        <input type="text" id="newBranchNameInput" placeholder="Например, Филиал на Рудаки" />
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" id="btnConfirmAddBranch">Создать</button>
+        <button class="btn-cancel" id="btnCancelAddBranch">Отмена</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // ------------------------------------------------------------------
     // Замени на свои настоящие значения — те же, что в index.html и .env
@@ -1179,7 +1197,6 @@
     });
 
     document.getElementById("btnAddBranch").addEventListener("click", async () => {
-      const currentBranch = allBranches.find(b => b.id === currentBranchId);
       const { data: botCheck } = await sb.from('bots').select('bot_token').eq('branch_id', currentBranchId).maybeSingle();
 
       if (!botCheck || !botCheck.bot_token) {
@@ -1188,17 +1205,31 @@
         return;
       }
 
-      const branchName = prompt("Название нового филиала:");
-      if (!branchName || !branchName.trim()) return;
+      document.getElementById("branchDropdown").style.display = "none";
+      document.getElementById("newBranchNameInput").value = "";
+      document.getElementById("addBranchOverlay").classList.add("show");
+    });
+
+    document.getElementById("addBranchClose").addEventListener("click", () => {
+      document.getElementById("addBranchOverlay").classList.remove("show");
+    });
+    document.getElementById("btnCancelAddBranch").addEventListener("click", () => {
+      document.getElementById("addBranchOverlay").classList.remove("show");
+    });
+
+    document.getElementById("btnConfirmAddBranch").addEventListener("click", async () => {
+      const branchName = document.getElementById("newBranchNameInput").value.trim();
+      if (!branchName) { showToast("Впишите название филиала"); return; }
 
       const { data: newBranch, error } = await sb.from('branches')
-        .insert({ owner_id: currentUserId, name: branchName.trim() })
+        .insert({ owner_id: currentUserId, name: branchName })
         .select()
         .single();
 
       if (error) { showToast("Ошибка: " + error.message); return; }
 
       allBranches.push(newBranch);
+      document.getElementById("addBranchOverlay").classList.remove("show");
       await switchBranch(newBranch.id);
       showToast("Филиал создан, настройте бота");
     });
