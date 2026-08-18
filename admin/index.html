@@ -1157,14 +1157,50 @@
 
       const listEl = document.getElementById("branchList");
       listEl.innerHTML = allBranches.map(b => `
-        <div class="branch-option" data-id="${b.id}" style="display:flex; align-items:center; gap:8px; padding:10px 14px; font-size:13px; cursor:pointer; ${b.id === currentBranchId ? 'background:var(--accent-soft); color:var(--accent);' : 'color:var(--ink);'}">
-          ${b.name}
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 14px; font-size:13px; ${b.id === currentBranchId ? 'background:var(--accent-soft); color:var(--accent);' : 'color:var(--ink);'}">
+          <span class="branch-option" data-id="${b.id}" style="cursor:pointer; flex:1;">${b.name}</span>
+          ${allBranches.length > 1 ? `<span class="branch-delete" data-id="${b.id}" style="cursor:pointer; color:var(--faint); padding-left:8px;">✕</span>` : ''}
         </div>
       `).join("");
 
       listEl.querySelectorAll(".branch-option").forEach(el => {
         el.addEventListener("click", () => switchBranch(Number(el.dataset.id)));
       });
+
+      listEl.querySelectorAll(".branch-delete").forEach(el => {
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          deleteBranch(Number(el.dataset.id));
+        });
+      });
+    }
+
+    async function deleteBranch(branchId) {
+      const branch = allBranches.find(b => b.id === branchId);
+      if (!branch) return;
+
+      if (!confirm(`Удалить филиал "${branch.name}" и все его данные (услуги, сотрудников, записи)? Это необратимо.`)) return;
+
+      await sb.from('bookings').delete().eq('branch_id', branchId);
+      await sb.from('services').delete().eq('branch_id', branchId);
+      await sb.from('masters').delete().eq('branch_id', branchId);
+      await sb.from('bots').delete().eq('branch_id', branchId);
+      const { error } = await sb.from('branches').delete().eq('id', branchId);
+
+      if (error) { showToast("Ошибка: " + error.message); return; }
+
+      allBranches = allBranches.filter(b => b.id !== branchId);
+      if (currentBranchId === branchId) {
+        currentBranchId = allBranches[0].id;
+        loadServices();
+        loadMasters();
+        loadClients();
+        loadAnalytics();
+        loadBotInfo();
+        loadBusinessSettings();
+      }
+      renderBranchSwitcher();
+      showToast("Филиал удалён");
     }
 
     async function switchBranch(branchId) {
