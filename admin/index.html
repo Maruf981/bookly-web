@@ -1029,17 +1029,20 @@
       <div class="bot-card">
         <div style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Старт</div>
         <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$9<span style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
-        <div style="font-size:12px; color:var(--muted); line-height:1.8;">1 филиал<br>До 5 сотрудников<br>Напоминания клиентам</div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:14px;">1 филиал<br>До 5 сотрудников<br>Напоминания клиентам</div>
+        <button class="btn-cancel select-plan-btn" data-plan="Старт" style="width:100%;">Выбрать</button>
       </div>
       <div class="bot-card" style="border-color:var(--accent);">
         <div style="font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Рост</div>
         <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$19<span style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
-        <div style="font-size:12px; color:var(--muted); line-height:1.8;">До 3 филиалов<br>Без лимита сотрудников<br>Google Calendar</div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:14px;">До 3 филиалов<br>Без лимита сотрудников<br>Google Calendar</div>
+        <button class="btn-save select-plan-btn" data-plan="Рост" style="width:100%;">Выбрать</button>
       </div>
       <div class="bot-card">
         <div style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Бизнес</div>
         <div style="font-family:Georgia,serif; font-size:24px; font-weight:700; margin-bottom:10px;">$39<span style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
-        <div style="font-size:12px; color:var(--muted); line-height:1.8;">Без лимита филиалов<br>Без лимита сотрудников<br>Всё включено</div>
+        <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:14px;">Без лимита филиалов<br>Без лимита сотрудников<br>Всё включено</div>
+        <button class="btn-cancel select-plan-btn" data-plan="Бизнес" style="width:100%;">Выбрать</button>
       </div>
     </div>
 
@@ -1196,6 +1199,47 @@
 
     let allBranches = [];
 
+
+        function getPlanLimits(planName) {
+      const limits = {
+        trial: { maxBranches: Infinity },
+        'Старт': { maxBranches: 1 },
+        'Рост': { maxBranches: 3 },
+        'Бизнес': { maxBranches: Infinity },
+      };
+      return limits[planName] || limits.trial;
+    }
+
+    function getMainBranch() {
+      return allBranches.reduce((min, b) => (!min || b.id < min.id) ? b : min, null);
+    }
+
+    function isTrialExpired(mainBranch) {
+      if (!mainBranch || mainBranch.plan !== 'trial') return false;
+      const startedAt = mainBranch.trial_started_at ? new Date(mainBranch.trial_started_at) : new Date();
+      const daysPassed = Math.floor((Date.now() - startedAt.getTime()) / (1000 * 60 * 60 * 24));
+      return daysPassed >= 7;
+    }
+
+    document.addEventListener("click", async (e) => {
+      const btn = e.target.closest(".select-plan-btn");
+      if (!btn) return;
+
+      const planName = btn.dataset.plan;
+      const mainBranch = getMainBranch();
+      if (!mainBranch) return;
+
+      // Пока без реальной оплаты — просто фиксируем выбранный тариф.
+      // Позже здесь будет интеграция с платёжной системой.
+      const { error } = await sb.from('branches').update({ plan: planName }).eq('id', mainBranch.id);
+
+      if (error) { showToast("Ошибка: " + error.message); return; }
+
+      mainBranch.plan = planName;
+      renderTrialBadge();
+      showToast(`Тариф "${planName}" выбран`);
+    });
+
     function renderTrialBadge() {
       const currentBranch = allBranches.find(b => b.id === currentBranchId);
       const badgeEl = document.getElementById("trialBadge");
@@ -1323,6 +1367,21 @@
 
       if (!botCheck || !botCheck.bot_token) {
         showToast("Сначала подключите бота к текущему филиалу");
+        document.getElementById("branchDropdown").style.display = "none";
+        return;
+      }
+
+      const mainBranch = getMainBranch();
+      const planLimits = getPlanLimits(mainBranch ? mainBranch.plan : 'trial');
+
+      if (isTrialExpired(mainBranch)) {
+        showToast("Пробный период закончился — выберите тариф внизу страницы");
+        document.getElementById("branchDropdown").style.display = "none";
+        return;
+      }
+
+      if (allBranches.length >= planLimits.maxBranches) {
+        showToast(`Ваш тариф позволяет до ${planLimits.maxBranches} филиал(ов) — выберите тариф выше`);
         document.getElementById("branchDropdown").style.display = "none";
         return;
       }
