@@ -795,7 +795,19 @@
       <div>
         <div class="dash-title" style="font-size:28px;">Личный кабинет</div>
       </div>
-      <button class="btn-logout" id="btnLogout">Выйти</button>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="position:relative;">
+          <button id="btnBranchSwitcher" style="display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line); color:var(--ink); padding:9px 14px; border-radius:8px; font-size:13px; cursor:pointer;">
+            <span id="branchSwitcherLabel">Филиал</span>
+            <span style="color:var(--faint); font-size:10px;">▾</span>
+          </button>
+          <div id="branchDropdown" style="display:none; position:absolute; top:calc(100% + 6px); right:0; min-width:240px; background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden; z-index:20; box-shadow:0 8px 24px rgba(0,0,0,0.35);">
+            <div id="branchList"></div>
+            <div id="btnAddBranch" style="padding:10px 14px; border-top:1px solid var(--line); color:var(--accent); font-size:13px; cursor:pointer;">+ Добавить филиал</div>
+          </div>
+        </div>
+        <button class="btn-logout" id="btnLogout">Выйти</button>
+      </div>
     </div>
 
     <div class="bot-section">
@@ -1119,6 +1131,78 @@
       return data;
     }
 
+    let allBranches = [];
+
+    function renderBranchSwitcher() {
+      const currentBranch = allBranches.find(b => b.id === currentBranchId);
+      document.getElementById("branchSwitcherLabel").textContent = currentBranch ? currentBranch.name : "Филиал";
+
+      const listEl = document.getElementById("branchList");
+      listEl.innerHTML = allBranches.map(b => `
+        <div class="branch-option" data-id="${b.id}" style="display:flex; align-items:center; gap:8px; padding:10px 14px; font-size:13px; cursor:pointer; ${b.id === currentBranchId ? 'background:var(--accent-soft); color:var(--accent);' : 'color:var(--ink);'}">
+          ${b.name}
+        </div>
+      `).join("");
+
+      listEl.querySelectorAll(".branch-option").forEach(el => {
+        el.addEventListener("click", () => switchBranch(Number(el.dataset.id)));
+      });
+    }
+
+    async function switchBranch(branchId) {
+      if (branchId === currentBranchId) {
+        document.getElementById("branchDropdown").style.display = "none";
+        return;
+      }
+      currentBranchId = branchId;
+      document.getElementById("branchDropdown").style.display = "none";
+      loadServices();
+      loadMasters();
+      loadClients();
+      loadAnalytics();
+      loadBotInfo();
+      loadBusinessSettings();
+      renderBranchSwitcher();
+    }
+
+    document.getElementById("btnBranchSwitcher").addEventListener("click", () => {
+      const dropdown = document.getElementById("branchDropdown");
+      dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+    });
+
+    document.addEventListener("click", (e) => {
+      const dropdown = document.getElementById("branchDropdown");
+      const btn = document.getElementById("btnBranchSwitcher");
+      if (dropdown.style.display !== "none" && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+
+    document.getElementById("btnAddBranch").addEventListener("click", async () => {
+      const currentBranch = allBranches.find(b => b.id === currentBranchId);
+      const { data: botCheck } = await sb.from('bots').select('bot_token').eq('branch_id', currentBranchId).maybeSingle();
+
+      if (!botCheck || !botCheck.bot_token) {
+        showToast("Сначала подключите бота к текущему филиалу");
+        document.getElementById("branchDropdown").style.display = "none";
+        return;
+      }
+
+      const branchName = prompt("Название нового филиала:");
+      if (!branchName || !branchName.trim()) return;
+
+      const { data: newBranch, error } = await sb.from('branches')
+        .insert({ owner_id: currentUserId, name: branchName.trim() })
+        .select()
+        .single();
+
+      if (error) { showToast("Ошибка: " + error.message); return; }
+
+      allBranches.push(newBranch);
+      await switchBranch(newBranch.id);
+      showToast("Филиал создан, настройте бота");
+    });
+
 
     function enableEnterSubmit(inputId, buttonId) {
       document.getElementById(inputId).addEventListener("keydown", (e) => {
@@ -1257,8 +1341,8 @@
       }
 
       currentUserId = data.user.id;
-      const branches = await loadBranches();
-      currentBranchId = branches.length > 0 ? branches[0].id : null;
+      allBranches = await loadBranches();
+      currentBranchId = allBranches.length > 0 ? allBranches[0].id : null;
       document.getElementById("loginWrap").style.display = "none";
       document.getElementById("dash").style.display = "block";
       loadServices();
@@ -1267,6 +1351,7 @@
       loadAnalytics();
       loadBotInfo();
       loadBusinessSettings();
+      renderBranchSwitcher();
     });
 
     document.getElementById("btnLogout").addEventListener("click", async () => {
@@ -1978,8 +2063,8 @@
       const { data } = await sb.auth.getSession();
       if (data.session) {
         currentUserId = data.session.user.id;
-        const branches = await loadBranches();
-        currentBranchId = branches.length > 0 ? branches[0].id : null;
+        allBranches = await loadBranches();
+        currentBranchId = allBranches.length > 0 ? allBranches[0].id : null;
         document.getElementById("loginWrap").style.display = "none";
         document.getElementById("dash").style.display = "block";
         loadServices();
@@ -1988,6 +2073,7 @@
         loadAnalytics();
         loadBotInfo();
         loadBusinessSettings();
+        renderBranchSwitcher();
       }
     })();
 
