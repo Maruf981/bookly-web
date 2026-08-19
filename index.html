@@ -1017,6 +1017,22 @@
         return bookingDateTime < new Date();
       }
 
+      function getDayLabel(bookingDate) {
+        const weekdayNames = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+        const now = new Date();
+        const todayIso = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
+
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowIso = tomorrow.getFullYear() + "-" + String(tomorrow.getMonth() + 1).padStart(2, "0") + "-" + String(tomorrow.getDate()).padStart(2, "0");
+
+        if (bookingDate === todayIso) return "Сегодня";
+        if (bookingDate === tomorrowIso) return "Завтра";
+
+        const [y, m, d] = bookingDate.split('-').map(Number);
+        return weekdayNames[new Date(y, m - 1, d).getDay()];
+      }
+
       const data = (rawData || []).filter(b => !isBookingPast(b.booking_date, b.time));
 
       if (!data || data.length === 0) {
@@ -1024,10 +1040,10 @@
         return;
       }
 
-      listEl.innerHTML = data.map(b => `
+       listEl.innerHTML = data.map(b => `
         <div style="border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:8px;">
           <div style="font-size:13px; font-weight:600; margin-bottom:3px;">${b.service}</div>
-          <div style="font-size:11px; color:var(--muted); margin-bottom:10px;">${b.master} · ${b.day}, ${b.time}</div>
+          <div style="font-size:11px; color:var(--muted); margin-bottom:10px;">${b.master} · ${getDayLabel(b.booking_date)}, ${b.time}</div>
           <div style="display:flex; gap:8px;">
             <button class="my-booking-cancel-btn" data-id="${b.id}" style="flex:1; background:none; border:1px solid var(--danger); color:var(--danger); padding:7px; border-radius:7px; font-size:11px; cursor:pointer;">Отменить</button>
             <button class="my-booking-reschedule-btn" data-id="${b.id}" style="flex:1; background:none; border:1px solid var(--brass); color:var(--brass); padding:7px; border-radius:7px; font-size:11px; cursor:pointer;">Перенести</button>
