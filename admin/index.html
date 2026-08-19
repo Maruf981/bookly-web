@@ -762,9 +762,60 @@
     .crm-staff-bar { height: 100%; background: var(--accent); border-radius: 3px; }
     .crm-staff-revenue { font-family: 'Fraunces', serif; font-size: 13px; font-weight: 700; color: var(--accent); width: 76px; text-align: right; }
 
+    /* ---------- Client list + profile card ---------- */
+    .client-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .client-row {
+      display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line);
+      border-radius: 10px; padding: 10px 14px; cursor: pointer; transition: border-color .15s ease;
+    }
+    .client-row:hover { border-color: var(--accent); }
+    .client-row.active { border-color: var(--accent); background: var(--accent-soft); }
+    .row-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: #fff;
+      font-family: 'Fraunces', serif; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .row-name { font-size: 13px; font-weight: 700; }
+    .row-tag { font-size: 9px; font-weight: 800; letter-spacing: .3px; text-transform: uppercase; padding: 2px 7px; border-radius: 20px; margin-left: 6px; }
+    .row-tag.regular { background: var(--accent-soft); color: var(--accent); }
+    .row-tag.risk { background: var(--danger-soft); color: var(--danger); }
+    .row-meta { font-size: 11px; color: var(--faint); margin-top: 1px; }
+    .row-right { margin-left: auto; text-align: right; font-size: 11px; color: var(--faint); }
+
+    .profile-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 26px; }
+    .profile-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+    .profile-avatar { width: 60px; height: 60px; border-radius: 50%; background: var(--accent); color: #fff;
+      font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .profile-name { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; }
+    .profile-username { font-size: 12.5px; color: var(--faint); margin-bottom: 6px; }
+    .profile-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .profile-tag { font-size: 10px; font-weight: 800; letter-spacing: .3px; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; }
+    .profile-tag.regular { background: var(--accent-soft); color: var(--accent); }
+    .profile-tag.risk { background: var(--danger-soft); color: var(--danger); }
+    .profile-delete-btn { margin-left: auto; background: none; border: 1px solid var(--danger); color: var(--danger);
+      padding: 7px 14px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+    .profile-delete-btn:hover { background: var(--danger-soft); }
+
+    .profile-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 22px; }
+    .pstat { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; }
+    .pstat-label { font-size: 9.5px; color: var(--faint); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
+    .pstat-value { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; }
+
+    .profile-section-title { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--faint); font-weight: 700; margin-bottom: 10px; }
+
+    .history-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+    .history-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: var(--surface-2); border-radius: 8px; flex-wrap: wrap; }
+    .history-date { font-size: 11px; color: var(--faint); width: 68px; flex-shrink: 0; }
+    .history-service { font-size: 12.5px; font-weight: 600; flex: 1; }
+    .history-status { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+    .history-note-box { display: flex; gap: 6px; width: 100%; margin-top: 6px; }
+
+    .notes-box { display: flex; gap: 8px; }
+    .notes-input { flex: 1; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 12.5px;
+      background: var(--surface-2); color: var(--ink); font-family: inherit; }
+    .notes-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 0 16px; font-size: 12.5px; font-weight: 700; cursor: pointer; }
+
     @media (max-width: 900px) {
       .crm-kpi-grid { grid-template-columns: 1fr 1fr; }
       .crm-charts-row { grid-template-columns: 1fr; }
+      .profile-stats { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 600px) {
@@ -1096,39 +1147,22 @@
 
     <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
-    <div class="two-col-section">
-      <div>
-        <div class="dash-eyebrow" style="margin-top:28px;">Сотрудники</div>
-        <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши сотрудники</div>
+    <div>
+      <div class="dash-eyebrow" style="margin-top:28px;">Сотрудники</div>
+      <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши сотрудники</div>
 
-        <div class="ledger">
-          <div class="ledger-head">
-            <div>Имя</div>
-            <div>Роль</div>
-            <div>Инициалы</div>
-            <div></div>
-          </div>
-          <div id="masterRows"></div>
+      <div class="ledger">
+        <div class="ledger-head">
+          <div>Имя</div>
+          <div>Роль</div>
+          <div>Инициалы</div>
+          <div></div>
         </div>
-
-        <div class="add-bar">
-          <button class="btn-add" id="btnShowAddMaster">+ Добавить сотрудника</button>
-        </div>
+        <div id="masterRows"></div>
       </div>
 
-      <div>
-        <div class="dash-eyebrow" style="margin-top:28px;">Клиенты</div>
-        <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши клиенты</div>
-
-        <div class="ledger">
-          <div class="ledger-head">
-            <div>Клиент</div>
-            <div>Визитов</div>
-            <div>Последний визит</div>
-            <div></div>
-          </div>
-          <div id="clientRows"></div>
-        </div>
+      <div class="add-bar">
+        <button class="btn-add" id="btnShowAddMaster">+ Добавить сотрудника</button>
       </div>
     </div>
 
@@ -1252,6 +1286,15 @@
         <div class="crm-chart-title">Рейтинг сотрудников</div>
         <div id="crmStaffRank"></div>
       </div>
+    </div>
+
+    <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
+
+    <div id="clientsSection">
+      <div class="dash-eyebrow" style="margin-top:28px;">Клиенты</div>
+      <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши клиенты</div>
+      <div class="client-list" id="clientListRows"></div>
+      <div id="clientProfileCard"></div>
     </div>
 
     <div class="form-card" id="masterFormCard">
@@ -2136,70 +2179,6 @@
     }
 
 
-    async function loadClients() {
-      const { data, error } = await sb
-        .from('bookings')
-        .select('*')
-        .eq('branch_id', currentBranchId)
-        .order('booking_date', { ascending: false });
-
-      const rowsEl = document.getElementById("clientRows");
-
-      if (error) {
-        rowsEl.innerHTML = `<div class="empty-state"><div class="empty-state-title">Ошибка</div><div class="empty-state-text">${error.message}</div></div>`;
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        rowsEl.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state-icon">👥</div>
-          <div class="empty-state-title">Пока нет ни одного клиента</div>
-          <div class="empty-state-text">Клиенты появятся здесь после первой записи</div>
-        </div>
-      `;
-        return;
-      }
-
-      // Группируем записи по клиенту (используем client_chat_id, а если его нет — client_username)
-      const clientsMap = new Map();
-      for (const booking of data) {
-        const key = booking.client_username || booking.client_chat_id || booking.client_name;
-        if (!clientsMap.has(key)) {
-          clientsMap.set(key, {
-            key,
-            name: booking.client_name || 'Клиент',
-            username: booking.client_username || '',
-            visits: 0,
-            lastVisit: booking.booking_date,
-            lastService: booking.service,
-            bookings: [],
-          });
-        }
-        const client = clientsMap.get(key);
-        client.visits += 1;
-        client.bookings.push(booking);
-      }
-
-      const clients = Array.from(clientsMap.values());
-      window.__clientsData = clients; // сохраняем для разворачивания карточек
-
-      rowsEl.innerHTML = clients.map(c => `
-      <div class="row client-row" data-key="${c.key}" style="cursor:pointer;">
-        <div class="row-name">${c.name} ${c.username ? `<span style="color:var(--faint); font-weight:400;">(${c.username})</span>` : ''}</div>
-        <div class="row-duration">${c.visits}</div>
-        <div class="row-duration">${c.lastVisit} · ${c.lastService}</div>
-        <div style="color:var(--faint);">▾</div>
-      </div>
-      <div class="client-history" id="history-${c.key}" style="display:none; padding: 4px 16px 14px; border-bottom: 1px solid var(--line);"></div>
-    `).join("");
-
-      document.querySelectorAll(".client-row").forEach(row => {
-        row.addEventListener("click", () => toggleClientHistory(row.dataset.key));
-      });
-    }
-
-
     // ---------- CRM dashboard ----------
 
     function getCrmDefaultDates() {
@@ -2420,20 +2399,102 @@
       document.getElementById(id).addEventListener("change", loadCrmDashboard);
     });
 
-    function toggleClientHistory(key) {
-      const historyEl = document.getElementById(`history-${key}`);
-      const isOpen = historyEl.style.display !== "none";
+    let selectedClientKey = null;
 
-      if (isOpen) {
-        historyEl.style.display = "none";
+    function getClientTag(client) {
+      if (client.visits >= 5) return { label: 'Постоянный', cls: 'regular' };
+      const daysSinceLastVisit = Math.floor((Date.now() - new Date(client.lastVisit).getTime()) / (1000 * 60 * 60 * 24));
+      if (daysSinceLastVisit > 45) return { label: 'Риск оттока', cls: 'risk' };
+      return null;
+    }
+
+    async function loadClients() {
+      const { data, error } = await sb
+        .from('bookings')
+        .select('*')
+        .eq('branch_id', currentBranchId)
+        .order('booking_date', { ascending: false });
+
+      const listEl = document.getElementById("clientListRows");
+      const profileEl = document.getElementById("clientProfileCard");
+
+      if (error) {
+        listEl.innerHTML = `<div class="empty-state"><div class="empty-state-title">Ошибка</div><div class="empty-state-text">${error.message}</div></div>`;
+        profileEl.innerHTML = '';
         return;
       }
 
+      if (!data || data.length === 0) {
+        listEl.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">👥</div>
+          <div class="empty-state-title">Пока нет ни одного клиента</div>
+          <div class="empty-state-text">Клиенты появятся здесь после первой записи</div>
+        </div>
+      `;
+        profileEl.innerHTML = '';
+        return;
+      }
+
+      const { data: botData } = await sb.from('bots').select('currency').eq('branch_id', currentBranchId).maybeSingle();
+      const currencyLabel = botData?.currency || '₽';
+
+      const clientsMap = new Map();
+      for (const booking of data) {
+        const key = booking.client_username || booking.client_chat_id || booking.client_name;
+        if (!clientsMap.has(key)) {
+          clientsMap.set(key, {
+            key,
+            name: booking.client_name || 'Клиент',
+            username: booking.client_username || '',
+            visits: 0,
+            lastVisit: booking.booking_date,
+            lastService: booking.service,
+            bookings: [],
+          });
+        }
+        const client = clientsMap.get(key);
+        client.visits += 1;
+        client.bookings.push(booking);
+      }
+
+      const clients = Array.from(clientsMap.values());
+      window.__clientsData = clients;
+
+      listEl.innerHTML = clients.map(c => {
+        const initials = (c.name || 'КЛ').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        const tag = getClientTag(c);
+        return `
+        <div class="client-row ${c.key === selectedClientKey ? 'active' : ''}" data-key="${c.key}">
+          <div class="row-avatar">${initials}</div>
+          <div>
+            <span class="row-name">${c.name}</span>${tag ? `<span class="row-tag ${tag.cls}">${tag.label}</span>` : ''}
+            <div class="row-meta">${c.username || 'без username'}</div>
+          </div>
+          <div class="row-right">${c.visits} визит(ов)<br>${c.lastVisit}</div>
+        </div>
+      `;
+      }).join("");
+
+      listEl.querySelectorAll(".client-row").forEach(row => {
+        row.addEventListener("click", () => selectClient(row.dataset.key, currencyLabel));
+      });
+
+      if (selectedClientKey && clients.some(c => c.key === selectedClientKey)) {
+        selectClient(selectedClientKey, currencyLabel);
+      } else {
+        profileEl.innerHTML = '';
+      }
+    }
+
+    function selectClient(key, currencyLabel) {
+      selectedClientKey = key;
+      document.querySelectorAll(".client-row").forEach(row => {
+        row.classList.toggle("active", row.dataset.key === key);
+      });
       const client = window.__clientsData.find(c => c.key === key);
       if (!client) return;
-
-      renderClientHistory(client, historyEl);
-      historyEl.style.display = "block";
+      renderClientProfileCard(client, currencyLabel);
     }
 
     function isBookingPastForAdmin(bookingDate, bookingTime) {
@@ -2444,20 +2505,25 @@
       return bookingDateTime < new Date();
     }
 
-    function renderClientHistory(client, historyEl) {
+    function renderClientProfileCard(client, currencyLabel) {
+      const profileEl = document.getElementById("clientProfileCard");
+      const initials = (client.name || 'КЛ').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+      const tag = getClientTag(client);
+      const totalSpent = client.bookings.filter(b => b.status !== 'cancelled').reduce((sum, b) => sum + (Number(b.price) || 0), 0);
+
       const sortedBookings = [...client.bookings].sort((a, b) => (b.booking_date || '').localeCompare(a.booking_date || ''));
+      const statusLabels = {
+        cancelled: { text: 'Отменена', cls: 'danger-soft', color: 'var(--danger)' },
+        completed: { text: 'Посетил(а)', color: 'var(--accent)', bg: 'var(--accent-soft)' },
+        no_show: { text: 'Не пришёл(ла)', color: 'var(--danger)', bg: 'var(--danger-soft)' },
+      };
 
-      historyEl.innerHTML = sortedBookings.map(b => {
+      const historyHtml = sortedBookings.map(b => {
         const isPast = isBookingPastForAdmin(b.booking_date, b.time);
-        const statusLabels = {
-          cancelled: { text: 'Отменена', color: 'var(--danger)' },
-          completed: { text: 'Посетил(а)', color: 'var(--accent)' },
-          no_show: { text: 'Не пришёл(ла)', color: 'var(--danger)' },
-        };
-
         let statusHtml;
         if (statusLabels[b.status]) {
-          statusHtml = `<span style="color:${statusLabels[b.status].color};">${statusLabels[b.status].text}</span>`;
+          const s = statusLabels[b.status];
+          statusHtml = `<span class="history-status" style="color:${s.color}; background:${s.bg || 'var(--danger-soft)'};">${s.text}</span>`;
         } else if (b.status === 'active' && isPast) {
           statusHtml = `
             <span style="display:flex; gap:6px;">
@@ -2466,51 +2532,81 @@
             </span>
           `;
         } else {
-          statusHtml = `<span style="color:var(--accent);">Активна</span>`;
+          statusHtml = `<span class="history-status" style="color:var(--accent); background:var(--accent-soft);">Активна</span>`;
         }
 
         return `
-          <div style="padding:6px 0; border-bottom: 1px dashed var(--line);">
-            <div style="display:flex; justify-content:space-between; align-items:center; font-size:12.5px; color:var(--muted); margin-bottom:6px;">
-              <span>${b.booking_date} · ${b.service}${b.master ? ' · ' + b.master : ''}</span>
-              ${statusHtml}
-            </div>
-            <div style="display:flex; gap:6px;">
-              <input type="text" class="note-input" data-id="${b.id}" placeholder="Заметка о клиенте..." value="${b.notes || ''}" style="flex:1; padding:6px 9px; border:1px solid var(--line); border-radius:6px; font-size:11.5px; background:var(--surface-2); color:var(--ink); font-family:inherit;" />
-              <button class="save-note-btn" data-id="${b.id}" style="background:none; border:1px solid var(--accent); color:var(--accent); padding:5px 10px; border-radius:6px; font-size:11px; cursor:pointer;">✓</button>
+          <div class="history-item">
+            <div class="history-date">${b.booking_date}</div>
+            <div class="history-service">${b.service}${b.master ? ' · ' + b.master : ''}</div>
+            ${statusHtml}
+            <div class="history-note-box">
+              <input type="text" class="notes-input note-input" data-id="${b.id}" placeholder="Заметка о визите..." value="${b.notes || ''}" />
+              <button class="notes-btn save-note-btn" data-id="${b.id}">✓</button>
             </div>
           </div>
         `;
       }).join("");
 
-      historyEl.querySelectorAll(".mark-status-btn").forEach(btn => {
+      profileEl.innerHTML = `
+        <div class="profile-card">
+          <div class="profile-head">
+            <div class="profile-avatar">${initials}</div>
+            <div>
+              <div class="profile-name">${client.name}</div>
+              <div class="profile-username">${client.username || 'без username'}</div>
+              <div class="profile-tags">${tag ? `<span class="profile-tag ${tag.cls}">${tag.label}</span>` : ''}</div>
+            </div>
+            <button class="profile-delete-btn" id="btnDeleteClient">Удалить клиента</button>
+          </div>
+
+          <div class="profile-stats">
+            <div class="pstat"><div class="pstat-label">Визитов</div><div class="pstat-value">${client.visits}</div></div>
+            <div class="pstat"><div class="pstat-label">Потрачено</div><div class="pstat-value">${totalSpent.toLocaleString('ru-RU')} ${currencyLabel}</div></div>
+            <div class="pstat"><div class="pstat-label">Последний визит</div><div class="pstat-value">${client.lastVisit}</div></div>
+            <div class="pstat"><div class="pstat-label">Услуга</div><div class="pstat-value" style="font-size:13px;">${client.lastService || '—'}</div></div>
+          </div>
+
+          <div class="profile-section-title">История визитов</div>
+          <div class="history-list">${historyHtml}</div>
+        </div>
+      `;
+
+      profileEl.querySelectorAll(".mark-status-btn").forEach(btn => {
         btn.addEventListener("click", async (e) => {
           e.stopPropagation();
           await sb.from('bookings').update({ status: btn.dataset.status }).eq('id', btn.dataset.id).eq('owner_id', currentUserId);
-
-          // Обновляем статус локально, без перезагрузки и сворачивания списка
           const bookingInMemory = client.bookings.find(b => String(b.id) === String(btn.dataset.id));
           if (bookingInMemory) bookingInMemory.status = btn.dataset.status;
-
-          renderClientHistory(client, historyEl);
+          renderClientProfileCard(client, currencyLabel);
         });
       });
 
-      historyEl.querySelectorAll(".save-note-btn").forEach(btn => {
+      profileEl.querySelectorAll(".save-note-btn").forEach(btn => {
         btn.addEventListener("click", async (e) => {
           e.stopPropagation();
-          const input = historyEl.querySelector(`.note-input[data-id="${btn.dataset.id}"]`);
+          const input = profileEl.querySelector(`.note-input[data-id="${btn.dataset.id}"]`);
           const noteText = input.value.trim();
-
           const { error } = await sb.from('bookings').update({ notes: noteText }).eq('id', btn.dataset.id).eq('owner_id', currentUserId);
-
           if (error) { showToast("Ошибка: " + error.message); return; }
-
           const bookingInMemory = client.bookings.find(b => String(b.id) === String(btn.dataset.id));
           if (bookingInMemory) bookingInMemory.notes = noteText;
-
           showToast("Заметка сохранена");
         });
+      });
+
+      document.getElementById("btnDeleteClient").addEventListener("click", async () => {
+        if (!confirm(`Удалить клиента "${client.name}" и все его записи (${client.visits} шт.)? Это необратимо.`)) return;
+
+        const ids = client.bookings.map(b => b.id);
+        const { error } = await sb.from('bookings').delete().in('id', ids).eq('branch_id', currentBranchId);
+
+        if (error) { showToast("Ошибка: " + error.message); return; }
+
+        selectedClientKey = null;
+        showToast("Клиент удалён");
+        loadClients();
+        loadCrmDashboard();
       });
     }
 
