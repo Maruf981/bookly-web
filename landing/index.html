@@ -664,6 +664,7 @@
     .chat-demo-stage {
       position: relative;
       height: 420px;
+      contain: layout;
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -697,7 +698,15 @@
       transform: rotate(-4deg);
       box-shadow: 0 1px 2px rgba(28,27,31,0.08);
     }
-    [data-theme="dark"] .chat-note::before { background: rgba(255,255,255,0.08); }
+    [data-theme="dark"] .chat-note.chat {
+      background: #FAF6EE;
+      color: #1C1B1F;
+    }
+    [data-theme="dark"] .chat-note.chat::before { background: rgba(255,255,255,0.55); }
+    [data-theme="dark"] .chat-note.chat .msg-line.client .line-who { color: #1F8A5F; }
+    [data-theme="dark"] .chat-note.chat .msg-line.bot .line-who { color: #C4472F; }
+    [data-theme="dark"] .chat-note.chat .msg-line { color: #1C1B1F; }
+    [data-theme="dark"] .chat-note.ad::before { background: rgba(255,255,255,0.08); }
     .chat-note .who {
       font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase; font-weight: 800;
       margin-bottom: 12px;
@@ -759,6 +768,15 @@
       color: #fff;
     }
     .chat-note.ad::before { background: rgba(255,255,255,0.35); }
+    .chat-note.ad .ad-headline {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1.3;
+      letter-spacing: -0.2px;
+      margin-bottom: 16px;
+      color: #fff;
+    }
     .chat-note.ad .ad-lines {
       display: flex;
       flex-direction: column;
@@ -769,12 +787,12 @@
       align-items: flex-start;
       gap: 10px;
     }
-    .chat-note.ad .ad-icon { font-size: 20px; flex-shrink: 0; line-height: 1.3; }
+    .chat-note.ad .ad-icon { font-size: 18px; flex-shrink: 0; line-height: 1.3; }
     .chat-note.ad .ad-text {
       font-family: 'Fraunces', serif;
-      font-size: 16px;
+      font-size: 14px;
       line-height: 1.35;
-      color: #fff;
+      color: rgba(255,255,255,0.92);
     }
 
     @media (max-width: 760px) {
@@ -1368,7 +1386,7 @@
     </div>
   </div>
 
-  <section>
+  <section style="contain: layout;">
     <div class="wrap">
       <div class="section-eyebrow" data-ru="Как отвечает бот" data-en="How the bot replies">Как отвечает бот</div>
       <div class="section-title" data-ru="Живой разговор с клиентом" data-en="A real conversation with a client">Живой разговор с клиентом</div>
@@ -1941,13 +1959,15 @@
         { who: 'client', text: '4 PM works, book me with Arthur' },
         { who: 'bot', text: "Done! You're booked for 4 PM with Arthur. See you then 🙂" },
       ];
+      const adHeadlineRu = 'КЛИЕНТЫ ПИШУТ.<br>ВЫ НЕ УСПЕВАЕТЕ.<br>БОТ ЗАПИШЕТ.';
+      const adHeadlineEn = "CLIENTS MESSAGE.<br>YOU CAN'T KEEP UP.<br>THE BOT BOOKS THEM.";
       const adsRu = [
-        { icon: '⏱', text: 'Экономит до 3 часов в день на переписке с клиентами' },
-        { icon: '', text: 'Работает 24/7 вместо вас' },
+        { icon: '🌍', text: 'Отвечает на вопросы 24/7 на любом языке' },
+        { icon: '💪', text: 'Работает без выходных и ошибок, не устаёт и всегда готов помочь' },
       ];
       const adsEn = [
-        { icon: '⏱', text: 'Saves up to 3 hours a day on client chats' },
-        { icon: '', text: 'Works 24/7 for you' },
+        { icon: '🌍', text: 'Answers questions 24/7 in any language' },
+        { icon: '💪', text: "Works with no days off or mistakes, never tired, always ready to help" },
       ];
 
       const stage = document.getElementById('chatDemoStage');
@@ -1956,63 +1976,31 @@
 
       function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-      function buildSequence(dialog, ads) {
+      function buildSequence(dialog, ads, headline) {
         return [
           { type: 'chat', dialog },
-          { type: 'ad', ads },
+          { type: 'ad', ads, headline },
         ];
       }
 
-      function makeNote(item) {
+      function makeNote(item, clientLabel, botLabel) {
         const el = document.createElement('div');
         if (item.type === 'ad') {
           el.className = 'chat-note ad';
-          el.innerHTML = `<div class="ad-lines"></div>`;
+          const linesHtml = item.ads.map(ad => {
+            const iconHtml = ad.icon ? `<span class="ad-icon">${ad.icon}</span>` : '';
+            return `<div class="ad-line">${iconHtml}<span class="ad-text">${ad.text}</span></div>`;
+          }).join('');
+          el.innerHTML = `<div class="ad-headline">${item.headline}</div><div class="ad-lines">${linesHtml}</div>`;
         } else {
           el.className = 'chat-note chat';
-          el.innerHTML = `<div class="msg-lines"></div>`;
+          const linesHtml = item.dialog.map(msg => {
+            const label = msg.who === 'client' ? clientLabel : botLabel;
+            return `<div class="msg-line ${msg.who}"><span class="line-who">${label}</span><span class="line-text">${msg.text}</span></div>`;
+          }).join('');
+          el.innerHTML = `<div class="msg-lines">${linesHtml}</div>`;
         }
         return el;
-      }
-
-      async function typeInto(msgEl, text, myToken) {
-        let out = '';
-        for (const ch of text) {
-          if (myToken !== token) return;
-          out += ch;
-          msgEl.innerHTML = out + '<span class="chat-caret"></span>';
-          const isPunct = /[.,!?]/.test(ch);
-          await wait(isPunct ? 220 : 32);
-        }
-        msgEl.textContent = text;
-      }
-
-      async function typeDialog(linesContainer, dialog, clientLabel, botLabel, myToken) {
-        for (const msg of dialog) {
-          if (myToken !== token) return;
-          const lineEl = document.createElement('div');
-          lineEl.className = 'msg-line ' + msg.who;
-          const label = msg.who === 'client' ? clientLabel : botLabel;
-          lineEl.innerHTML = `<span class="line-who">${label}</span><span class="line-text"></span>`;
-          linesContainer.appendChild(lineEl);
-          const textEl = lineEl.querySelector('.line-text');
-          await typeInto(textEl, msg.text, myToken);
-          await wait(500);
-        }
-      }
-
-      async function typeAds(linesContainer, ads, myToken) {
-        for (const ad of ads) {
-          if (myToken !== token) return;
-          const lineEl = document.createElement('div');
-          lineEl.className = 'ad-line';
-          const iconHtml = ad.icon ? `<span class="ad-icon">${ad.icon}</span>` : '';
-          lineEl.innerHTML = `${iconHtml}<span class="ad-text"></span>`;
-          linesContainer.appendChild(lineEl);
-          const textEl = lineEl.querySelector('.ad-text');
-          await typeInto(textEl, ad.text, myToken);
-          await wait(600);
-        }
       }
 
       async function playChatDemo() {
@@ -2020,9 +2008,10 @@
         stage.innerHTML = '';
         const dialog = currentLang === 'en' ? dialogEn : dialogRu;
         const ads = currentLang === 'en' ? adsEn : adsRu;
+        const headline = currentLang === 'en' ? adHeadlineEn : adHeadlineRu;
         const clientLabel = currentLang === 'en' ? 'Client' : 'Клиент';
         const botLabel = 'Bookly';
-        const sequence = buildSequence(dialog, ads);
+        const sequence = buildSequence(dialog, ads, headline);
 
         let backNote = null;
 
@@ -2045,19 +2034,11 @@
           await wait(350);
           if (myToken !== token) return;
 
-          const note = makeNote(item);
+          const note = makeNote(item, clientLabel, botLabel);
           note.classList.add('pos-front');
           stage.appendChild(note);
 
-          if (item.type === 'chat') {
-            const linesContainer = note.querySelector('.msg-lines');
-            await typeDialog(linesContainer, item.dialog, clientLabel, botLabel, myToken);
-            await wait(1400);
-          } else {
-            const linesContainer = note.querySelector('.ad-lines');
-            await typeAds(linesContainer, item.ads, myToken);
-            await wait(1500);
-          }
+          await wait(2600);
         }
 
         await wait(900);
