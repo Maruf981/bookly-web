@@ -569,9 +569,16 @@
 <body data-theme="light">
   <script>
     (function() {
-      var saved = localStorage.getItem('bookly_theme');
-      if (saved === 'dark' || saved === 'light') {
-        document.body.dataset.theme = saved;
+      // Внутри Telegram — берём системную тему телефона пользователя.
+      // Вне Telegram (обычный браузер, тестирование) — используем
+      // сохранённый выбор темы с сайта, если он есть.
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.colorScheme) {
+        document.body.dataset.theme = window.Telegram.WebApp.colorScheme === 'dark' ? 'dark' : 'light';
+      } else {
+        var saved = localStorage.getItem('bookly_theme');
+        if (saved === 'dark' || saved === 'light') {
+          document.body.dataset.theme = saved;
+        }
       }
     })();
   </script>
@@ -1071,6 +1078,9 @@
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
+      window.Telegram.WebApp.onEvent('themeChanged', () => {
+        document.body.dataset.theme = window.Telegram.WebApp.colorScheme === 'dark' ? 'dark' : 'light';
+      });
     }
 
     applyShopInfoFromUrl(); // подставляет название бизнеса в заголовок страницы и вкладки браузера
