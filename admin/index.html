@@ -712,6 +712,61 @@
       line-height: 1.5;
     }
 
+    /* ---------- CRM dashboard ---------- */
+    .crm-filters-row {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+      padding: 12px 16px; margin-bottom: 16px;
+    }
+    .crm-filter-group { display: flex; flex-direction: column; gap: 3px; }
+    .crm-filter-label { font-size: 9.5px; letter-spacing: .5px; text-transform: uppercase; color: var(--faint); font-weight: 700; }
+    .crm-filter-input, .crm-filter-select {
+      border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; font-size: 12.5px;
+      background: var(--surface-2); color: var(--ink); font-family: inherit;
+    }
+    .crm-filter-sep { width: 1px; height: 28px; background: var(--line); margin: 0 4px; }
+
+    .crm-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+    .crm-kpi-card { border-radius: 10px; padding: 16px; color: #fff; }
+    .crm-kpi-card.c1 { background: linear-gradient(135deg, var(--accent), #3EAE7E); }
+    .crm-kpi-card.c2 { background: linear-gradient(135deg, #4F46E5, #7C76F0); }
+    .crm-kpi-card.c3 { background: linear-gradient(135deg, #C99A2F, #E3B15A); }
+    .crm-kpi-card.c4 { background: linear-gradient(135deg, var(--danger), #E88462); }
+    .crm-kpi-label { font-size: 11px; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
+    .crm-kpi-value { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; }
+    .crm-kpi-trend { font-size: 11px; margin-top: 4px; font-weight: 600; color: rgba(255,255,255,0.9); }
+
+    .crm-charts-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .crm-chart-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+    .crm-chart-title { font-size: 12.5px; font-weight: 700; margin-bottom: 12px; }
+
+    .crm-donut-wrap { display: flex; align-items: center; gap: 14px; }
+    .crm-donut-legend { display: flex; flex-direction: column; gap: 6px; font-size: 11px; }
+    .crm-legend-item { display: flex; align-items: center; gap: 6px; }
+    .crm-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .crm-legend-label { color: var(--muted); }
+    .crm-legend-val { color: var(--ink); font-weight: 700; margin-left: auto; padding-left: 8px; }
+
+    .crm-staff-rank-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+    .crm-staff-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+    .crm-staff-row:last-child { border-bottom: none; }
+    .crm-staff-rank-num { width: 20px; height: 20px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: var(--faint); flex-shrink: 0; }
+    .crm-staff-row:first-child .crm-staff-rank-num { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .crm-staff-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff;
+      font-family: 'Fraunces', serif; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .crm-staff-info { flex: 1; }
+    .crm-staff-name { font-size: 12.5px; font-weight: 700; }
+    .crm-staff-meta { font-size: 10.5px; color: var(--faint); }
+    .crm-staff-bar-wrap { width: 90px; height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+    .crm-staff-bar { height: 100%; background: var(--accent); border-radius: 3px; }
+    .crm-staff-revenue { font-family: 'Fraunces', serif; font-size: 13px; font-weight: 700; color: var(--accent); width: 76px; text-align: right; }
+
+    @media (max-width: 900px) {
+      .crm-kpi-grid { grid-template-columns: 1fr 1fr; }
+      .crm-charts-row { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 600px) {
       .bot-card {
         max-width: 340px;
@@ -1130,6 +1185,82 @@
       </div>
     </div>
 
+    <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
+
+    <div id="crmSection">
+      <div class="dash-eyebrow" style="margin-top:28px;">CRM</div>
+      <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Обзор клиентов и записей</div>
+
+      <div class="crm-filters-row">
+        <div class="crm-filter-group">
+          <span class="crm-filter-label">С даты</span>
+          <input type="date" class="crm-filter-input" id="crmDateFrom">
+        </div>
+        <div class="crm-filter-group">
+          <span class="crm-filter-label">По дату</span>
+          <input type="date" class="crm-filter-input" id="crmDateTo">
+        </div>
+        <div class="crm-filter-sep"></div>
+        <div class="crm-filter-group">
+          <span class="crm-filter-label">Сотрудник</span>
+          <select class="crm-filter-select" id="crmMasterFilter"><option value="">Все</option></select>
+        </div>
+        <div class="crm-filter-group">
+          <span class="crm-filter-label">Услуга</span>
+          <select class="crm-filter-select" id="crmServiceFilter"><option value="">Все</option></select>
+        </div>
+      </div>
+
+      <div class="crm-kpi-grid" id="crmKpiGrid">
+        <div class="crm-kpi-card c1">
+          <div class="crm-kpi-label">Всего записей</div>
+          <div class="crm-kpi-value" id="crmKpiTotal">—</div>
+          <div class="crm-kpi-trend" id="crmKpiTotalTrend">—</div>
+        </div>
+        <div class="crm-kpi-card c2">
+          <div class="crm-kpi-label">Выручка</div>
+          <div class="crm-kpi-value" id="crmKpiRevenue">—</div>
+          <div class="crm-kpi-trend" id="crmKpiRevenueTrend">—</div>
+        </div>
+        <div class="crm-kpi-card c3">
+          <div class="crm-kpi-label">Средний чек</div>
+          <div class="crm-kpi-value" id="crmKpiAvg">—</div>
+          <div class="crm-kpi-trend" id="crmKpiAvgTrend">—</div>
+        </div>
+        <div class="crm-kpi-card c4">
+          <div class="crm-kpi-label">Отменено</div>
+          <div class="crm-kpi-value" id="crmKpiCancelled">—</div>
+          <div class="crm-kpi-trend" id="crmKpiCancelledTrend">—</div>
+        </div>
+      </div>
+
+      <div class="crm-charts-row">
+        <div class="crm-chart-card">
+          <div class="crm-chart-title">Записи по неделям</div>
+          <svg viewBox="0 0 320 120" width="100%" height="120" id="crmLineChart"></svg>
+        </div>
+        <div class="crm-chart-card">
+          <div class="crm-chart-title">Популярные услуги</div>
+          <div class="crm-donut-wrap">
+            <svg viewBox="0 0 42 42" width="100" height="100" id="crmServicesDonut"></svg>
+            <div class="crm-donut-legend" id="crmServicesLegend"></div>
+          </div>
+        </div>
+        <div class="crm-chart-card">
+          <div class="crm-chart-title">Статусы записей</div>
+          <div class="crm-donut-wrap">
+            <svg viewBox="0 0 42 42" width="100" height="100" id="crmStatusDonut"></svg>
+            <div class="crm-donut-legend" id="crmStatusLegend"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="crm-staff-rank-card">
+        <div class="crm-chart-title">Рейтинг сотрудников</div>
+        <div id="crmStaffRank"></div>
+      </div>
+    </div>
+
     <div class="form-card" id="masterFormCard">
       <div class="input-group">
         <label>Имя сотрудника</label>
@@ -1505,6 +1636,7 @@
         loadAnalytics();
         loadBotInfo();
         loadBusinessSettings();
+        populateCrmFilters().then(loadCrmDashboard);
       }
       renderBranchSwitcher();
       showToast("Филиал удалён");
@@ -1525,6 +1657,7 @@
       loadBotInfo();
       loadBusinessSettings();
       renderBranchSwitcher();
+      populateCrmFilters().then(loadCrmDashboard);
     }
 
     document.getElementById("btnBranchSwitcher").addEventListener("click", () => {
@@ -1744,6 +1877,10 @@
       loadBotInfo();
       loadBusinessSettings();
       renderBranchSwitcher();
+      const crmDates = getCrmDefaultDates();
+      document.getElementById("crmDateFrom").value = crmDates.from;
+      document.getElementById("crmDateTo").value = crmDates.to;
+      populateCrmFilters().then(loadCrmDashboard);
     });
 
     document.getElementById("btnLogout").addEventListener("click", async () => {
@@ -2140,6 +2277,225 @@
       `;
     }
 
+    // ---------- CRM dashboard ----------
+
+    function getCrmDefaultDates() {
+      const to = new Date();
+      const from = new Date();
+      from.setDate(from.getDate() - 30);
+      const fmt = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+      return { from: fmt(from), to: fmt(to) };
+    }
+
+    async function populateCrmFilters() {
+      const { data: mastersData } = await sb.from('masters').select('name').eq('branch_id', currentBranchId);
+      const { data: servicesData } = await sb.from('services').select('name').eq('branch_id', currentBranchId);
+
+      const masterSelect = document.getElementById("crmMasterFilter");
+      const serviceSelect = document.getElementById("crmServiceFilter");
+
+      masterSelect.innerHTML = '<option value="">Все</option>' +
+        (mastersData || []).map(m => `<option value="${m.name}">${m.name}</option>`).join("");
+      serviceSelect.innerHTML = '<option value="">Все</option>' +
+        (servicesData || []).map(s => `<option value="${s.name}">${s.name}</option>`).join("");
+    }
+
+    function crmBuildQuery(dateFrom, dateTo, masterFilter, serviceFilter) {
+      let query = sb.from('bookings').select('*')
+        .eq('branch_id', currentBranchId)
+        .gte('booking_date', dateFrom)
+        .lte('booking_date', dateTo);
+      if (masterFilter) query = query.eq('master', masterFilter);
+      if (serviceFilter) query = query.eq('service', serviceFilter);
+      return query;
+    }
+
+    function crmFormatTrend(current, previous) {
+      if (!previous) return current > 0 ? "Новые данные" : "—";
+      const change = Math.round(((current - previous) / previous) * 100);
+      if (change === 0) return "Без изменений";
+      return (change > 0 ? "↑ " : "↓ ") + Math.abs(change) + "% к пред. периоду";
+    }
+
+    function crmGenerateBuckets(dateFrom, dateTo, n) {
+      const start = new Date(dateFrom);
+      const end = new Date(dateTo);
+      const totalMs = end.getTime() - start.getTime();
+      const buckets = [];
+      for (let i = 0; i < n; i++) {
+        const bStart = new Date(start.getTime() + (totalMs * i) / n);
+        const bEnd = new Date(start.getTime() + (totalMs * (i + 1)) / n);
+        buckets.push({ start: bStart, end: bEnd });
+      }
+      return buckets;
+    }
+
+    function renderCrmLineChart(bookings, dateFrom, dateTo) {
+      const svg = document.getElementById("crmLineChart");
+      const n = 8;
+      const buckets = crmGenerateBuckets(dateFrom, dateTo, n);
+      const counts = buckets.map(b => bookings.filter(bk => {
+        const d = new Date(bk.booking_date);
+        return d >= b.start && d < b.end;
+      }).length);
+
+      const maxCount = Math.max(1, ...counts);
+      const w = 320, h = 100;
+      const points = counts.map((c, i) => {
+        const x = (i / (n - 1)) * w;
+        const y = h - (c / maxCount) * (h - 10);
+        return `${x},${y}`;
+      }).join(" ");
+
+      const startLabel = new Date(dateFrom).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+      const endLabel = new Date(dateTo).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+
+      svg.innerHTML = `
+        <polyline points="${points}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <polygon points="${points} ${w},${h + 20} 0,${h + 20}" fill="var(--accent-soft)" stroke="none"/>
+        <text x="0" y="115" fill="var(--faint)" font-size="8">${startLabel}</text>
+        <text x="${w - 40}" y="115" fill="var(--faint)" font-size="8">${endLabel}</text>
+      `;
+    }
+
+    function renderCrmDonut(svgId, legendId, entries) {
+      const svg = document.getElementById(svgId);
+      const legend = document.getElementById(legendId);
+      const total = entries.reduce((sum, e) => sum + e.value, 0);
+
+      if (total === 0) {
+        svg.innerHTML = `<circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--line)" stroke-width="6"/>`;
+        legend.innerHTML = `<div style="color:var(--faint); font-size:11px;">Нет данных</div>`;
+        return;
+      }
+
+      let cumulative = 0;
+      let circles = `<circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--line)" stroke-width="6"/>`;
+      let legendHtml = "";
+
+      entries.forEach(e => {
+        const percent = Math.round((e.value / total) * 100);
+        if (percent > 0) {
+          circles += `<circle cx="21" cy="21" r="15.9" fill="none" stroke="${e.color}" stroke-width="6"
+            stroke-dasharray="${percent} 100" stroke-dashoffset="${25 - cumulative}" transform="rotate(-90 21 21)"/>`;
+        }
+        cumulative += percent;
+        legendHtml += `<div class="crm-legend-item"><span class="crm-legend-dot" style="background:${e.color};"></span>
+          <span class="crm-legend-label">${e.label}</span><span class="crm-legend-val">${percent}%</span></div>`;
+      });
+
+      svg.innerHTML = circles;
+      legend.innerHTML = legendHtml;
+    }
+
+    function renderCrmStaffRank(bookings, currencyLabel) {
+      const container = document.getElementById("crmStaffRank");
+      const byMaster = {};
+      bookings.filter(b => b.status !== 'cancelled').forEach(b => {
+        if (!b.master) return;
+        if (!byMaster[b.master]) byMaster[b.master] = { name: b.master, visits: 0, revenue: 0 };
+        byMaster[b.master].visits += 1;
+        byMaster[b.master].revenue += Number(b.price) || 0;
+      });
+
+      const staffList = Object.values(byMaster).sort((a, b) => b.revenue - a.revenue).slice(0, 5);
+
+      if (staffList.length === 0) {
+        container.innerHTML = `<div style="color:var(--faint); font-size:12px; padding: 12px 0;">Нет данных за выбранный период</div>`;
+        return;
+      }
+
+      const maxRevenue = staffList[0].revenue || 1;
+
+      container.innerHTML = staffList.map((s, i) => {
+        const initials = s.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        const barPercent = Math.round((s.revenue / maxRevenue) * 100);
+        return `
+          <div class="crm-staff-row">
+            <span class="crm-staff-rank-num">${i + 1}</span>
+            <div class="crm-staff-avatar">${initials}</div>
+            <div class="crm-staff-info">
+              <div class="crm-staff-name">${s.name}</div>
+              <div class="crm-staff-meta">${s.visits} записей</div>
+            </div>
+            <div class="crm-staff-bar-wrap"><div class="crm-staff-bar" style="width:${barPercent}%;"></div></div>
+            <div class="crm-staff-revenue">${s.revenue.toLocaleString('ru-RU')} ${currencyLabel}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function loadCrmDashboard() {
+      const dateFrom = document.getElementById("crmDateFrom").value;
+      const dateTo = document.getElementById("crmDateTo").value;
+      const masterFilter = document.getElementById("crmMasterFilter").value;
+      const serviceFilter = document.getElementById("crmServiceFilter").value;
+      if (!dateFrom || !dateTo) return;
+
+      const { data: bookings, error } = await crmBuildQuery(dateFrom, dateTo, masterFilter, serviceFilter);
+      if (error || !bookings) return;
+
+      const periodMs = new Date(dateTo).getTime() - new Date(dateFrom).getTime();
+      const prevTo = new Date(new Date(dateFrom).getTime() - 24 * 60 * 60 * 1000);
+      const prevFrom = new Date(prevTo.getTime() - periodMs);
+      const fmt = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+      const { data: prevBookings } = await crmBuildQuery(fmt(prevFrom), fmt(prevTo), masterFilter, serviceFilter);
+      const prevList = prevBookings || [];
+
+      const { data: botData } = await sb.from('bots').select('currency').eq('branch_id', currentBranchId).maybeSingle();
+      const currencyLabel = botData?.currency || '₽';
+
+      const total = bookings.length;
+      const prevTotal = prevList.length;
+
+      const nonCancelled = bookings.filter(b => b.status !== 'cancelled');
+      const revenue = nonCancelled.reduce((sum, b) => sum + (Number(b.price) || 0), 0);
+      const prevRevenue = prevList.filter(b => b.status !== 'cancelled').reduce((sum, b) => sum + (Number(b.price) || 0), 0);
+
+      const avgCheck = nonCancelled.length > 0 ? Math.round(revenue / nonCancelled.length) : 0;
+      const prevAvgCheck = prevList.filter(b => b.status !== 'cancelled').length > 0
+        ? Math.round(prevRevenue / prevList.filter(b => b.status !== 'cancelled').length) : 0;
+
+      const cancelledCount = bookings.filter(b => b.status === 'cancelled').length;
+      const cancelledPercent = total > 0 ? Math.round((cancelledCount / total) * 100) : 0;
+      const prevCancelledCount = prevList.filter(b => b.status === 'cancelled').length;
+      const prevCancelledPercent = prevTotal > 0 ? Math.round((prevCancelledCount / prevTotal) * 100) : 0;
+
+      document.getElementById("crmKpiTotal").textContent = total;
+      document.getElementById("crmKpiTotalTrend").textContent = crmFormatTrend(total, prevTotal);
+      document.getElementById("crmKpiRevenue").textContent = revenue.toLocaleString('ru-RU') + " " + currencyLabel;
+      document.getElementById("crmKpiRevenueTrend").textContent = crmFormatTrend(revenue, prevRevenue);
+      document.getElementById("crmKpiAvg").textContent = avgCheck.toLocaleString('ru-RU') + " " + currencyLabel;
+      document.getElementById("crmKpiAvgTrend").textContent = crmFormatTrend(avgCheck, prevAvgCheck);
+      document.getElementById("crmKpiCancelled").textContent = cancelledPercent + "%";
+      document.getElementById("crmKpiCancelledTrend").textContent = crmFormatTrend(cancelledPercent, prevCancelledPercent);
+
+      renderCrmLineChart(bookings, dateFrom, dateTo);
+
+      const serviceCounts = {};
+      nonCancelled.forEach(b => { if (b.service) serviceCounts[b.service] = (serviceCounts[b.service] || 0) + 1; });
+      const topServices = Object.entries(serviceCounts).sort((a, b) => b[1] - a[1]);
+      const top3 = topServices.slice(0, 3);
+      const otherCount = topServices.slice(3).reduce((sum, [, c]) => sum + c, 0);
+      const serviceColors = ['var(--accent)', '#4F46E5', 'var(--danger)'];
+      const serviceEntries = top3.map(([name, count], i) => ({ label: name, value: count, color: serviceColors[i] }));
+      if (otherCount > 0) serviceEntries.push({ label: 'Другое', value: otherCount, color: 'var(--faint)' });
+      renderCrmDonut('crmServicesDonut', 'crmServicesLegend', serviceEntries);
+
+      const completedCount = bookings.filter(b => b.status === 'completed').length;
+      const noShowCount = bookings.filter(b => b.status === 'no_show').length;
+      renderCrmDonut('crmStatusDonut', 'crmStatusLegend', [
+        { label: 'Пришли', value: completedCount, color: 'var(--accent)' },
+        { label: 'Отменили', value: cancelledCount, color: 'var(--danger)' },
+        { label: 'Не пришли', value: noShowCount, color: 'var(--faint)' },
+      ]);
+
+      renderCrmStaffRank(bookings, currencyLabel);
+    }
+
+    ["crmDateFrom", "crmDateTo", "crmMasterFilter", "crmServiceFilter"].forEach(id => {
+      document.getElementById(id).addEventListener("change", loadCrmDashboard);
+    });
 
     function toggleClientHistory(key) {
       const historyEl = document.getElementById(`history-${key}`);
@@ -2471,6 +2827,10 @@
         loadBotInfo();
         loadBusinessSettings();
         renderBranchSwitcher();
+        const crmDates = getCrmDefaultDates();
+        document.getElementById("crmDateFrom").value = crmDates.from;
+        document.getElementById("crmDateTo").value = crmDates.to;
+        populateCrmFilters().then(loadCrmDashboard);
       } else {
         document.getElementById("initialLoader").style.display = "none";
         document.getElementById("loginWrap").style.display = "flex";
