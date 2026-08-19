@@ -4,21 +4,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <title>Bookly — запись</title>
   <style>
     :root {
+      --bg: #FAF6EE;
+      --surface: #FFFFFF;
+      --surface-2: #FCF9F2;
+      --ink: #1C1B1F;
+      --muted: #6B6A63;
+      --faint: #A6A296;
+      --brass: #1F8A5F;
+      --brass-dim: #176B49;
+      --red: #C4472F;
+      --danger: #C4472F;
+      --line: #E7E1D2;
+    }
+
+    [data-theme="dark"] {
       --bg: #0b0d12;
       --surface: #14171f;
       --surface-2: #1a1e28;
       --ink: #eef0f5;
       --muted: #9aa1b2;
       --faint: #5b6272;
-      --brass: #e8b23d;
-      --brass-dim: #c99a2f;
-      --red: #d9564a;
-      --danger: #d9564a;
+      --brass: #34D399;
+      --brass-dim: #1F8A5F;
+      --red: #E88462;
+      --danger: #E88462;
       --line: #262b38;
     }
 
@@ -31,10 +47,11 @@
     body {
       background: var(--bg);
       color: var(--ink);
-      font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Inter', -apple-system, "Segoe UI", Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
       display: flex;
       justify-content: center;
+      transition: background .4s ease, color .4s ease;
     }
 
     .app {
@@ -50,7 +67,7 @@
 
     .header {
       padding: 20px 18px 16px;
-      background: linear-gradient(180deg, #14171f 0%, #0b0d12 100%);
+      background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
       border-bottom: 1px solid var(--line);
       position: relative;
       overflow: hidden;
@@ -64,7 +81,8 @@
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(232, 178, 61, 0.12) 0%, transparent 70%);
+      background: radial-gradient(circle, var(--brass) 0%, transparent 70%);
+      opacity: 0.14;
     }
 
     .eyebrow {
@@ -72,15 +90,15 @@
       letter-spacing: 2.5px;
       text-transform: uppercase;
       color: var(--brass);
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 4px;
     }
 
     .shop-name {
-      font-family: Georgia, "Times New Roman", serif;
+      font-family: 'Fraunces', serif;
       font-weight: 700;
       font-size: 26px;
-      letter-spacing: 0.5px;
+      letter-spacing: -0.3px;
       color: var(--ink);
       line-height: 1;
     }
@@ -98,9 +116,9 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #6fae5f;
+      background: var(--brass);
       display: inline-block;
-      box-shadow: 0 0 0 3px rgba(111, 174, 95, 0.15);
+      box-shadow: 0 0 0 3px rgba(31, 138, 95, 0.15);
     }
 
     /* ---------- Section labels ---------- */
@@ -149,7 +167,7 @@
 
     .master.active {
       border-color: var(--brass);
-      background: linear-gradient(180deg, rgba(232, 178, 61, 0.08), var(--surface));
+      background: linear-gradient(180deg, rgba(31, 138, 95, 0.08), var(--surface));
     }
 
     .avatar {
@@ -159,7 +177,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: Georgia, serif;
+      font-family: 'Fraunces', serif;
       font-weight: 700;
       font-size: 12px;
       color: #fff;
@@ -167,7 +185,7 @@
     }
 
     .master.active .avatar {
-      box-shadow: 0 0 0 3px rgba(232, 178, 61, 0.20);
+      box-shadow: 0 0 0 3px rgba(31, 138, 95, 0.20);
     }
 
     .master-name {
@@ -217,7 +235,7 @@
 
     .ticket.selected {
       border-color: var(--brass);
-      background: linear-gradient(90deg, rgba(232, 178, 61, 0.06), var(--surface) 30%);
+      background: linear-gradient(90deg, rgba(31, 138, 95, 0.06), var(--surface) 30%);
     }
 
     .ticket.selected::before {
@@ -242,7 +260,7 @@
     }
 
     .ticket-price {
-      font-family: Georgia, serif;
+      font-family: 'Fraunces', serif;
       font-size: 15px;
       font-weight: 700;
       color: var(--brass);
@@ -315,7 +333,7 @@
       border-radius: 9px;
       border: 1px solid var(--line);
       background: var(--surface);
-      font-family: Georgia, serif;
+      font-family: 'Fraunces', serif;
       font-size: 13px;
       color: var(--ink);
       cursor: pointer;
@@ -351,6 +369,9 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      box-shadow: 0 -6px 20px -4px rgba(28, 27, 31, 0.12);
+    }
+    [data-theme="dark"] .bottombar {
       box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.35);
     }
 
@@ -368,7 +389,7 @@
     }
 
     .bottombar-price {
-      font-family: Georgia, serif;
+      font-family: 'Fraunces', serif;
       font-size: 17px;
       font-weight: 700;
       color: var(--brass);
@@ -376,7 +397,7 @@
 
     .btn-book {
       background: var(--red);
-      color: #fbf1ef;
+      color: #fff;
       border: none;
       border-radius: 9px;
       padding: 12px 20px;
@@ -397,7 +418,7 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(10, 8, 5, 0.72);
+      background: rgba(28, 27, 31, 0.55);
       display: none;
       align-items: center;
       justify-content: center;
@@ -416,6 +437,9 @@
       border-radius: 15px;
       overflow: hidden;
       animation: pop .25s ease;
+      box-shadow: 0 20px 50px -16px rgba(28, 27, 31, 0.35);
+    }
+    [data-theme="dark"] .stub {
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
     }
 
@@ -461,7 +485,7 @@
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      background: rgba(232, 178, 61, 0.12);
+      background: rgba(31, 138, 95, 0.12);
       border: 1.5px solid var(--brass);
       display: flex;
       align-items: center;
@@ -479,7 +503,7 @@
     }
 
     .stub-title {
-      font-family: Georgia, serif;
+      font-family: 'Fraunces', serif;
       font-size: 17px;
       font-weight: 700;
       margin-bottom: 3px;
@@ -520,7 +544,7 @@
     .stub-number {
       margin-top: 14px;
       text-align: center;
-      font-family: Georgia, serif;
+      font-family: 'Fraunces', serif;
       letter-spacing: 3.5px;
       font-size: 11px;
       color: var(--faint);
@@ -542,7 +566,7 @@
   </style>
 </head>
 
-<body>
+<body data-theme="light">
 
   <div class="app">
 
