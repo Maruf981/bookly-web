@@ -1075,6 +1075,14 @@
 </head>
 
 <body data-theme="light">
+  <script>
+    (function() {
+      var saved = localStorage.getItem('bookly_theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.body.dataset.theme = saved;
+      }
+    })();
+  </script>
 
   <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
   <div class="bg-grid"></div>
@@ -1690,7 +1698,9 @@
     const themeToggle = document.getElementById("themeToggle");
     themeToggle.addEventListener("click", () => {
       const isDark = document.body.dataset.theme === "dark";
-      document.body.dataset.theme = isDark ? "light" : "dark";
+      const newTheme = isDark ? "light" : "dark";
+      document.body.dataset.theme = newTheme;
+      localStorage.setItem("bookly_theme", newTheme);
     });
 
     document.querySelectorAll(".guide-tab").forEach(tab => {

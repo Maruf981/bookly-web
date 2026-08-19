@@ -59,6 +59,14 @@
 </style>
 </head>
 <body data-theme="light">
+<script>
+  (function() {
+    var saved = localStorage.getItem('bookly_theme');
+    if (saved === 'dark' || saved === 'light') {
+      document.body.dataset.theme = saved;
+    }
+  })();
+</script>
 
 <header>
   <div class="wrap header-row">

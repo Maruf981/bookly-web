@@ -750,6 +750,14 @@
 </head>
 
 <body data-theme="light">
+  <script>
+    (function() {
+      var saved = localStorage.getItem('bookly_theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.body.dataset.theme = saved;
+      }
+    })();
+  </script>
 
   <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
   <div class="bg-grid"></div>

@@ -567,6 +567,14 @@
 </head>
 
 <body data-theme="light">
+  <script>
+    (function() {
+      var saved = localStorage.getItem('bookly_theme');
+      if (saved === 'dark' || saved === 'light') {
+        document.body.dataset.theme = saved;
+      }
+    })();
+  </script>
 
   <div class="app">
 
