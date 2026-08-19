@@ -10,7 +10,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <title>Личный кабинет — управление услугами</title>
   <style>
@@ -62,19 +64,60 @@
     }
 
     /* ---------- Decorative background ---------- */
-    .bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-    .bg-orbs .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .28; }
-    [data-theme="dark"] .bg-orbs .orb { opacity: .18; }
-    .orb-1 { width: 520px; height: 520px; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); top: -14%; left: -8%; }
-    .orb-2 { width: 420px; height: 420px; background: radial-gradient(circle, #C4472F 0%, transparent 70%); bottom: -18%; right: -8%; opacity: .14; }
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg-orbs .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: .28;
+    }
+
+    [data-theme="dark"] .bg-orbs .orb {
+      opacity: .18;
+    }
+
+    .orb-1 {
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      top: -14%;
+      left: -8%;
+    }
+
+    .orb-2 {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, #C4472F 0%, transparent 70%);
+      bottom: -18%;
+      right: -8%;
+      opacity: .14;
+    }
+
     .bg-grid {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
       background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
-      background-size: 56px 56px; opacity: .45;
+      background-size: 56px 56px;
+      opacity: .45;
       mask-image: radial-gradient(ellipse 70% 55% at 55% 5%, black, transparent 78%);
     }
 
-    .login-wrap, .dash, .toast, .guide-overlay { position: relative; z-index: 1; }
+    .login-wrap,
+    .dash,
+    .toast,
+    .guide-overlay {
+      position: relative;
+      z-index: 1;
+    }
 
     .login-wrap {
       min-height: 100vh;
@@ -190,7 +233,10 @@
       margin-top: 6px;
       transition: transform .15s ease;
     }
-    .btn-primary:hover { transform: translateY(-1px); }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+    }
 
     .btn-primary:disabled {
       opacity: 0.5;
@@ -714,108 +760,546 @@
 
     /* ---------- CRM dashboard ---------- */
     .crm-filters-row {
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
-      padding: 12px 16px; margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
     }
-    .crm-filter-group { display: flex; flex-direction: column; gap: 3px; }
-    .crm-filter-label { font-size: 9.5px; letter-spacing: .5px; text-transform: uppercase; color: var(--faint); font-weight: 700; }
-    .crm-filter-input, .crm-filter-select {
-      border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; font-size: 12.5px;
-      background: var(--surface-2); color: var(--ink); font-family: inherit;
+
+    .crm-filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
     }
-    .crm-filter-sep { width: 1px; height: 28px; background: var(--line); margin: 0 4px; }
 
-    .crm-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
-    .crm-kpi-card { border-radius: 10px; padding: 16px; color: #fff; }
-    .crm-kpi-card.c1 { background: linear-gradient(135deg, var(--accent), #3EAE7E); }
-    .crm-kpi-card.c2 { background: linear-gradient(135deg, #4F46E5, #7C76F0); }
-    .crm-kpi-card.c3 { background: linear-gradient(135deg, #C99A2F, #E3B15A); }
-    .crm-kpi-card.c4 { background: linear-gradient(135deg, var(--danger), #E88462); }
-    .crm-kpi-label { font-size: 11px; color: rgba(255,255,255,0.8); margin-bottom: 8px; }
-    .crm-kpi-value { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; }
-    .crm-kpi-trend { font-size: 11px; margin-top: 4px; font-weight: 600; color: rgba(255,255,255,0.9); }
+    .crm-filter-label {
+      font-size: 9.5px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-weight: 700;
+    }
 
-    .crm-charts-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-    .crm-chart-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
-    .crm-chart-title { font-size: 12.5px; font-weight: 700; margin-bottom: 12px; }
+    .crm-filter-input,
+    .crm-filter-select {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12.5px;
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: inherit;
+    }
 
-    .crm-donut-wrap { display: flex; align-items: center; gap: 14px; }
-    .crm-donut-legend { display: flex; flex-direction: column; gap: 6px; font-size: 11px; }
-    .crm-legend-item { display: flex; align-items: center; gap: 6px; }
-    .crm-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .crm-legend-label { color: var(--muted); }
-    .crm-legend-val { color: var(--ink); font-weight: 700; margin-left: auto; padding-left: 8px; }
+    .crm-filter-sep {
+      width: 1px;
+      height: 28px;
+      background: var(--line);
+      margin: 0 4px;
+    }
 
-    .crm-staff-rank-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
-    .crm-staff-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); }
-    .crm-staff-row:last-child { border-bottom: none; }
-    .crm-staff-rank-num { width: 20px; height: 20px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line);
-      display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: var(--faint); flex-shrink: 0; }
-    .crm-staff-row:first-child .crm-staff-rank-num { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .crm-staff-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff;
-      font-family: 'Fraunces', serif; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .crm-staff-info { flex: 1; }
-    .crm-staff-name { font-size: 12.5px; font-weight: 700; }
-    .crm-staff-meta { font-size: 10.5px; color: var(--faint); }
-    .crm-staff-bar-wrap { width: 90px; height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
-    .crm-staff-bar { height: 100%; background: var(--accent); border-radius: 3px; }
-    .crm-staff-revenue { font-family: 'Fraunces', serif; font-size: 13px; font-weight: 700; color: var(--accent); width: 76px; text-align: right; }
+    .crm-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .crm-kpi-card {
+      border-radius: 10px;
+      padding: 16px;
+      color: #fff;
+    }
+
+    .crm-kpi-card.c1 {
+      background: linear-gradient(135deg, var(--accent), #3EAE7E);
+    }
+
+    .crm-kpi-card.c2 {
+      background: linear-gradient(135deg, #4F46E5, #7C76F0);
+    }
+
+    .crm-kpi-card.c3 {
+      background: linear-gradient(135deg, #C99A2F, #E3B15A);
+    }
+
+    .crm-kpi-card.c4 {
+      background: linear-gradient(135deg, var(--danger), #E88462);
+    }
+
+    .crm-kpi-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 8px;
+    }
+
+    .crm-kpi-value {
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .crm-kpi-trend {
+      font-size: 11px;
+      margin-top: 4px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .crm-charts-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .crm-chart-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .crm-chart-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .crm-donut-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .crm-donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .crm-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .crm-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .crm-legend-label {
+      color: var(--muted);
+    }
+
+    .crm-legend-val {
+      color: var(--ink);
+      font-weight: 700;
+      margin-left: auto;
+      padding-left: 8px;
+    }
+
+    .crm-staff-rank-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .crm-staff-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .crm-staff-row:last-child {
+      border-bottom: none;
+    }
+
+    .crm-staff-rank-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--faint);
+      flex-shrink: 0;
+    }
+
+    .crm-staff-row:first-child .crm-staff-rank-num {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .crm-staff-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Fraunces', serif;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .crm-staff-info {
+      flex: 1;
+    }
+
+    .crm-staff-name {
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+
+    .crm-staff-meta {
+      font-size: 10.5px;
+      color: var(--faint);
+    }
+
+    .crm-staff-bar-wrap {
+      width: 90px;
+      height: 6px;
+      background: var(--surface-2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .crm-staff-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+    }
+
+    .crm-staff-revenue {
+      font-family: 'Fraunces', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      width: 76px;
+      text-align: right;
+    }
 
     /* ---------- Client list + profile card ---------- */
-    .client-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-    .client-row {
-      display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line);
-      border-radius: 10px; padding: 10px 14px; cursor: pointer; transition: border-color .15s ease;
+    .client-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
     }
-    .client-row:hover { border-color: var(--accent); }
-    .client-row.active { border-color: var(--accent); background: var(--accent-soft); }
-    .row-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: #fff;
-      font-family: 'Fraunces', serif; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .row-name { font-size: 13px; font-weight: 700; }
-    .row-tag { font-size: 9px; font-weight: 800; letter-spacing: .3px; text-transform: uppercase; padding: 2px 7px; border-radius: 20px; margin-left: 6px; }
-    .row-tag.regular { background: var(--accent-soft); color: var(--accent); }
-    .row-tag.risk { background: var(--danger-soft); color: var(--danger); }
-    .row-meta { font-size: 11px; color: var(--faint); margin-top: 1px; }
-    .row-right { margin-left: auto; text-align: right; font-size: 11px; color: var(--faint); }
 
-    .profile-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 26px; }
-    .profile-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
-    .profile-avatar { width: 60px; height: 60px; border-radius: 50%; background: var(--accent); color: #fff;
-      font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .profile-name { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; }
-    .profile-username { font-size: 12.5px; color: var(--faint); margin-bottom: 6px; }
-    .profile-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-    .profile-tag { font-size: 10px; font-weight: 800; letter-spacing: .3px; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; }
-    .profile-tag.regular { background: var(--accent-soft); color: var(--accent); }
-    .profile-tag.risk { background: var(--danger-soft); color: var(--danger); }
-    .profile-delete-btn { margin-left: auto; background: none; border: 1px solid var(--danger); color: var(--danger);
-      padding: 7px 14px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
-    .profile-delete-btn:hover { background: var(--danger-soft); }
+    .client-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: border-color .15s ease;
+    }
 
-    .profile-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 22px; }
-    .pstat { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; }
-    .pstat-label { font-size: 9.5px; color: var(--faint); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
-    .pstat-value { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; }
+    .client-row:hover {
+      border-color: var(--accent);
+    }
 
-    .profile-section-title { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--faint); font-weight: 700; margin-bottom: 10px; }
+    .client-row.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
 
-    .history-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
-    .history-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: var(--surface-2); border-radius: 8px; flex-wrap: wrap; }
-    .history-date { font-size: 11px; color: var(--faint); width: 68px; flex-shrink: 0; }
-    .history-service { font-size: 12.5px; font-weight: 600; flex: 1; }
-    .history-status { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
-    .history-note-box { display: flex; gap: 6px; width: 100%; margin-top: 6px; }
+    .row-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
-    .notes-box { display: flex; gap: 8px; }
-    .notes-input { flex: 1; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 12.5px;
-      background: var(--surface-2); color: var(--ink); font-family: inherit; }
-    .notes-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 0 16px; font-size: 12.5px; font-weight: 700; cursor: pointer; }
+    .row-name {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .row-tag {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 20px;
+      margin-left: 6px;
+    }
+
+    .row-tag.regular {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .row-tag.risk {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .row-meta {
+      font-size: 11px;
+      color: var(--faint);
+      margin-top: 1px;
+    }
+
+    .row-right {
+      margin-left: auto;
+      text-align: right;
+      font-size: 11px;
+      color: var(--faint);
+    }
+
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 26px;
+    }
+
+    .profile-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .profile-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .profile-name {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .profile-username {
+      font-size: 12.5px;
+      color: var(--faint);
+      margin-bottom: 6px;
+    }
+
+    .profile-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .profile-tag {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    .profile-tag.regular {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .profile-tag.risk {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .profile-delete-btn {
+      margin-left: auto;
+      background: none;
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      padding: 7px 14px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .profile-delete-btn:hover {
+      background: var(--danger-soft);
+    }
+
+     .profile-close-btn {
+      background: none;
+      border: 1px solid var(--line);
+      color: var(--faint);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 14px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .profile-close-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .pstat {
+      background: var(--surface-2);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .pstat-label {
+      font-size: 9.5px;
+      color: var(--faint);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 3px;
+    }
+
+    .pstat-value {
+      font-family: 'Fraunces', serif;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .profile-section-title {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--faint);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      background: var(--surface-2);
+      border-radius: 8px;
+      flex-wrap: wrap;
+    }
+
+    .history-date {
+      font-size: 11px;
+      color: var(--faint);
+      width: 68px;
+      flex-shrink: 0;
+    }
+
+    .history-service {
+      font-size: 12.5px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .history-status {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    .history-note-box {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      margin-top: 6px;
+    }
+
+    .notes-box {
+      display: flex;
+      gap: 8px;
+    }
+
+    .notes-input {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 12.5px;
+      background: var(--surface-2);
+      color: var(--ink);
+      font-family: inherit;
+    }
+
+    .notes-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0 16px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
     @media (max-width: 900px) {
-      .crm-kpi-grid { grid-template-columns: 1fr 1fr; }
-      .crm-charts-row { grid-template-columns: 1fr; }
-      .profile-stats { grid-template-columns: 1fr 1fr; }
+      .crm-kpi-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .crm-charts-row {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-stats {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     @media (max-width: 600px) {
@@ -857,7 +1341,7 @@
 
 <body data-theme="light">
   <script>
-    (function() {
+    (function () {
       var saved = localStorage.getItem('bookly_theme');
       if (saved === 'dark' || saved === 'light') {
         document.body.dataset.theme = saved;
@@ -865,7 +1349,10 @@
     })();
   </script>
 
-  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
   <div class="bg-grid"></div>
 
   <div id="initialLoader"
@@ -1191,22 +1678,26 @@
           <div
             style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
             Рост</div>
-          <div class="plan-price" style="font-family:'Fraunces',serif; font-size:24px; font-weight:700; margin-bottom:10px; transition:color .15s ease;">$19<span
-              style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
+          <div class="plan-price"
+            style="font-family:'Fraunces',serif; font-size:24px; font-weight:700; margin-bottom:10px; transition:color .15s ease;">
+            $19<span style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
           <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:10px;">До 3 филиалов<br>Без
             лимита сотрудников<br>Google Calendar</div>
-          <div class="plan-info-btn" data-plan-info="Рост" style="cursor:pointer; color:var(--accent); font-size:12px; margin-bottom:14px;">Подробно о тарифе</div>
+          <div class="plan-info-btn" data-plan-info="Рост"
+            style="cursor:pointer; color:var(--accent); font-size:12px; margin-bottom:14px;">Подробно о тарифе</div>
           <button class="btn-cancel select-plan-btn" data-plan="Рост" style="width:100%;">Выбрать</button>
         </div>
         <div class="bot-card plan-card" data-plan-card="Бизнес">
           <div
             style="font-size:11px; color:var(--faint); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
             Бизнес</div>
-          <div class="plan-price" style="font-family:'Fraunces',serif; font-size:24px; font-weight:700; margin-bottom:10px; transition:color .15s ease;">$39<span
-              style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
+          <div class="plan-price"
+            style="font-family:'Fraunces',serif; font-size:24px; font-weight:700; margin-bottom:10px; transition:color .15s ease;">
+            $39<span style="font-size:13px; color:var(--faint); font-weight:400;"> /мес</span></div>
           <div style="font-size:12px; color:var(--muted); line-height:1.8; margin-bottom:10px;">Без лимита
             филиалов<br>Без лимита сотрудников<br>Всё включено</div>
-          <div class="plan-info-btn" data-plan-info="Бизнес" style="cursor:pointer; color:var(--accent); font-size:12px; margin-bottom:14px;">Подробно о тарифе</div>
+          <div class="plan-info-btn" data-plan-info="Бизнес"
+            style="cursor:pointer; color:var(--accent); font-size:12px; margin-bottom:14px;">Подробно о тарифе</div>
           <button class="btn-cancel select-plan-btn" data-plan="Бизнес" style="width:100%;">Выбрать</button>
         </div>
       </div>
@@ -1230,11 +1721,15 @@
         <div class="crm-filter-sep"></div>
         <div class="crm-filter-group">
           <span class="crm-filter-label">Сотрудник</span>
-          <select class="crm-filter-select" id="crmMasterFilter"><option value="">Все</option></select>
+          <select class="crm-filter-select" id="crmMasterFilter">
+            <option value="">Все</option>
+          </select>
         </div>
         <div class="crm-filter-group">
           <span class="crm-filter-label">Услуга</span>
-          <select class="crm-filter-select" id="crmServiceFilter"><option value="">Все</option></select>
+          <select class="crm-filter-select" id="crmServiceFilter">
+            <option value="">Все</option>
+          </select>
         </div>
       </div>
 
@@ -1594,7 +2089,7 @@
         if (!priceEl) return;
         priceEl.classList.toggle("active-plan", card.dataset.planCard === activePlanName);
       });
-      
+
 
       const listEl = document.getElementById("branchList");
       listEl.innerHTML = allBranches.map(b => `
@@ -1634,7 +2129,7 @@
       if (!infoBtn) return;
       document.getElementById("planDetailsOverlay").classList.add("show");
     });
-        document.querySelectorAll(".plan-card").forEach(card => {
+    document.querySelectorAll(".plan-card").forEach(card => {
       card.addEventListener("click", () => {
         document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("card-focused"));
         card.classList.add("card-focused");
@@ -1668,7 +2163,7 @@
         currentBranchId = allBranches[0].id;
         loadServices();
         loadMasters();
-        loadClients();        
+        loadClients();
         loadBotInfo();
         loadBusinessSettings();
         populateCrmFilters().then(loadCrmDashboard);
@@ -1687,7 +2182,7 @@
       document.getElementById("branchDropdown").style.display = "none";
       loadServices();
       loadMasters();
-      loadClients()      
+      loadClients()
       loadBotInfo();
       loadBusinessSettings();
       renderBranchSwitcher();
@@ -1906,7 +2401,7 @@
       document.getElementById("dash").style.display = "block";
       loadServices();
       loadMasters();
-      loadClients();      
+      loadClients();
       loadBotInfo();
       loadBusinessSettings();
       renderBranchSwitcher();
@@ -2557,7 +3052,8 @@
               <div class="profile-username">${client.username || 'без username'}</div>
               <div class="profile-tags">${tag ? `<span class="profile-tag ${tag.cls}">${tag.label}</span>` : ''}</div>
             </div>
-            <button class="profile-delete-btn" id="btnDeleteClient">Удалить клиента</button>
+                        <button class="profile-delete-btn" id="btnDeleteClient">Удалить клиента</button>
+            <button class="profile-close-btn" id="btnCloseProfile">✕</button>
           </div>
 
           <div class="profile-stats">
@@ -2603,10 +3099,16 @@
 
         if (error) { showToast("Ошибка: " + error.message); return; }
 
-        selectedClientKey = null;
+          selectedClientKey = null;
         showToast("Клиент удалён");
         loadClients();
         loadCrmDashboard();
+      });
+
+      document.getElementById("btnCloseProfile").addEventListener("click", () => {
+        selectedClientKey = null;
+        document.querySelectorAll(".client-row").forEach(row => row.classList.remove("active"));
+        document.getElementById("clientProfileCard").innerHTML = '';
       });
     }
 
@@ -2841,7 +3343,7 @@
         document.getElementById("dash").style.display = "block";
         loadServices();
         loadMasters();
-        loadClients();        
+        loadClients();
         loadBotInfo();
         loadBusinessSettings();
         renderBranchSwitcher();
