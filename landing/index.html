@@ -45,6 +45,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -63,7 +64,6 @@
       text-decoration: none;
     }
 
-    /* ---------- Decorative background ---------- */
     .bg-orbs {
       position: fixed;
       inset: 0;
@@ -137,8 +137,6 @@
       position: relative;
       z-index: 1;
     }
-
-    /* ---------- Header ---------- */
 
     header {
       border-bottom: 1px solid var(--line);
@@ -268,8 +266,6 @@
       box-shadow: 0 14px 28px -10px var(--accent);
     }
 
-    /* ---------- Hero ---------- */
-
     .hero {
       position: relative;
       padding-top: 90px;
@@ -353,7 +349,6 @@
       border-radius: 4px;
     }
 
-    /* volume buttons */
     .phone-shell::before {
       left: -3px;
       top: 92px;
@@ -362,7 +357,6 @@
       box-shadow: 0 46px 0 #232025;
     }
 
-    /* power button */
     .phone-shell::after {
       right: -3px;
       top: 120px;
@@ -810,8 +804,6 @@
       animation-delay: 1.5s;
     }
 
-    /* ---------- Sections ---------- */
-
     section {
       padding: 60px 0;
       position: relative;
@@ -821,16 +813,18 @@
       border-top: 1px solid var(--line);
     }
 
-    /* ---------- Chat demo: overlapping paper notes ---------- */
+    /* ---------- Chat + Pricing combined split section ---------- */
+    .chat-pricing-split {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+
     .chat-demo-stage {
       position: relative;
       height: 420px;
       contain: layout;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      margin: 10px 0 20px;
-      padding-left: 4%;
     }
 
     .chat-note {
@@ -889,30 +883,6 @@
       background: rgba(255, 255, 255, 0.08);
     }
 
-    .chat-note .who {
-      font-size: 11px;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
-
-    .chat-note.client .who {
-      color: var(--accent);
-    }
-
-    .chat-note.bot .who {
-      color: var(--red);
-    }
-
-    .chat-note .msg {
-      font-family: 'Fraunces', serif;
-      font-size: 22px;
-      line-height: 1.45;
-      color: var(--ink);
-      min-height: 62px;
-    }
-
     .chat-note .msg-lines {
       display: flex;
       flex-direction: column;
@@ -942,22 +912,6 @@
 
     .chat-note .msg-line.bot .line-who {
       color: var(--red);
-    }
-
-    .chat-caret {
-      display: inline-block;
-      width: 2px;
-      height: 22px;
-      background: var(--ink);
-      margin-left: 2px;
-      vertical-align: middle;
-      animation: chatBlink .8s step-end infinite;
-    }
-
-    @keyframes chatBlink {
-      50% {
-        opacity: 0;
-      }
     }
 
     .chat-note.pos-back {
@@ -1021,14 +975,34 @@
       color: rgba(255, 255, 255, 0.92);
     }
 
+    @media (max-width: 900px) {
+      .chat-pricing-split {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 760px) {
       .chat-demo-stage {
         height: 400px;
+        justify-content: center;
+        padding-left: 0;
       }
 
       .chat-note {
         height: 360px;
         padding: 18px 20px;
+      }
+
+      .chat-note.pos-front {
+        transform: translate(0, calc(-50% - 10px)) rotate(-3deg);
+      }
+
+      .chat-note.pos-back {
+        transform: translate(16px, calc(-50% + 26px)) rotate(4deg);
+      }
+
+      .chat-note.pos-gone-left {
+        transform: translate(-140px, calc(-50% - 40px)) rotate(-12deg);
       }
     }
 
@@ -1247,382 +1221,6 @@
       min-height: 39px;
     }
 
-    .price-card {
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      padding: 32px;
-      max-width: 400px;
-      background: var(--surface);
-    }
-
-    .price-amount {
-      font-family: 'Fraunces', serif;
-      font-size: 32px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 4px;
-    }
-
-    .price-amount span {
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    .price-list {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .price-item {
-      font-size: 13.5px;
-      color: var(--muted);
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-    }
-
-    .price-item::before {
-      content: "✓";
-      color: var(--green);
-      font-weight: 800;
-    }
-
-    /* ---------- ТАРИФЫ ---------- */
-    .pricing-section {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .pricing-head {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-
-    .pricing-title {
-      margin: 0 auto 10px;
-      text-align: center;
-    }
-
-    .pricing-subtitle {
-      font-size: 15px;
-      color: var(--muted);
-      margin-bottom: 28px;
-    }
-
-    /* Переключатель */
-    .billing-toggle-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .price-yearly-badge {
-      font-size: 13px;
-      color: var(--accent);
-      margin-left: 8px;
-    }
-
-    .billing-label {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--faint);
-      cursor: pointer;
-    }
-
-    .billing-label.active {
-      color: var(--ink);
-    }
-
-    .billing-toggle {
-      width: 48px;
-      height: 26px;
-      border-radius: 4px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      cursor: pointer;
-      position: relative;
-    }
-
-    .billing-toggle-dot {
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 20px;
-      height: 20px;
-      border-radius: 2px;
-      background: var(--accent);
-      transition: transform .3s ease;
-    }
-
-    .billing-toggle.yearly .billing-toggle-dot {
-      transform: translateX(22px);
-    }
-
-    .billing-save {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--accent);
-      background: var(--accent-soft);
-      border: 1px solid var(--accent);
-      padding: 3px 8px;
-      border-radius: 3px;
-    }
-
-    /* Сетка */
-    .pricing-premium-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-bottom: 32px;
-    }
-
-    /* Карточка */
-    .price-premium-card {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      padding: 32px 28px;
-      display: flex;
-      flex-direction: column;
-      transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
-    }
-
-    .price-premium-card:hover {
-      transform: translateY(-6px);
-      border-color: var(--accent);
-      box-shadow: 0 12px 24px -8px rgba(28, 27, 31, 0.15);
-    }
-
-    /* Популярный */
-    .price-card-featured {
-      border: 2px solid var(--accent);
-      position: relative;
-      background: linear-gradient(170deg, var(--accent-soft) 0%, var(--surface) 30%);
-    }
-
-    .price-card-ribbon {
-      position: absolute;
-      top: 16px;
-      right: -35px;
-      background: var(--accent);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 6px 40px;
-      transform: rotate(45deg);
-    }
-
-    /* Верх */
-    .price-premium-top {
-      margin-bottom: 20px;
-    }
-
-    .price-premium-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 4px;
-      background: var(--surface-2);
-      border: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent);
-      margin-bottom: 14px;
-    }
-
-    .price-premium-icon svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .icon-featured {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .price-premium-name {
-      font-family: 'Fraunces', serif;
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .price-premium-desc {
-      font-size: 13px;
-      color: var(--faint);
-    }
-
-    /* Цена */
-    .price-premium-amount {
-      font-family: 'Fraunces', serif;
-      font-size: 42px;
-      font-weight: 700;
-      margin-bottom: 24px;
-      display: flex;
-      align-items: baseline;
-    }
-
-    .price-currency {
-      font-size: 22px;
-      color: var(--faint);
-    }
-
-    .price-suffix {
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      color: var(--faint);
-      margin-left: 2px;
-    }
-
-    /* Фичи */
-    .price-premium-features {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 28px;
-      flex: 1;
-    }
-
-    .price-premium-features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    .price-premium-features li svg {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-      color: var(--green);
-    }
-
-    .price-premium-features li.feature-disabled {
-      opacity: 0.4;
-    }
-
-    .price-premium-features li.feature-disabled svg {
-      color: var(--faint);
-    }
-
-    /* Кнопки */
-    .price-premium-btn {
-      display: block;
-      text-align: center;
-      padding: 13px 20px;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: 700;
-      transition: all .25s ease;
-    }
-
-    .price-btn-accent {
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #fff;
-      box-shadow: 0 10px 24px -10px var(--accent);
-    }
-
-    .price-btn-accent:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 32px -10px var(--accent);
-    }
-
-    .price-btn-ghost {
-      border: 1px solid var(--line);
-      color: var(--ink);
-    }
-
-    .price-btn-ghost:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-soft);
-    }
-
-    .price-card-note {
-      text-align: center;
-      font-size: 11px;
-      color: var(--faint);
-      margin-top: 12px;
-    }
-
-    /* Гарантия */
-    .pricing-guarantee {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      padding: 20px;
-      border-top: 1px solid var(--line);
-    }
-
-    .guarantee-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--accent-soft);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent);
-    }
-
-    .guarantee-icon svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .guarantee-text {
-      display: flex;
-      flex-direction: column;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .guarantee-sub {
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--faint);
-    }
-
-    /* Тёмная тема */
-    [data-theme="dark"] .price-premium-card {
-      background: var(--surface);
-    }
-
-    [data-theme="dark"] .price-card-featured {
-      background: linear-gradient(170deg, var(--accent-soft) 0%, var(--surface) 35%);
-    }
-
-    [data-theme="dark"] .price-btn-ghost {
-      border-color: var(--line);
-      color: var(--ink);
-    }
-
-    [data-theme="dark"] .price-btn-ghost:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* Мобильные */
-    @media (max-width: 760px) {
-      .pricing-premium-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .price-premium-amount {
-        font-size: 36px;
-      }
-    }
-
-    /* FAQ */
-
     .faq-newspaper {
       display: flex;
       flex-direction: column;
@@ -1656,6 +1254,7 @@
       background: var(--surface);
       border: 1px solid var(--line);
       transition: border-color .25s ease;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .faq-newspaper-wrap:hover {
@@ -1716,8 +1315,6 @@
       color: var(--muted);
       line-height: 1.7;
     }
-
-    /* Final CTA */
 
     .cta-band {
       background: var(--surface);
@@ -1784,10 +1381,288 @@
       text-align: center;
     }
 
-    @media (max-width: 760px) {
-      .footer-grid {
+    /* ---------- Compact pricing (used beside the chat papers) ---------- */
+    .pricing-mini-head {
+      margin-bottom: 16px;
+    }
+
+    .pricing-mini-eyebrow {
+      font-size: 11px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .pricing-mini-title {
+      font-family: 'Fraunces', serif;
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin-bottom: 4px;
+    }
+
+    .pricing-mini-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .billing-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .billing-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--faint);
+      cursor: pointer;
+    }
+
+    .billing-label.active {
+      color: var(--ink);
+    }
+
+    .billing-toggle {
+      width: 34px;
+      height: 18px;
+      border-radius: 3px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .billing-toggle-dot {
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      background: var(--accent);
+      transition: transform .3s ease;
+    }
+
+    .billing-toggle.yearly .billing-toggle-dot {
+      transform: translateX(16px);
+    }
+
+    .billing-save {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    .pricing-mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .price-mini-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .price-mini-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+    }
+
+    .price-mini-card.featured {
+      border: 1.5px solid var(--accent);
+      background: linear-gradient(170deg, var(--accent-soft) 0%, var(--surface) 40%);
+      position: relative;
+    }
+
+    .price-mini-ribbon {
+      position: absolute;
+      top: 7px;
+      right: -18px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 7.5px;
+      font-weight: 800;
+      padding: 2px 18px;
+      transform: rotate(45deg);
+    }
+
+    .price-mini-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 3px;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .price-mini-icon svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    .icon-featured {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .price-mini-name {
+      font-family: 'Fraunces', serif;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .price-mini-desc {
+      font-size: 9px;
+      color: var(--faint);
+      margin-bottom: 6px;
+    }
+
+    .price-mini-amount {
+      font-family: 'Fraunces', serif;
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: baseline;
+      gap: 1px;
+    }
+
+    .price-mini-currency {
+      font-size: 11px;
+      color: var(--faint);
+    }
+
+    .price-mini-suffix {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      color: var(--faint);
+      font-weight: 500;
+      margin-left: 1px;
+    }
+
+    .price-mini-yearly-badge {
+      font-size: 9px;
+      color: var(--accent);
+      margin-left: 6px;
+    }
+
+    .price-mini-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-bottom: 8px;
+      flex: 1;
+    }
+
+    .price-mini-features li {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      color: var(--muted);
+    }
+
+    .price-mini-features li svg {
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+      color: var(--green);
+    }
+
+    .price-mini-features li.feature-disabled {
+      opacity: 0.4;
+      text-decoration: line-through;
+    }
+
+    .price-mini-features li.feature-disabled svg {
+      color: var(--faint);
+    }
+
+    .price-mini-btn {
+      text-align: center;
+      padding: 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      text-decoration: none;
+      display: block;
+    }
+
+    .price-mini-card.featured .price-mini-btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      border: none;
+    }
+
+    .price-mini-note {
+      text-align: center;
+      font-size: 8.5px;
+      color: var(--faint);
+      margin-top: 4px;
+    }
+
+    .pricing-mini-guarantee {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .guarantee-mini-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .guarantee-mini-icon svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .guarantee-mini-text {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .guarantee-mini-sub {
+      font-size: 9.5px;
+      font-weight: 400;
+      color: var(--faint);
+    }
+
+    @media (max-width: 900px) {
+      .pricing-mini-grid {
         grid-template-columns: 1fr;
-        gap: 24px;
       }
     }
 
@@ -1839,6 +1714,11 @@
 
       .demo-wrap {
         margin-bottom: 40px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
       }
     }
   </style>
@@ -2035,7 +1915,163 @@
       <div class="section-eyebrow" data-ru="Как отвечает бот" data-en="How the bot replies">Как отвечает бот</div>
       <div class="section-title" data-ru="Живой разговор с клиентом" data-en="A real conversation with a client">Живой
         разговор с клиентом</div>
-      <div class="chat-demo-stage" id="chatDemoStage"></div>
+
+      <div class="chat-pricing-split">
+        <div class="chat-demo-stage" id="chatDemoStage"></div>
+
+        <div class="pricing-mini-col">
+          <div class="pricing-mini-head">
+            <div class="pricing-mini-eyebrow" data-ru="Тарифы" data-en="Pricing">Тарифы</div>
+            <div class="pricing-mini-title" data-ru="Простой и честный прайс" data-en="Simple, honest pricing">Простой
+              и честный прайс</div>
+            <div class="pricing-mini-sub" data-ru="Начните бесплатно и upgrade, когда появятся клиенты"
+              data-en="Start free and upgrade as your client base grows">Начните бесплатно и upgrade, когда появятся
+              клиенты</div>
+          </div>
+
+          <div class="billing-toggle-wrap">
+            <span class="billing-label active" id="labelMonthly" data-ru="Помесячно" data-en="Monthly">Помесячно</span>
+            <button class="billing-toggle" id="billingToggle" type="button">
+              <span class="billing-toggle-dot"></span>
+            </button>
+            <span class="billing-label" id="labelYearly" data-ru="На год" data-en="Yearly">На год</span>
+            <span class="billing-save">−20%</span>
+          </div>
+
+          <div class="pricing-mini-grid">
+            <div class="price-mini-card">
+              <div class="price-mini-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.2-4.8-2.5-4.8 2.5.9-5.2L4.3 7.6l5.3-.8z" />
+                </svg>
+              </div>
+              <div class="price-mini-name" data-ru="Старт" data-en="Starter">Старт</div>
+              <div class="price-mini-desc" data-ru="Для частных мастеров" data-en="For solo pros">Для частных
+                мастеров</div>
+              <div class="price-mini-amount">
+                <span class="price-mini-currency">$</span>
+                <span class="price-value" data-monthly="15" data-yearly="12">15</span>
+                <span class="price-mini-suffix" data-ru="/мес" data-en="/mo">/мес</span>
+                <span class="price-mini-yearly-badge" style="display:none;" data-ru="$144/год"
+                  data-en="$144/yr">$144/год</span>
+              </div>
+              <ul class="price-mini-features">
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="1 сотрудник" data-en="1 staff member">1 сотрудник</span></li>
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="До 50 записей/мес" data-en="Up to 50 bookings/mo">До 50 записей/мес</span></li>
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="Уведомления в Telegram" data-en="Telegram notifications">Уведомления в
+                    Telegram</span></li>
+                <li class="feature-disabled"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M4 4l8 8M12 4l-8 8" />
+                  </svg><span data-ru="Напоминания клиентам" data-en="Client reminders">Напоминания клиентам</span></li>
+                <li class="feature-disabled"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M4 4l8 8M12 4l-8 8" />
+                  </svg><span data-ru="Статистика" data-en="Analytics">Статистика</span></li>
+              </ul>
+              <a href="#" class="price-mini-btn" data-ru="Начать бесплатно" data-en="Start free">Начать бесплатно</a>
+            </div>
+
+            <div class="price-mini-card featured">
+              <div class="price-mini-ribbon" data-ru="🔥" data-en="🔥">🔥</div>
+              <div class="price-mini-icon icon-featured">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <path d="M13 2L3 14h7l-1 8 10-12h-7z" />
+                </svg>
+              </div>
+              <div class="price-mini-name" data-ru="Профи" data-en="Pro">Профи</div>
+              <div class="price-mini-desc" data-ru="Для растущего бизнеса" data-en="For growing businesses">Для
+                растущего бизнеса</div>
+              <div class="price-mini-amount">
+                <span class="price-mini-currency">$</span>
+                <span class="price-value" data-monthly="15" data-yearly="12">15</span>
+                <span class="price-mini-suffix" data-ru="/мес" data-en="/mo">/мес</span>
+              </div>
+              <ul class="price-mini-features">
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="До 5 сотрудников" data-en="Up to 5 staff">До 5 сотрудников</span></li>
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="Безлимитные записи" data-en="Unlimited bookings">Безлимитные записи</span></li>
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="Напоминания клиентам" data-en="Client reminders">Напоминания клиентам</span>
+                </li>
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="Перенос и отмена" data-en="Reschedule & cancel">Перенос и отмена</span></li>
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="Статистика и отчёты" data-en="Analytics & reports">Статистика и отчёты</span>
+                </li>
+              </ul>
+              <a href="#" class="price-mini-btn" data-ru="Попробовать 14 дней" data-en="Try 14 days">Попробовать 14
+                дней</a>
+              <div class="price-mini-note" data-ru="Без банковской карты" data-en="No credit card required">Без
+                банковской карты</div>
+            </div>
+
+            <div class="price-mini-card">
+              <div class="price-mini-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
+                </svg>
+              </div>
+              <div class="price-mini-name" data-ru="Бизнес" data-en="Business">Бизнес</div>
+              <div class="price-mini-desc" data-ru="Для сетей и филиалов" data-en="For chains & locations">Для сетей
+                и филиалов</div>
+              <div class="price-mini-amount">
+                <span class="price-mini-currency">$</span>
+                <span class="price-value" data-monthly="30" data-yearly="24">30</span>
+                <span class="price-mini-suffix" data-ru="/мес" data-en="/mo">/мес</span>
+                <span class="price-mini-yearly-badge" style="display:none;" data-ru="$288/год"
+                  data-en="$288/yr">$288/год</span>
+              </div>
+              <ul class="price-mini-features">
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="Безлимит сотрудников" data-en="Unlimited staff">Безлимит сотрудников</span>
+                </li>
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="Несколько филиалов" data-en="Multiple locations">Несколько филиалов</span></li>
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="Кастомные сценарии" data-en="Custom scripts">Кастомные сценарии</span></li>
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="CRM интеграция" data-en="CRM integration">CRM интеграция</span></li>
+                <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 8l3.5 3.5L13 5" />
+                  </svg><span data-ru="API доступ" data-en="API access">API доступ</span></li>
+              </ul>
+              <a href="#" class="price-mini-btn" data-ru="Связаться с нами" data-en="Contact us">Связаться с нами</a>
+            </div>
+          </div>
+
+          <div class="pricing-mini-guarantee">
+            <div class="guarantee-mini-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" />
+                <path d="M9 12l2 2 4-4" />
+              </svg>
+            </div>
+            <div>
+              <div class="guarantee-mini-text" data-ru="14 дней бесплатно на всех тарифах"
+                data-en="14 days free on all plans">14 дней бесплатно на всех тарифах</div>
+              <div class="guarantee-mini-sub" data-ru="Отмена в один клик, без вопросов"
+                data-en="Cancel in one click, no questions asked">Отмена в один клик, без вопросов</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2427,171 +2463,6 @@
     </div>
   </div>
 
-
-  <!-- ===== ТАРИФЫ ===== -->
-  <section class="section-border pricing-section">
-    <div class="wrap">
-      <div class="pricing-head">
-        <div class="section-eyebrow" data-ru="Тарифы" data-en="Pricing">Тарифы</div>
-        <div class="section-title pricing-title" data-ru="Простой и честный прайс" data-en="Simple, honest pricing">
-          Простой и честный прайс
-        </div>
-        <p class="pricing-subtitle" data-ru="Начните бесплатно и upgrade, когда появятся клиенты"
-          data-en="Start free and upgrade as your client base grows">
-          Начните бесплатно и upgrade, когда появятся клиенты
-        </p>
-
-        <!-- Переключатель -->
-        <div class="billing-toggle-wrap">
-          <span class="billing-label active" id="labelMonthly" data-ru="Помесячно" data-en="Monthly">Помесячно</span>
-          <button class="billing-toggle" id="billingToggle" type="button">
-            <span class="billing-toggle-dot"></span>
-          </button>
-          <span class="billing-label" id="labelYearly" data-ru="На год" data-en="Yearly">На год</span>
-          <span class="billing-save">−20%</span>
-        </div>
-      </div>
-
-      <div class="pricing-premium-grid">
-        <!-- Тариф 1 -->
-        <div class="price-premium-card">
-          <div class="price-premium-top">
-            <div class="price-premium-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.2-4.8-2.5-4.8 2.5.9-5.2L4.3 7.6l5.3-.8z" />
-              </svg>
-            </div>
-            <div class="price-premium-name" data-ru="Старт" data-en="Starter">Старт</div>
-            <div class="price-premium-desc" data-ru="Для частных мастеров" data-en="For solo pros">Для частных мастеров
-            </div>
-          </div>
-          <div class="price-premium-amount">
-            <span class="price-currency">$</span>
-            <span class="price-value" data-monthly="0" data-yearly="0">0</span>
-            <span class="price-suffix" data-ru="/мес" data-en="/mo">/мес</span>
-          </div>
-          <ul class="price-premium-features">
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="1 сотрудник" data-en="1 staff member">1 сотрудник</span></li>
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="До 50 записей/мес" data-en="Up to 50 bookings/mo">До 50 записей/мес</span></li>
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="Уведомления в Telegram" data-en="Telegram notifications">Уведомления в
-                Telegram</span></li>
-            <li class="feature-disabled"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 4l8 8M12 4l-8 8" />
-              </svg><span data-ru="Напоминания клиентам" data-en="Client reminders">Напоминания клиентам</span></li>
-            <li class="feature-disabled"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 4l8 8M12 4l-8 8" />
-              </svg><span data-ru="Статистика" data-en="Analytics">Статистика</span></li>
-          </ul>
-          <a href="#" class="price-premium-btn price-btn-ghost" data-ru="Начать бесплатно" data-en="Start free">Начать
-            бесплатно</a>
-        </div>
-
-        <!-- Тариф 2 (Популярный) -->
-        <div class="price-premium-card price-card-featured">
-          <div class="price-card-ribbon" data-ru="🔥 Популярный" data-en="🔥 Popular">🔥 Популярный</div>
-          <div class="price-premium-top">
-            <div class="price-premium-icon icon-featured">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <path d="M13 2L3 14h7l-1 8 10-12h-7z" />
-              </svg>
-            </div>
-            <div class="price-premium-name" data-ru="Профи" data-en="Pro">Профи</div>
-            <div class="price-premium-desc" data-ru="Для растущего бизнеса" data-en="For growing businesses">Для
-              растущего бизнеса</div>
-          </div>
-          <div class="price-premium-amount">
-            <span class="price-currency">$</span>
-            <span class="price-value" data-monthly="15" data-yearly="12">15</span>
-            <span class="price-suffix" data-ru="/мес" data-en="/mo">/мес</span>
-            <span class="price-yearly-badge" style="display:none;">$144/год</span>
-          </div>
-          <ul class="price-premium-features">
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="До 5 сотрудников" data-en="Up to 5 staff">До 5 сотрудников</span></li>
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="Безлимитные записи" data-en="Unlimited bookings">Безлимитные записи</span></li>
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="Напоминания клиентам" data-en="Client reminders">Напоминания клиентам</span></li>
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="Перенос и отмена" data-en="Reschedule & cancel">Перенос и отмена</span></li>
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="Статистика и отчёты" data-en="Analytics & reports">Статистика и отчёты</span></li>
-          </ul>
-          <a href="#" class="price-premium-btn price-btn-accent" data-ru="Попробовать 14 дней"
-            data-en="Try 14 days">Попробовать 14 дней</a>
-          <div class="price-card-note" data-ru="Без банковской карты" data-en="No credit card required">Без банковской
-            карты</div>
-        </div>
-
-        <!-- Тариф 3 -->
-        <div class="price-premium-card">
-          <div class="price-premium-top">
-            <div class="price-premium-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
-              </svg>
-            </div>
-            <div class="price-premium-name" data-ru="Бизнес" data-en="Business">Бизнес</div>
-            <div class="price-premium-desc" data-ru="Для сетей и филиалов" data-en="For chains & locations">Для сетей и
-              филиалов</div>
-          </div>
-          <div class="price-premium-amount">
-            <span class="price-currency">$</span>
-            <span class="price-value" data-monthly="30" data-yearly="24">30</span>
-            <span class="price-suffix" data-ru="/мес" data-en="/mo">/мес</span>
-            <span class="price-yearly-badge" style="display:none;">$288/год</span>
-          </div>
-          <ul class="price-premium-features">
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="Безлимит сотрудников" data-en="Unlimited staff">Безлимит сотрудников</span></li>
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="Несколько филиалов" data-en="Multiple locations">Несколько филиалов</span></li>
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="Кастомные сценарии" data-en="Custom scripts">Кастомные сценарии</span></li>
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="CRM интеграция" data-en="CRM integration">CRM интеграция</span></li>
-            <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 8l3.5 3.5L13 5" />
-              </svg><span data-ru="API доступ" data-en="API access">API доступ</span></li>
-          </ul>
-          <a href="#" class="price-premium-btn price-btn-ghost" data-ru="Связаться с нами"
-            data-en="Contact us">Связаться с нами</a>
-        </div>
-      </div>
-
-      <!-- Гарантия -->
-      <div class="pricing-guarantee">
-        <div class="guarantee-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" />
-            <path d="M9 12l2 2 4-4" />
-          </svg>
-        </div>
-        <div class="guarantee-text">
-          <span data-ru="14 дней бесплатно на всех тарифах" data-en="14 days free on all plans">14 дней бесплатно на
-            всех тарифах</span>
-          <span class="guarantee-sub" data-ru="Отмена в один клик, без вопросов"
-            data-en="Cancel in one click, no questions asked">Отмена в один клик, без вопросов</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <div class="wrap">
     <div class="cta-band">
       <div class="section-title" data-ru="Подключите бота сегодня" data-en="Connect your bot today">Подключите бота
@@ -2858,13 +2729,12 @@
         document.querySelectorAll('.price-value').forEach(el => {
           const val = isYearly ? el.dataset.yearly : el.dataset.monthly;
           el.textContent = val;
-          document.querySelectorAll('.price-yearly-badge').forEach(badge => {
-            badge.style.display = isYearly ? 'inline' : 'none';
-          });
+        });
+        document.querySelectorAll('.price-mini-yearly-badge').forEach(badge => {
+          badge.style.display = isYearly ? 'inline' : 'none';
         });
       });
     })();
-
   </script>
 
 </body>
