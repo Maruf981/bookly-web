@@ -830,6 +830,20 @@
       background: var(--surface-2);
       color: var(--ink);
       font-family: inherit;
+      transition: border-color .15s ease;
+    }
+
+    .crm-filter-input:hover,
+    .crm-filter-select:hover,
+    .crm-filter-input:focus,
+    .crm-filter-select:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    [data-theme="dark"] .crm-filter-input::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      cursor: pointer;
     }
 
     .crm-filter-sep {
@@ -1573,7 +1587,7 @@
       align-items: center;
       gap: 8px;
       padding-top: 10px;
-      border-top: 1px solid var(--line);
+      
     }
 
     .guarantee-mini-icon {
