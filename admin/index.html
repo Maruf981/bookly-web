@@ -2159,68 +2159,91 @@
       </div>
     </div>
 
-        <div class="crm-staff-rank-card" style="max-width:445px; position:relative;">
-      <div class="crm-chart-title">Рейтинг сотрудников по выручке</div>
-      <svg viewBox="0 0 400 140" width="100%" height="140" id="crmStaffRankChart"></svg>
-      <div id="crmStaffTooltip" style="display:none; position:absolute; background:var(--ink); color:var(--bg); padding:7px 11px; border-radius:4px; font-size:11.5px; font-weight:600; pointer-events:none; white-space:nowrap; z-index:20; box-shadow:0 6px 16px rgba(0,0,0,0.25);"></div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+      <div class="crm-staff-rank-card" style="flex:1; min-width:280px; max-width:445px; position:relative;">
+        <div class="crm-chart-title">Рейтинг сотрудников по выручке</div>
+        <svg viewBox="0 0 400 140" width="100%" height="140" id="crmStaffRankChart"></svg>
+        <div id="crmStaffTooltip" style="display:none; position:absolute; background:var(--ink); color:var(--bg); padding:7px 11px; border-radius:4px; font-size:11.5px; font-weight:600; pointer-events:none; white-space:nowrap; z-index:20; box-shadow:0 6px 16px rgba(0,0,0,0.25);"></div>
+      </div>
+
+            <div class="crm-staff-rank-card" style="flex:1; min-width:280px; max-width:605px; position:relative;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+          <div>
+            <div class="crm-chart-title" style="margin-bottom:2px;">Загруженность по дням недели</div>
+            <div style="font-size:10.5px; color:var(--faint);">Записи за выбранный период</div>
+          </div>
+          <div style="text-align:right;">
+            <div id="crmPeakDayValue" style="font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--accent);">—</div>
+            <div style="font-size:9.5px; color:var(--faint);">пиковый день</div>
+          </div>
+        </div>
+        <svg viewBox="0 0 560 140" width="100%" height="140" id="crmWeekdayChart"></svg>
+        <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:9px; color:var(--faint);">
+          <span><span style="color:#E24B4A;">●</span> низкая загрузка</span>
+          <span><span style="color:var(--accent);">●</span> высокая загрузка</span>
+        </div>
+        <div id="crmWeekdayTooltip" style="display:none; position:absolute; background:var(--ink); color:var(--bg); padding:7px 11px; border-radius:4px; font-size:11.5px; font-weight:600; pointer-events:none; white-space:nowrap; z-index:20; box-shadow:0 6px 16px rgba(0,0,0,0.25);"></div>
+      </div>
     </div>
+
+    
 
     <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
     <div id="clientsSection">
-    <div class="dash-eyebrow" style="margin-top:28px;">Клиенты</div>
-    <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши клиенты</div>
-    <div class="client-list" id="clientListRows"></div>
-    <div id="clientProfileCard"></div>
-  </div>
+      <div class="dash-eyebrow" style="margin-top:28px;">Клиенты</div>
+      <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши клиенты</div>
+      <div class="client-list" id="clientListRows"></div>
+      <div id="clientProfileCard"></div>
+    </div>
 
-  <div class="guide-overlay" id="staffCardOverlay">
-    <div class="guide-modal" id="staffCardModal" style="max-width:380px;"></div>
-  </div>
+    <div class="guide-overlay" id="staffCardOverlay">
+      <div class="guide-modal" id="staffCardModal" style="max-width:380px;"></div>
+    </div>
 
-  <div class="guide-overlay" id="serviceCardOverlay">
-    <div class="guide-modal" id="serviceCardModal" style="max-width:380px;"></div>
-  </div>
+    <div class="guide-overlay" id="serviceCardOverlay">
+      <div class="guide-modal" id="serviceCardModal" style="max-width:380px;"></div>
+    </div>
 
-  <div class="guide-overlay" id="addStaffOverlay">
-    <div class="guide-modal" style="max-width:360px;">
-      <div class="guide-header">
-        <div class="dash-eyebrow">Новый сотрудник</div>
-        <div class="dash-title" style="font-size:18px;">Добавить сотрудника</div>
-        <button class="guide-close" id="addStaffClose">✕</button>
-      </div>
-      <div class="input-group"><label>Имя</label><input type="text" id="addStaffName" placeholder="Например, Артур" />
-      </div>
-      <div class="input-group"><label>Роль</label><input type="text" id="addStaffRole" placeholder="Барбер" /></div>
-      <div class="input-group"><label>Инициалы</label><input type="text" id="addStaffInitials" placeholder="АР"
-          maxlength="2" /></div>
-      <div class="input-group"><label>Телефон</label><input type="text" id="addStaffPhone"
-          placeholder="+992 000 00 00 00" /></div>
-      <div class="form-actions">
-        <button class="btn-save" id="btnConfirmAddStaff">Создать</button>
-        <button class="btn-cancel" id="btnCancelAddStaff">Отмена</button>
+    <div class="guide-overlay" id="addStaffOverlay">
+      <div class="guide-modal" style="max-width:360px;">
+        <div class="guide-header">
+          <div class="dash-eyebrow">Новый сотрудник</div>
+          <div class="dash-title" style="font-size:18px;">Добавить сотрудника</div>
+          <button class="guide-close" id="addStaffClose">✕</button>
+        </div>
+        <div class="input-group"><label>Имя</label><input type="text" id="addStaffName" placeholder="Например, Артур" />
+        </div>
+        <div class="input-group"><label>Роль</label><input type="text" id="addStaffRole" placeholder="Барбер" /></div>
+        <div class="input-group"><label>Инициалы</label><input type="text" id="addStaffInitials" placeholder="АР"
+            maxlength="2" /></div>
+        <div class="input-group"><label>Телефон</label><input type="text" id="addStaffPhone"
+            placeholder="+992 000 00 00 00" /></div>
+        <div class="form-actions">
+          <button class="btn-save" id="btnConfirmAddStaff">Создать</button>
+          <button class="btn-cancel" id="btnCancelAddStaff">Отмена</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="guide-overlay" id="addServiceOverlay">
-    <div class="guide-modal" style="max-width:360px;">
-      <div class="guide-header">
-        <div class="dash-eyebrow">Новая услуга</div>
-        <div class="dash-title" style="font-size:18px;">Добавить услугу</div>
-        <button class="guide-close" id="addServiceClose">✕</button>
-      </div>
-      <div class="input-group"><label>Название</label><input type="text" id="addServiceName"
-          placeholder="Стрижка машинкой" /></div>
-      <div class="input-group"><label>Длительность</label><input type="text" id="addServiceDuration"
-          placeholder="25 мин" /></div>
-      <div class="input-group"><label>Цена</label><input type="number" id="addServicePrice" placeholder="60" /></div>
-      <div class="form-actions">
-        <button class="btn-save" id="btnConfirmAddService">Создать</button>
-        <button class="btn-cancel" id="btnCancelAddService">Отмена</button>
+    <div class="guide-overlay" id="addServiceOverlay">
+      <div class="guide-modal" style="max-width:360px;">
+        <div class="guide-header">
+          <div class="dash-eyebrow">Новая услуга</div>
+          <div class="dash-title" style="font-size:18px;">Добавить услугу</div>
+          <button class="guide-close" id="addServiceClose">✕</button>
+        </div>
+        <div class="input-group"><label>Название</label><input type="text" id="addServiceName"
+            placeholder="Стрижка машинкой" /></div>
+        <div class="input-group"><label>Длительность</label><input type="text" id="addServiceDuration"
+            placeholder="25 мин" /></div>
+        <div class="input-group"><label>Цена</label><input type="number" id="addServicePrice" placeholder="60" /></div>
+        <div class="form-actions">
+          <button class="btn-save" id="btnConfirmAddService">Создать</button>
+          <button class="btn-cancel" id="btnCancelAddService">Отмена</button>
+        </div>
       </div>
     </div>
-  </div>
 
   </div>
 
@@ -3132,6 +3155,105 @@
       });
     }
 
+
+    //----------------
+        function renderCrmWeekdayChart(bookings) {
+      const svg = document.getElementById("crmWeekdayChart");
+      const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+      const counts = [0, 0, 0, 0, 0, 0, 0];
+
+      bookings.filter(b => b.status !== 'cancelled').forEach(b => {
+        if (!b.booking_date) return;
+        const d = new Date(b.booking_date);
+        counts[d.getDay()] += 1;
+      });
+
+      const orderedIdx = [1, 2, 3, 4, 5, 6, 0];
+      const orderedCounts = orderedIdx.map(i => counts[i]);
+      const orderedNames = orderedIdx.map(i => dayNames[i]);
+
+      const maxCount = Math.max(1, ...orderedCounts);
+      const minCount = Math.min(...orderedCounts);
+      const peakIdx = orderedCounts.indexOf(maxCount);
+
+      document.getElementById("crmPeakDayValue").textContent = orderedNames[peakIdx];
+
+      const w = 560, sidePad = 25, topPad = 20, bottomPad = 20, plotH = 70;
+      const plotW = w - sidePad * 2;
+      const n = orderedCounts.length;
+      const stepX = plotW / (n - 1);
+      const xFor = i => sidePad + i * stepX;
+      const yFor = c => topPad + (1 - (maxCount > 0 ? c / maxCount : 0)) * plotH;
+
+      const colorFor = i => {
+        const t = i / (n - 1);
+        if (t < 0.4) return '#E24B4A';
+        if (t < 0.65) return '#EF9F27';
+        return 'var(--accent)';
+      };
+
+      const points = orderedCounts.map((c, i) => ({ x: xFor(i), y: yFor(c) }));
+      const linePath = points.map((p, i) => (i === 0 ? `M${p.x},${p.y}` : ` L${p.x},${p.y}`)).join("");
+      const areaPath = `${linePath} L${points[n - 1].x},${topPad + plotH + 20} L${points[0].x},${topPad + plotH + 20} Z`;
+
+      const gridLines = [topPad, topPad + plotH / 2, topPad + plotH].map(y =>
+        `<line x1="${sidePad}" y1="${y}" x2="${w - sidePad}" y2="${y}" stroke="var(--line)" stroke-width="1"/>`
+      ).join("");
+
+      const dots = points.map((p, i) => {
+        const color = i === peakIdx ? 'var(--accent)' : colorFor(i);
+        const r = i === peakIdx ? 5 : 4;
+        return `<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${color}" style="cursor:pointer;" class="crm-weekday-dot" data-day="${orderedNames[i]}" data-count="${orderedCounts[i]}"/>`;
+      }).join("");
+
+      const nameLabels = orderedNames.map((name, i) => {
+        const color = i === peakIdx ? 'var(--accent)' : 'var(--faint)';
+        const weight = i === peakIdx ? '700' : '400';
+        return `<text x="${xFor(i)}" y="${topPad + plotH + bottomPad + 10}" text-anchor="middle" font-size="9.5" fill="${color}" font-weight="${weight}">${name}</text>`;
+      }).join("");
+
+      svg.innerHTML = `
+        <defs>
+          <linearGradient id="lineGradientRG" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#E24B4A"/>
+            <stop offset="40%" stop-color="#E24B4A"/>
+            <stop offset="60%" stop-color="#EF9F27"/>
+            <stop offset="100%" stop-color="var(--accent)"/>
+          </linearGradient>
+          <linearGradient id="areaGradientRG" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#E24B4A" stop-opacity="0.28"/>
+            <stop offset="55%" stop-color="#EF9F27" stop-opacity="0.2"/>
+            <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.32"/>
+          </linearGradient>
+        </defs>
+        ${gridLines}
+        <path d="${areaPath}" fill="url(#areaGradientRG)"/>
+        <path d="${linePath}" fill="none" stroke="url(#lineGradientRG)" stroke-width="2.5" stroke-linecap="round"/>
+        ${dots}
+        ${nameLabels}
+      `;
+
+      const tooltip = document.getElementById("crmWeekdayTooltip");
+      svg.querySelectorAll(".crm-weekday-dot").forEach(dot => {
+        dot.addEventListener("mouseenter", (e) => {
+          const { day, count } = e.target.dataset;
+          tooltip.textContent = `${day}: ${count} записей`;
+          tooltip.style.display = "block";
+        });
+        dot.addEventListener("mousemove", (e) => {
+          const parentRect = svg.parentElement.getBoundingClientRect();
+          const x = e.clientX - parentRect.left;
+          const y = e.clientY - parentRect.top;
+          tooltip.style.left = x + "px";
+          tooltip.style.top = (y - 40) + "px";
+          tooltip.style.transform = "translateX(-50%)";
+        });
+        dot.addEventListener("mouseleave", () => {
+          tooltip.style.display = "none";
+        });
+      });
+    }
+
     async function loadCrmDashboard() {
       const dateFrom = document.getElementById("crmDateFrom").value;
       const dateTo = document.getElementById("crmDateTo").value;
@@ -3198,7 +3320,9 @@
       ]);
 
       renderCrmStaffRank(bookings, currencyLabel);
+      renderCrmWeekdayChart(bookings);
     }
+
 
     ["crmDateFrom", "crmDateTo", "crmMasterFilter", "crmServiceFilter"].forEach(id => {
       document.getElementById(id).addEventListener("change", loadCrmDashboard);
