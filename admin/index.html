@@ -2541,20 +2541,7 @@
         return;
       }
 
-      const mainBranch = getMainBranch();
-      const planLimits = getPlanLimits(mainBranch ? mainBranch.plan : 'trial');
 
-      if (isTrialExpired(mainBranch)) {
-        showToast("Пробный период закончился — выберите тариф внизу страницы");
-        document.getElementById("branchDropdown").style.display = "none";
-        return;
-      }
-
-      if (allBranches.length >= planLimits.maxBranches) {
-        showToast(`Ваш тариф позволяет до ${planLimits.maxBranches} филиал(ов) — выберите тариф выше`);
-        document.getElementById("branchDropdown").style.display = "none";
-        return;
-      }
 
       document.getElementById("branchDropdown").style.display = "none";
       document.getElementById("newBranchNameInput").value = "";
@@ -3412,7 +3399,278 @@
 
     // ---------- Masters management ----------
 
+    // ---------- Masters management ----------
 
+    let staffChipData = [];
+    let serviceChipData = [];
+
+    async function loadStaffAndServiceChips() {
+      const { data: masters } = await sb.from('masters').select('*').eq('branch_id', currentBranchId).order('id');
+      const { data: services } = await sb.from('services').select('*').eq('branch_id', currentBranchId).order('id');
+      staffChipData = masters || [];
+      serviceChipData = services || [];
+      renderStaffDropdown();
+      renderServiceDropdown();
+    }
+
+    function renderStaffDropdown() {
+      const el = document.getElementById("staffDropdown");
+      if (staffChipData.length === 0) {
+        el.innerHTML = `<div style="padding:10px; font-size:12px; color:var(--faint);">Пока нет сотрудников</div>`;
+        return;
+      }
+      el.innerHTML = staffChipData.map(m => {
+        const initials = (m.initials || m.name || '?').slice(0, 2).toUpperCase();
+        return `<div class="chip-dropdown-item" data-staff-id="${m.id}">
+          <div class="chip-dropdown-avatar">${initials}</div>
+          <span>${m.name}</span>
+        </div>`;
+      }).join("");
+      el.querySelectorAll("[data-staff-id]").forEach(item => {
+        item.addEventListener("click", () => openStaffCard(Number(item.dataset.staffId)));
+      });
+    }
+
+    function renderServiceDropdown() {
+      const el = document.getElementById("serviceDropdown");
+      if (serviceChipData.length === 0) {
+        el.innerHTML = `<div style="padding:10px; font-size:12px; color:var(--faint);">Пока нет услуг</div>`;
+        return;
+      }
+      el.innerHTML = serviceChipData.map(s => {
+        return `<div class="chip-dropdown-item" data-service-id="${s.id}">
+          <span style="flex:1;">${s.name}</span>
+          <span style="color:var(--accent); font-weight:700;">${s.price}</span>
+        </div>`;
+      }).join("");
+      el.querySelectorAll("[data-service-id]").forEach(item => {
+        item.addEventListener("click", () => openServiceCard(Number(item.dataset.serviceId)));
+      });
+    }
+
+    document.getElementById("btnStaffDropdown").addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.getElementById("serviceDropdown").classList.remove("show");
+      document.getElementById("staffDropdown").classList.toggle("show");
+    });
+
+    document.getElementById("btnServiceDropdown").addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.getElementById("staffDropdown").classList.remove("show");
+      document.getElementById("serviceDropdown").classList.toggle("show");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".crm-filter-group")) {
+        document.getElementById("staffDropdown").classList.remove("show");
+        document.getElementById("serviceDropdown").classList.remove("show");
+      }
+    });
+
+    async function openStaffCard(staffId) {
+      const master = staffChipData.find(m => m.id === staffId);
+      if (!master) return;
+
+      const { data: bookings } = await sb.from('bookings').select('*').eq('branch_id', currentBranchId).eq('master', master.name);
+      const { data: botData } = await sb.from('bots').select('currency').eq('branch_id', currentBranchId).maybeSingle();
+      const currencyLabel = botData?.currency || '₽';
+
+      const all = bookings || [];
+      const nonCancelled = all.filter(b => b.status !== 'cancelled');
+      const revenue = nonCancelled.reduce((sum, b) => sum + (Number(b.price) || 0), 0);
+      const cancelledCount = all.filter(b => b.status === 'cancelled').length;
+      const cancelledPercent = all.length > 0 ? Math.round((cancelledCount / all.length) * 100) : 0;
+
+      const recent = [...all].sort((a, b) => (b.booking_date || '').localeCompare(a.booking_date || '')).slice(0, 3);
+      const recentHtml = recent.length > 0
+        ? recent.map(b => `<div class="card-recent-item"><span style="color:var(--muted);">${b.booking_date} · ${b.service || '—'}</span><span style="color:var(--accent); font-weight:600;">${b.price || 0} ${currencyLabel}</span></div>`).join("")
+        : `<div style="font-size:11.5px; color:var(--faint);">Пока нет записей</div>`;
+
+      const initials = (master.initials || master.name || '?').slice(0, 2).toUpperCase();
+
+      document.getElementById("staffCardModal").innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div style="width:52px; height:52px; border-radius:4px; background:var(--accent); color:#fff; font-weight:700; font-size:18px; display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif;">${initials}</div>
+            <div>
+              <div style="font-size:17px; font-weight:700; font-family:'Fraunces',serif;">${master.name}</div>
+              <div style="font-size:11.5px; color:var(--faint);">${master.role || '—'}</div>
+            </div>
+          </div>
+          <button class="guide-close" id="btnCloseStaffCard">✕</button>
+        </div>
+
+        <div class="card-stat-grid">
+          <div class="card-stat"><div class="card-stat-label">Записей</div><div class="card-stat-value">${all.length}</div></div>
+          <div class="card-stat"><div class="card-stat-label">Выручка</div><div class="card-stat-value" style="color:var(--accent);">${revenue.toLocaleString('ru-RU')} ${currencyLabel}</div></div>
+          <div class="card-stat"><div class="card-stat-label">Отменено</div><div class="card-stat-value">${cancelledPercent}%</div></div>
+          <div class="card-stat"><div class="card-stat-label">Инициалы</div><div class="card-stat-value">${master.initials || '—'}</div></div>
+        </div>
+
+        <div class="input-group"><label>Имя</label><input type="text" id="staffCardName" value="${master.name || ''}" /></div>
+        <div class="input-group"><label>Роль</label><input type="text" id="staffCardRole" value="${master.role || ''}" /></div>
+        <div class="input-group"><label>Инициалы</label><input type="text" id="staffCardInitials" value="${master.initials || ''}" maxlength="2" /></div>
+        <div class="input-group"><label>Телефон</label><input type="text" id="staffCardPhone" value="${master.phone || ''}" placeholder="+992 000 00 00 00" /></div>
+
+        <div style="font-size:10px; color:var(--faint); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px;">Последние записи</div>
+        ${recentHtml}
+
+        <div class="form-actions" style="margin-top:16px;">
+          <button class="btn-save" id="btnSaveStaffCard">Сохранить</button>
+          <button class="btn-cancel" id="btnDeleteStaffCard" style="border-color:var(--danger); color:var(--danger);">Удалить</button>
+        </div>
+      `;
+
+      document.getElementById("btnCloseStaffCard").addEventListener("click", () => {
+        document.getElementById("staffCardOverlay").classList.remove("show");
+      });
+
+      document.getElementById("btnSaveStaffCard").addEventListener("click", async () => {
+        const name = document.getElementById("staffCardName").value.trim();
+        const role = document.getElementById("staffCardRole").value.trim();
+        const initials = document.getElementById("staffCardInitials").value.trim().toUpperCase();
+        const phone = document.getElementById("staffCardPhone").value.trim();
+        if (!name) { showToast("Впишите имя"); return; }
+
+        const { error } = await sb.from('masters').update({ name, role, initials, phone }).eq('id', master.id);
+        if (error) { showToast("Ошибка: " + error.message); return; }
+        showToast("Сохранено");
+        document.getElementById("staffCardOverlay").classList.remove("show");
+        loadStaffAndServiceChips();
+      });
+
+      document.getElementById("btnDeleteStaffCard").addEventListener("click", async () => {
+        if (!confirm(`Удалить сотрудника "${master.name}"?`)) return;
+        const { error } = await sb.from('masters').delete().eq('id', master.id);
+        if (error) { showToast("Ошибка: " + error.message); return; }
+        showToast("Сотрудник удалён");
+        document.getElementById("staffCardOverlay").classList.remove("show");
+        loadStaffAndServiceChips();
+      });
+
+      document.getElementById("staffCardOverlay").classList.add("show");
+      document.getElementById("staffDropdown").classList.remove("show");
+    }
+
+    async function openServiceCard(serviceId) {
+      const service = serviceChipData.find(s => s.id === serviceId);
+      if (!service) return;
+
+      const { data: bookings } = await sb.from('bookings').select('*').eq('branch_id', currentBranchId).eq('service', service.name);
+      const { data: botData } = await sb.from('bots').select('currency').eq('branch_id', currentBranchId).maybeSingle();
+      const currencyLabel = botData?.currency || '₽';
+
+      const all = bookings || [];
+      const nonCancelled = all.filter(b => b.status !== 'cancelled');
+      const revenue = nonCancelled.reduce((sum, b) => sum + (Number(b.price) || 0), 0);
+
+      const recent = [...all].sort((a, b) => (b.booking_date || '').localeCompare(a.booking_date || '')).slice(0, 3);
+      const recentHtml = recent.length > 0
+        ? recent.map(b => `<div class="card-recent-item"><span style="color:var(--muted);">${b.booking_date} · ${b.client_name || 'Клиент'}</span><span style="color:var(--accent); font-weight:600;">${b.price || 0} ${currencyLabel}</span></div>`).join("")
+        : `<div style="font-size:11.5px; color:var(--faint);">Пока нет записей</div>`;
+
+      document.getElementById("serviceCardModal").innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+          <div>
+            <div style="font-size:17px; font-weight:700; font-family:'Fraunces',serif;">${service.name}</div>
+            <div style="font-size:11.5px; color:var(--faint);">${service.duration || '—'}</div>
+          </div>
+          <button class="guide-close" id="btnCloseServiceCard">✕</button>
+        </div>
+
+        <div class="card-stat-grid">
+          <div class="card-stat"><div class="card-stat-label">Записей</div><div class="card-stat-value">${all.length}</div></div>
+          <div class="card-stat"><div class="card-stat-label">Выручка</div><div class="card-stat-value" style="color:var(--accent);">${revenue.toLocaleString('ru-RU')} ${currencyLabel}</div></div>
+        </div>
+
+        <div class="input-group"><label>Название</label><input type="text" id="serviceCardName" value="${service.name || ''}" /></div>
+        <div class="input-group"><label>Длительность</label><input type="text" id="serviceCardDuration" value="${service.duration || ''}" /></div>
+        <div class="input-group"><label>Цена</label><input type="number" id="serviceCardPrice" value="${service.price || ''}" /></div>
+
+        <div style="font-size:10px; color:var(--faint); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px;">Последние записи</div>
+        ${recentHtml}
+
+        <div class="form-actions" style="margin-top:16px;">
+          <button class="btn-save" id="btnSaveServiceCard">Сохранить</button>
+          <button class="btn-cancel" id="btnDeleteServiceCard" style="border-color:var(--danger); color:var(--danger);">Удалить</button>
+        </div>
+      `;
+
+      document.getElementById("btnCloseServiceCard").addEventListener("click", () => {
+        document.getElementById("serviceCardOverlay").classList.remove("show");
+      });
+
+      document.getElementById("btnSaveServiceCard").addEventListener("click", async () => {
+        const name = document.getElementById("serviceCardName").value.trim();
+        const duration = document.getElementById("serviceCardDuration").value.trim();
+        const price = Number(document.getElementById("serviceCardPrice").value);
+        if (!name || !price) { showToast("Впишите название и цену"); return; }
+
+        const { error } = await sb.from('services').update({ name, duration, price }).eq('id', service.id);
+        if (error) { showToast("Ошибка: " + error.message); return; }
+        showToast("Сохранено");
+        document.getElementById("serviceCardOverlay").classList.remove("show");
+        loadStaffAndServiceChips();
+      });
+
+      document.getElementById("btnDeleteServiceCard").addEventListener("click", async () => {
+        if (!confirm(`Удалить услугу "${service.name}"?`)) return;
+        const { error } = await sb.from('services').delete().eq('id', service.id);
+        if (error) { showToast("Ошибка: " + error.message); return; }
+        showToast("Услуга удалена");
+        document.getElementById("serviceCardOverlay").classList.remove("show");
+        loadStaffAndServiceChips();
+      });
+
+      document.getElementById("serviceCardOverlay").classList.add("show");
+      document.getElementById("serviceDropdown").classList.remove("show");
+    }
+
+    document.getElementById("btnAddStaffChip").addEventListener("click", () => {
+      document.getElementById("addStaffName").value = "";
+      document.getElementById("addStaffRole").value = "";
+      document.getElementById("addStaffInitials").value = "";
+      document.getElementById("addStaffPhone").value = "";
+      document.getElementById("addStaffOverlay").classList.add("show");
+    });
+    document.getElementById("addStaffClose").addEventListener("click", () => document.getElementById("addStaffOverlay").classList.remove("show"));
+    document.getElementById("btnCancelAddStaff").addEventListener("click", () => document.getElementById("addStaffOverlay").classList.remove("show"));
+
+    document.getElementById("btnConfirmAddStaff").addEventListener("click", async () => {
+      const name = document.getElementById("addStaffName").value.trim();
+      const role = document.getElementById("addStaffRole").value.trim();
+      const initials = document.getElementById("addStaffInitials").value.trim().toUpperCase();
+      const phone = document.getElementById("addStaffPhone").value.trim();
+      if (!name) { showToast("Впишите имя сотрудника"); return; }
+
+      const { error } = await sb.from('masters').insert({ name, role, initials, phone, owner_id: currentUserId, branch_id: currentBranchId });
+      if (error) { showToast("Ошибка: " + error.message); return; }
+      showToast("Сотрудник добавлен");
+      document.getElementById("addStaffOverlay").classList.remove("show");
+      loadStaffAndServiceChips();
+    });
+
+    document.getElementById("btnAddServiceChip").addEventListener("click", () => {
+      document.getElementById("addServiceName").value = "";
+      document.getElementById("addServiceDuration").value = "";
+      document.getElementById("addServicePrice").value = "";
+      document.getElementById("addServiceOverlay").classList.add("show");
+    });
+    document.getElementById("addServiceClose").addEventListener("click", () => document.getElementById("addServiceOverlay").classList.remove("show"));
+    document.getElementById("btnCancelAddService").addEventListener("click", () => document.getElementById("addServiceOverlay").classList.remove("show"));
+
+    document.getElementById("btnConfirmAddService").addEventListener("click", async () => {
+      const name = document.getElementById("addServiceName").value.trim();
+      const duration = document.getElementById("addServiceDuration").value.trim();
+      const price = Number(document.getElementById("addServicePrice").value);
+      if (!name || !price) { showToast("Впишите название и цену"); return; }
+
+      const { error } = await sb.from('services').insert({ name, duration, price, owner_id: currentUserId, branch_id: currentBranchId });
+      if (error) { showToast("Ошибка: " + error.message); return; }
+      showToast("Услуга добавлена");
+      document.getElementById("addServiceOverlay").classList.remove("show");
+      loadStaffAndServiceChips();
+    });
 
     document.getElementById("btnSetNewPassword").addEventListener("click", async () => {
       const newPassword = document.getElementById("newPasswordInput").value;
