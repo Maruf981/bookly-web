@@ -694,6 +694,20 @@
       opacity: 1;
     }
 
+        @keyframes feedScrollUp {
+      from { transform: translateY(0); }
+      to { transform: translateY(-50%); }
+    }
+
+    #feedScrollTrack.scrolling {
+      animation: feedScrollUp linear infinite;
+    }
+
+    .feed-item {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
     /* ---------- Guide modal ---------- */
 
     .guide-overlay {
@@ -1821,12 +1835,14 @@
         <div class="bot-card-label" style="color:var(--accent);">Ваш Telegram-бот</div>
         <div id="botStatusView"></div>
       </div>
-      <div class="bot-card" id="activityFeedCard" style="height:auto; max-height:340px; overflow:hidden; position:relative;">
+      <div class="bot-card" id="activityFeedCard" style="height:300px; overflow:hidden; position:relative;">
         <div style="display:flex; align-items:center; gap:6px; margin-bottom:14px;">
           <div style="width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent);"></div>
           <div class="bot-card-label" style="margin-bottom:0; color:var(--accent);">Живая лента</div>
         </div>
-        <div id="activityFeedList" style="position:relative; padding-left:20px;"></div>
+        <div style="position:absolute; top:44px; left:16px; right:16px; bottom:0; overflow:hidden; -webkit-mask-image:linear-gradient(to bottom, transparent, black 15%, black 85%, transparent); mask-image:linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);">
+          <div id="feedScrollTrack" style="display:flex; flex-direction:column;"></div>
+        </div>
       </div>
     </div>
 
@@ -3628,62 +3644,127 @@
       renderServiceDropdown();
     }
 
-        async function loadActivityFeed() {
+    let feedEventsCache = [];
+    let feedExtraCache = [];
+
+    async function loadActivityFeed() {
       const { data, error } = await sb.from('bookings')
         .select('*')
         .eq('branch_id', currentBranchId)
         .order('created_at', { ascending: false })
         .limit(10);
 
-      const listEl = document.getElementById("activityFeedList");
-      if (!listEl) return;
+      const newIds = (data || []).map(b => b.id + '_' + b.status).join(',');
+      const oldIds = feedEventsCache.map(b => b.id + '_' + b.status).join(',');
+      const dataChanged = newIds !== oldIds;
 
-      if (error || !data || data.length === 0) {
-        listEl.innerHTML = `<div style="font-size:11px; color:var(--faint);">Пока нет активности</div>`;
+      if (!error && data) {
+        feedEventsCache = data;
+      }
+
+      const fmt = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+      const today = new Date();
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+
+      const { data: weekData } = await sb.from('bookings').select('price,status')
+        .eq('branch_id', currentBranchId).gte('booking_date', fmt(weekAgo)).lte('booking_date', fmt(today)).neq('status', 'cancelled');
+      const { data: botData } = await sb.from('bots').select('currency').eq('branch_id', currentBranchId).maybeSingle();
+      const currencyLabel = botData?.currency || '₽';
+      const todayRevenue = (weekData || []).filter(b => true).reduce((s, b) => s + (Number(b.price) || 0), 0);
+
+      const { data: allBookings } = await sb.from('bookings').select('client_name,client_username').eq('branch_id', currentBranchId).neq('status', 'cancelled');
+      const counts = {};
+      (allBookings || []).forEach(b => {
+        const key = b.client_username || b.client_name || 'Клиент';
+        counts[key] = (counts[key] || 0) + 1;
+      });
+      const topClient = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+
+      feedExtraCache = [
+        { type: 'revenue', label: 'Выручка за неделю', value: `${todayRevenue.toLocaleString('ru-RU')} ${currencyLabel}` },
+        topClient ? { type: 'client', label: 'Самый частый клиент', value: `${topClient[0]} · ${topClient[1]} визитов` } : null
+      ].filter(Boolean);
+
+      renderFeedScroll();
+    }
+
+    function feedTimeAgo(dateStr) {
+      if (!dateStr) return '';
+      const diffMs = new Date() - new Date(dateStr);
+      const mins = Math.floor(diffMs / 60000);
+      if (mins < 1) return 'только что';
+      if (mins < 60) return `${mins} мин назад`;
+      const hours = Math.floor(mins / 60);
+      if (hours < 24) return `${hours} ч назад`;
+      const days = Math.floor(hours / 24);
+      return `${days} дн назад`;
+    }
+
+    function feedItemHtml(b) {
+      let dotColor, title;
+      if (b.status === 'cancelled') {
+        dotColor = 'var(--danger)';
+        title = `Отмена — <b>${b.client_name || 'Клиент'}</b>`;
+      } else if (b.status === 'completed') {
+        dotColor = 'var(--faint)';
+        title = `Посещение — <b>${b.client_name || 'Клиент'}</b>`;
+      } else {
+        dotColor = 'var(--accent)';
+        title = `Новая запись — <b>${b.client_name || 'Клиент'}</b>`;
+      }
+      return `
+        <div class="feed-item">
+          <div style="display:flex; align-items:center; gap:6px; margin-bottom:3px;">
+            <div style="width:6px; height:6px; border-radius:50%; background:${dotColor}; flex-shrink:0;"></div>
+            <div style="font-size:11px; color:var(--ink);">${title}</div>
+          </div>
+          <div style="font-size:9.5px; color:var(--muted); padding-left:12px;">${b.master ? 'к ' + b.master + ' · ' : ''}${b.service || ''}${b.time ? ' · ' + b.time : ''}</div>
+          <div style="font-size:8.5px; color:var(--faint); padding-left:12px; margin-top:2px;">${feedTimeAgo(b.created_at)}</div>
+        </div>
+      `;
+    }
+
+    function feedExtraItemHtml(item) {
+      const color = item.type === 'revenue' ? 'var(--accent)' : '#4F46E5';
+      return `
+        <div class="feed-item">
+          <div style="display:flex; align-items:center; gap:6px; margin-bottom:3px;">
+            <div style="width:6px; height:6px; border-radius:50%; background:${color}; flex-shrink:0;"></div>
+            <div style="font-size:11px; color:var(--ink);">${item.label}</div>
+          </div>
+          <div style="font-size:11px; color:${color}; font-weight:700; padding-left:12px;">${item.value}</div>
+        </div>
+      `;
+    }
+
+    function renderFeedScroll() {
+      const track = document.getElementById("feedScrollTrack");
+      if (!track) return;
+
+      const allItems = [...feedEventsCache.map(feedItemHtml), ...feedExtraCache.map(feedExtraItemHtml)];
+
+      if (allItems.length === 0) {
+        track.classList.remove("scrolling");
+        track.style.animation = "none";
+        track.innerHTML = `<div style="font-size:11px; color:var(--faint); padding:10px 0;">Пока нет активности</div>`;
         return;
       }
 
-      const now = new Date();
-      function timeAgo(dateStr) {
-        if (!dateStr) return '';
-        const diffMs = now - new Date(dateStr);
-        const mins = Math.floor(diffMs / 60000);
-        if (mins < 1) return 'только что';
-        if (mins < 60) return `${mins} мин назад`;
-        const hours = Math.floor(mins / 60);
-        if (hours < 24) return `${hours} ч назад`;
-        const days = Math.floor(hours / 24);
-        return `${days} дн назад`;
-      }
+      const itemsHtml = allItems.join("");
+      track.innerHTML = itemsHtml + itemsHtml;
 
-      listEl.innerHTML = `<div style="position:absolute; left:5px; top:4px; bottom:0; width:1px; background:linear-gradient(var(--line), transparent);"></div>` +
-        data.map((b, i) => {
-          let dotColor, title;
-          if (b.status === 'cancelled') {
-            dotColor = 'var(--danger)';
-            title = `Отмена — <b>${b.client_name || 'Клиент'}</b>`;
-          } else if (b.status === 'completed') {
-            dotColor = 'var(--faint)';
-            title = `Посещение — <b>${b.client_name || 'Клиент'}</b>`;
-          } else {
-            dotColor = 'var(--accent)';
-            title = `Новая запись — <b>${b.client_name || 'Клиент'}</b>`;
-          }
-          const opacity = Math.max(1 - i * 0.15, 0.3);
-          return `
-            <div style="position:relative; margin-bottom:16px; opacity:${opacity};">
-              <div style="position:absolute; left:-20px; top:2px; width:10px; height:10px; border-radius:50%; background:${dotColor}; border:2px solid var(--surface);"></div>
-              <div style="font-size:11px; color:var(--ink); margin-bottom:2px;">${title}</div>
-              <div style="font-size:9.5px; color:var(--muted);">${b.master ? 'к ' + b.master + ' · ' : ''}${b.service || ''}${b.time ? ' · ' + b.time : ''}</div>
-              <div style="font-size:8.5px; color:var(--faint); margin-top:2px;">${timeAgo(b.created_at)}</div>
-            </div>
-          `;
-        }).join("");
+      track.classList.remove("scrolling");
+      void track.offsetWidth;
 
-            setInterval(() => {
-      if (currentBranchId) loadActivityFeed();
-    }, 10000);
+      const duration = allItems.length * 4;
+      track.style.animationDuration = duration + "s";
+      track.classList.add("scrolling");
     }
+
+    setInterval(() => {
+      if (currentBranchId) loadActivityFeed();
+    }, 8000);
 
     function renderStaffDropdown() {
       const el = document.getElementById("staffDropdown");
