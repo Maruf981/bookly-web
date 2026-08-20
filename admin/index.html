@@ -3980,16 +3980,14 @@
     document.getElementById("calPrevMonth").addEventListener("click", () => {
       calCurrentMonth -= 1;
       if (calCurrentMonth < 0) { calCurrentMonth = 11; calCurrentYear -= 1; }
-      calSelectedDate = null;
-      document.getElementById("calDayDetails").style.display = "none";
+      calSelectedDate = null;      
       loadCalendarData();
     });
 
     document.getElementById("calNextMonth").addEventListener("click", () => {
       calCurrentMonth += 1;
       if (calCurrentMonth > 11) { calCurrentMonth = 0; calCurrentYear += 1; }
-      calSelectedDate = null;
-      document.getElementById("calDayDetails").style.display = "none";
+      calSelectedDate = null;      
       loadCalendarData();
     });
 
