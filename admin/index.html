@@ -270,7 +270,7 @@
       border: 1px solid var(--line);
       border-radius: 4px;
       box-shadow: 0 8px 24px rgba(28, 27, 31, 0.18);
-      z-index: 30;
+      z-index: 999;
       padding: 4px;
     }
 
@@ -2083,7 +2083,7 @@
           </select>
         </div>
         <div class="crm-filter-sep"></div>
-        <div class="crm-filter-group" style="position:relative;">
+        <div class="crm-filter-group" style="position:relative; z-index:10;">
           <span class="crm-filter-label">Список сотрудников</span>
           <div style="display:flex; gap:6px;">
             <button class="chip-list-btn" id="btnStaffDropdown">Открыть список <span
@@ -2093,7 +2093,7 @@
           <div class="chip-dropdown" id="staffDropdown"></div>
         </div>
 
-        <div class="crm-filter-group" style="position:relative;">
+        <div class="crm-filter-group" style="position:relative; z-index:10;">
           <span class="crm-filter-label">Список услуг</span>
           <div style="display:flex; gap:6px;">
             <button class="chip-list-btn" id="btnServiceDropdown">Открыть список <span
