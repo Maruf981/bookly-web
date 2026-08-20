@@ -580,7 +580,15 @@
     }
 
 
-
+    #crmStaffTooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--ink);
+    }
 
 
 
@@ -2151,9 +2159,10 @@
       </div>
     </div>
 
-    <div class="crm-staff-rank-card">
-      <div class="crm-chart-title">Рейтинг сотрудников</div>
-      <div id="crmStaffRank"></div>
+        <div class="crm-staff-rank-card" style="max-width:445px; position:relative;">
+      <div class="crm-chart-title">Рейтинг сотрудников по выручке</div>
+      <svg viewBox="0 0 400 140" width="100%" height="140" id="crmStaffRankChart"></svg>
+      <div id="crmStaffTooltip" style="display:none; position:absolute; background:var(--ink); color:var(--bg); padding:7px 11px; border-radius:4px; font-size:11.5px; font-weight:600; pointer-events:none; white-space:nowrap; z-index:20; box-shadow:0 6px 16px rgba(0,0,0,0.25);"></div>
     </div>
 
     <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
@@ -3044,7 +3053,7 @@
     }
 
     function renderCrmStaffRank(bookings, currencyLabel) {
-      const container = document.getElementById("crmStaffRank");
+      const svg = document.getElementById("crmStaffRankChart");
       const byMaster = {};
       bookings.filter(b => b.status !== 'cancelled').forEach(b => {
         if (!b.master) return;
@@ -3053,31 +3062,73 @@
         byMaster[b.master].revenue += Number(b.price) || 0;
       });
 
-      const staffList = Object.values(byMaster).sort((a, b) => b.revenue - a.revenue).slice(0, 5);
+      const staffList = Object.values(byMaster).sort((a, b) => b.revenue - a.revenue).slice(0, 4);
 
       if (staffList.length === 0) {
-        container.innerHTML = `<div style="color:var(--faint); font-size:12px; padding: 12px 0;">Нет данных за выбранный период</div>`;
+        svg.innerHTML = `<text x="200" y="70" text-anchor="middle" font-size="12" fill="var(--faint)">Нет данных за выбранный период</text>`;
         return;
       }
 
+      const w = 400, topPad = 30, bottomPad = 20, plotH = 90;
       const maxRevenue = staffList[0].revenue || 1;
+      const n = staffList.length;
+      const stepX = n > 1 ? w / (n - 1) : 0;
+      const xFor = i => n === 1 ? w / 2 : i * stepX;
+      const yFor = rev => topPad + (1 - rev / maxRevenue) * plotH;
 
-      container.innerHTML = staffList.map((s, i) => {
-        const initials = s.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-        const barPercent = Math.round((s.revenue / maxRevenue) * 100);
-        return `
-          <div class="crm-staff-row">
-            <span class="crm-staff-rank-num">${i + 1}</span>
-            <div class="crm-staff-avatar">${initials}</div>
-            <div class="crm-staff-info">
-              <div class="crm-staff-name">${s.name}</div>
-              <div class="crm-staff-meta">${s.visits} записей</div>
-            </div>
-            <div class="crm-staff-bar-wrap"><div class="crm-staff-bar" style="width:${barPercent}%;"></div></div>
-            <div class="crm-staff-revenue">${s.revenue.toLocaleString('ru-RU')} ${currencyLabel}</div>
-          </div>
-        `;
+      const points = staffList.map((s, i) => `${xFor(i)},${yFor(s.revenue)}`).join(" ");
+
+      const gridLines = [topPad, topPad + plotH / 2, topPad + plotH].map(y =>
+        `<line x1="0" y1="${y}" x2="${w}" y2="${y}" stroke="var(--line)" stroke-width="1"/>`
+      ).join("");
+
+      const dots = staffList.map((s, i) => {
+        const x = xFor(i), y = yFor(s.revenue);
+        const color = i === 0 ? 'var(--accent)' : 'var(--faint)';
+        const r = i === 0 ? 5 : 4;
+        return `<circle cx="${x}" cy="${y}" r="${r}" fill="${color}" style="cursor:pointer;" class="crm-staff-dot" data-name="${s.name}" data-revenue="${s.revenue}" data-visits="${s.visits}"/>`;
       }).join("");
+
+      const revenueLabels = staffList.map((s, i) => {
+        const x = xFor(i), y = yFor(s.revenue);
+        const color = i === 0 ? 'var(--accent)' : 'var(--muted)';
+        const weight = i === 0 ? '700' : '400';
+        return `<text x="${x}" y="${y - 8}" text-anchor="middle" font-size="10" font-weight="${weight}" fill="${color}">${s.revenue.toLocaleString('ru-RU')}</text>`;
+      }).join("");
+
+      const nameLabels = staffList.map((s, i) => {
+        const x = xFor(i);
+        return `<text x="${x}" y="${topPad + plotH + bottomPad}" text-anchor="middle" font-size="9" fill="var(--faint)">${s.name}</text>`;
+      }).join("");
+
+      svg.innerHTML = `
+        ${gridLines}
+        <polyline points="${points}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        ${dots}
+        ${revenueLabels}
+        ${nameLabels}
+      `;
+
+      const tooltip = document.getElementById("crmStaffTooltip");
+      svg.querySelectorAll(".crm-staff-dot").forEach(dot => {
+        dot.addEventListener("mouseenter", (e) => {
+          const { name, revenue, visits } = e.target.dataset;
+          tooltip.textContent = `${name}: ${Number(revenue).toLocaleString('ru-RU')} ${currencyLabel} · ${visits} записей`;
+          tooltip.style.display = "block";
+        });
+        dot.addEventListener("mousemove", (e) => {
+          const rect = svg.getBoundingClientRect();
+          const parentRect = svg.parentElement.getBoundingClientRect();
+          const x = e.clientX - parentRect.left;
+          const y = e.clientY - parentRect.top;
+          tooltip.style.left = x + "px";
+          tooltip.style.top = (y - 40) + "px";
+          tooltip.style.transform = "translateX(-50%)";
+        });
+        dot.addEventListener("mouseleave", () => {
+          tooltip.style.display = "none";
+        });
+      });
     }
 
     async function loadCrmDashboard() {
