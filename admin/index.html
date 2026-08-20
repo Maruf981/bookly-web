@@ -2491,11 +2491,10 @@
       allBranches = allBranches.filter(b => b.id !== branchId);
       if (currentBranchId === branchId) {
         currentBranchId = allBranches[0].id;
-
-
         loadClients();
         loadBotInfo();
         loadBusinessSettings();
+        loadStaffAndServiceChips();
         populateCrmFilters().then(loadCrmDashboard);
       }
       renderBranchSwitcher();
@@ -2510,11 +2509,10 @@
       currentBranchId = branchId;
       localStorage.setItem("bookly_current_branch", String(branchId));
       document.getElementById("branchDropdown").style.display = "none";
-
-
       loadClients()
       loadBotInfo();
       loadBusinessSettings();
+      loadStaffAndServiceChips();
       renderBranchSwitcher();
       populateCrmFilters().then(loadCrmDashboard);
     }
@@ -2717,10 +2715,10 @@
       document.getElementById("loginWrap").style.display = "none";
       document.getElementById("dash").style.display = "block";
 
-
       loadClients();
       loadBotInfo();
       loadBusinessSettings();
+      loadStaffAndServiceChips();
       renderBranchSwitcher();
       const crmDates = getCrmDefaultDates();
       document.getElementById("crmDateFrom").value = crmDates.from;
@@ -3722,11 +3720,10 @@
         currentBranchId = savedBranchExists ? savedBranchId : (allBranches.length > 0 ? allBranches[0].id : null);
         document.getElementById("initialLoader").style.display = "none";
         document.getElementById("dash").style.display = "block";
-
-
         loadClients();
         loadBotInfo();
         loadBusinessSettings();
+        loadStaffAndServiceChips();
         renderBranchSwitcher();
         const crmDates = getCrmDefaultDates();
         document.getElementById("crmDateFrom").value = crmDates.from;
