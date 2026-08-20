@@ -3069,11 +3069,12 @@
         return;
       }
 
-      const w = 400, topPad = 30, bottomPad = 20, plotH = 90;
+      const w = 400, sidePad = 28, topPad = 30, bottomPad = 20, plotH = 90;
+      const plotW = w - sidePad * 2;
       const maxRevenue = staffList[0].revenue || 1;
       const n = staffList.length;
-      const stepX = n > 1 ? w / (n - 1) : 0;
-      const xFor = i => n === 1 ? w / 2 : i * stepX;
+      const stepX = n > 1 ? plotW / (n - 1) : 0;
+      const xFor = i => n === 1 ? w / 2 : sidePad + i * stepX;
       const yFor = rev => topPad + (1 - rev / maxRevenue) * plotH;
 
       const points = staffList.map((s, i) => `${xFor(i)},${yFor(s.revenue)}`).join(" ");
