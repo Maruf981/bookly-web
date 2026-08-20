@@ -2085,6 +2085,12 @@
       showToast(`Тариф "${planName}" выбран`);
     });
 
+
+
+    function getMainBranch() {
+      return allBranches.reduce((min, b) => (!min || b.id < min.id) ? b : min, null);
+    }
+
     function renderTrialBadge() {
       const mainBranch = getMainBranch();
       const badgeEl = document.getElementById("trialBadge");
