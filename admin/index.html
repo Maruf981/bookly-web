@@ -1303,11 +1303,31 @@
     }
 
     @media (max-width: 600px) {
+      .profile-card {
+        position: relative;
+      }
+
+      .profile-head {
+        flex-wrap: wrap;
+      }
+
+      .profile-close-btn {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+      }
+
+      .profile-delete-btn {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+        text-align: center;
+      }
+
       .bot-card {
         max-width: 340px;
         margin: 0 auto;
       }
-
       .bot-status-row {
         flex-direction: column;
       }
