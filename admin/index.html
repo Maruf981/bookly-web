@@ -1928,6 +1928,31 @@
 
     <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
+          <div class="two-col-section">
+      <div>
+        <div class="dash-eyebrow" style="margin-top:0; color:var(--accent);">Записи</div>
+        <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Календарь записей</div>
+
+        <div id="bookingsCalendarCard" class="bot-card" style="position:relative;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <button id="calPrevMonth" style="background:none; border:1px solid var(--line); color:var(--muted); width:26px; height:26px; border-radius:4px; cursor:pointer;">‹</button>
+          <div id="calMonthLabel" style="font-family:'Fraunces',serif; font-size:14px; font-weight:700; color:var(--ink);">—</div>
+          <button id="calNextMonth" style="background:none; border:1px solid var(--line); color:var(--muted); width:26px; height:26px; border-radius:4px; cursor:pointer;">›</button>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-bottom:5px;">
+          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ПН</div>
+          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ВТ</div>
+          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">СР</div>
+          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ЧТ</div>
+          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ПТ</div>
+          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">СБ</div>
+          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ВС</div>
+        </div>
+        <div id="calGrid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; position:relative;"></div>
+        <div id="calDayTooltip" style="display:none; position:absolute; background:var(--ink); color:var(--bg); padding:7px 11px; border-radius:4px; font-size:11px; font-weight:600; pointer-events:none; white-space:nowrap; z-index:20; box-shadow:0 6px 16px rgba(0,0,0,0.25);"></div>
+        </div>
+      </div>
+    
       <div id="pricingSection">
         <div class="pricing-mini-head">
           <div class="pricing-mini-eyebrow">Тарифы</div>
@@ -2060,8 +2085,9 @@
             <div class="guarantee-mini-text">14 дней бесплатно на всех тарифах</div>
             <div class="guarantee-mini-sub">Отмена в один клик, без вопросов</div>
           </div>
-        </div>
       </div>
+    </div>
+    </div>
 
     <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
@@ -2528,6 +2554,7 @@
         loadBotInfo();
         loadBusinessSettings();
         loadStaffAndServiceChips();
+        loadCalendarData();
         populateCrmFilters().then(loadCrmDashboard);
       }
       renderBranchSwitcher();
@@ -2546,6 +2573,7 @@
       loadBotInfo();
       loadBusinessSettings();
       loadStaffAndServiceChips();
+      loadCalendarData();
       renderBranchSwitcher();
       populateCrmFilters().then(loadCrmDashboard);
     }
@@ -2752,6 +2780,7 @@
       loadBotInfo();
       loadBusinessSettings();
       loadStaffAndServiceChips();
+      loadCalendarData();
       renderBranchSwitcher();
       const crmDates = getCrmDefaultDates();
       document.getElementById("crmDateFrom").value = crmDates.from;
@@ -3848,6 +3877,122 @@
       loadStaffAndServiceChips();
     });
 
+        let calCurrentYear = new Date().getFullYear();
+    let calCurrentMonth = new Date().getMonth();
+    let calSelectedDate = null;
+    let calBookingsCache = [];
+
+    const CAL_MONTH_NAMES = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+
+    async function loadCalendarData() {
+      const monthStart = new Date(calCurrentYear, calCurrentMonth, 1);
+      const monthEnd = new Date(calCurrentYear, calCurrentMonth + 1, 0);
+      const fmt = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+
+      const { data } = await sb.from('bookings').select('*')
+        .eq('branch_id', currentBranchId)
+        .gte('booking_date', fmt(monthStart))
+        .lte('booking_date', fmt(monthEnd))
+        .neq('status', 'cancelled');
+
+      calBookingsCache = data || [];
+      renderCalendarGrid();
+    }
+
+    function renderCalendarGrid() {
+      document.getElementById("calMonthLabel").textContent = `${CAL_MONTH_NAMES[calCurrentMonth]} ${calCurrentYear}`;
+
+      const firstDay = new Date(calCurrentYear, calCurrentMonth, 1);
+      let startOffset = firstDay.getDay() - 1;
+      if (startOffset < 0) startOffset = 6;
+
+      const daysInMonth = new Date(calCurrentYear, calCurrentMonth + 1, 0).getDate();
+
+      const countsByDay = {};
+      calBookingsCache.forEach(b => {
+        if (!b.booking_date) return;
+        const day = Number(b.booking_date.split('-')[2]);
+        countsByDay[day] = (countsByDay[day] || 0) + 1;
+      });
+
+      const today = new Date();
+      const isCurrentMonth = today.getFullYear() === calCurrentYear && today.getMonth() === calCurrentMonth;
+
+      let html = '';
+      for (let i = 0; i < startOffset; i++) {
+        html += `<div style="opacity:0.3;"></div>`;
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const count = countsByDay[day] || 0;
+        const isToday = isCurrentMonth && today.getDate() === day;
+        const isSelected = calSelectedDate === day;
+
+        if (isToday) {
+          html += `<div class="cal-day" data-day="${day}" data-count="${count}" style="height:31px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:4px; background:var(--accent); cursor:pointer;">
+            <span style="font-size:10.5px; color:#fff; font-weight:700;">${day}</span>
+          </div>`;
+        } else {
+          let dots = '';
+          const dotCount = Math.min(count, 3);
+          for (let i = 0; i < dotCount; i++) {
+            dots += `<div style="width:3px; height:3px; border-radius:50%; background:var(--accent);"></div>`;
+          }
+          html += `<div class="cal-day" data-day="${day}" data-count="${count}" style="height:31px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:4px; background:var(--surface-2); cursor:pointer;">
+            <span style="font-size:10.5px; color:var(--ink);">${day}</span>
+            <div style="display:flex; gap:2px; margin-top:1px;">${dots}</div>
+          </div>`;
+        }
+      }
+
+      document.getElementById("calGrid").innerHTML = html;
+
+      const tooltip = document.getElementById("calDayTooltip");
+      document.querySelectorAll(".cal-day").forEach(cell => {
+        cell.addEventListener("mouseenter", async (e) => {
+          const day = Number(cell.dataset.day);
+          const count = Number(cell.dataset.count);
+          if (count === 0) {
+            tooltip.textContent = `${day} ${CAL_MONTH_NAMES[calCurrentMonth]} — нет записей`;
+          } else {
+            const dateStr = `${calCurrentYear}-${String(calCurrentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            const dayBookings = calBookingsCache.filter(b => b.booking_date === dateStr);
+            const revenue = dayBookings.reduce((sum, b) => sum + (Number(b.price) || 0), 0);
+            tooltip.textContent = `${day} ${CAL_MONTH_NAMES[calCurrentMonth]} — ${count} записей, ${revenue.toLocaleString('ru-RU')}`;
+          }
+          tooltip.style.display = "block";
+        });
+        cell.addEventListener("mousemove", (e) => {
+          const parentRect = cell.closest("#bookingsCalendarCard").getBoundingClientRect();
+          const x = e.clientX - parentRect.left;
+          const y = e.clientY - parentRect.top;
+          tooltip.style.left = x + "px";
+          tooltip.style.top = (y - 36) + "px";
+          tooltip.style.transform = "translateX(-50%)";
+        });
+        cell.addEventListener("mouseleave", () => {
+          tooltip.style.display = "none";
+        });
+      });
+    }
+
+
+    document.getElementById("calPrevMonth").addEventListener("click", () => {
+      calCurrentMonth -= 1;
+      if (calCurrentMonth < 0) { calCurrentMonth = 11; calCurrentYear -= 1; }
+      calSelectedDate = null;
+      document.getElementById("calDayDetails").style.display = "none";
+      loadCalendarData();
+    });
+
+    document.getElementById("calNextMonth").addEventListener("click", () => {
+      calCurrentMonth += 1;
+      if (calCurrentMonth > 11) { calCurrentMonth = 0; calCurrentYear += 1; }
+      calSelectedDate = null;
+      document.getElementById("calDayDetails").style.display = "none";
+      loadCalendarData();
+    });
+
     document.getElementById("btnSetNewPassword").addEventListener("click", async () => {
       const newPassword = document.getElementById("newPasswordInput").value;
       const errorBox = document.getElementById("newPasswordError");
@@ -3902,6 +4047,7 @@
         loadBotInfo();
         loadBusinessSettings();
         loadStaffAndServiceChips();
+        loadCalendarData();
         renderBranchSwitcher();
         const crmDates = getCrmDefaultDates();
         document.getElementById("crmDateFrom").value = crmDates.from;
