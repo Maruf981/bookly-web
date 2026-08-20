@@ -1804,43 +1804,30 @@
 
     <div class="bot-section">
       <div class="bot-card">
-        <div class="bot-card-label">Ваш Telegram-бот</div>
+        <div class="bot-card-label" style="color:var(--accent);">Ваш Telegram-бот</div>
         <div id="botStatusView"></div>
-      </div>
-      <div class="bot-card-decoration">
-        <svg viewBox="0 0 260 140" width="100%" height="100%" style="overflow:visible;">
-          <line class="net-line-deco lit" x1="130" y1="70" x2="40" y2="20" stroke="var(--line)" stroke-width="1" />
-          <line class="net-line-deco lit" x1="130" y1="70" x2="220" y2="15" stroke="var(--accent)" stroke-opacity="0.4"
-            stroke-width="1" />
-          <line class="net-line-deco" x1="130" y1="70" x2="30" y2="115" stroke="var(--line)" stroke-width="1" />
-          <line class="net-line-deco lit" x1="130" y1="70" x2="215" y2="120" stroke="var(--accent)" stroke-opacity="0.4"
-            stroke-width="1" />
-          <circle cx="130" cy="70" r="5" fill="var(--accent)" class="pulse-deco d1" />
-          <circle cx="40" cy="20" r="3" fill="var(--faint)" class="pulse-deco d2" />
-          <circle cx="220" cy="15" r="3" fill="var(--accent)" class="pulse-deco d3" />
-          <circle cx="30" cy="115" r="3" fill="var(--faint)" class="pulse-deco d4" />
-          <circle cx="215" cy="120" r="3" fill="var(--accent)" class="pulse-deco d1" />
-        </svg>
       </div>
     </div>
 
-    <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
-
-    <div class="two-col-section">
-      <div>
-        <div class="dash-eyebrow" style="margin-top:0;">Услуги</div>
-        <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши услуги</div>
-
-        <div id="businessSettingsCollapsed"
-          style="background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px; margin-bottom: 16px; display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <div id="bsName" style="font-size:13px; font-weight:700; color:var(--ink);">—</div>
-            <div id="bsSummary" style="font-size:11px; color:var(--faint); margin-top:2px;">—</div>
-          </div>
-          <button id="btnOpenBusinessSettings" class="btn-cancel">Настройки</button>
+     <div class="bot-card" style="margin-top:16px; max-width:350px;">
+      <div class="bot-card-label" style="color:var(--accent);">Настройки бизнеса</div>
+            <div id="businessSettingsCollapsed"
+        style="background: transparent; padding: 0; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div id="bsName" style="font-size:13px; font-weight:700; color:var(--ink);">—</div>
+          <div id="bsSummary" style="font-size:11px; color:var(--faint); margin-top:2px;">—</div>
         </div>
+        <button id="btnOpenBusinessSettings" class="btn-cancel" style="align-self:flex-end; margin-top:10px; border-color:var(--accent); color:var(--accent);">Настройки</button>
+      </div>
 
-        <div id="businessSettingsExpanded" class="form-card" style="display:none;">
+       <div class="guide-overlay" id="businessSettingsOverlay">
+        <div class="guide-modal" style="max-width:420px;">
+          <div class="guide-header">
+            <div class="dash-eyebrow">Настройки бизнеса</div>
+            <div class="dash-title" style="font-size:18px;">Изменить параметры</div>
+            <button class="guide-close" id="bsOverlayClose">✕</button>
+          </div>
+
           <div class="input-group">
             <label>Название бизнеса</label>
             <input type="text" id="bsNameInput" placeholder="Например, СТРОП" />
@@ -1923,6 +1910,9 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
       <div id="pricingSection">
         <div class="pricing-mini-head">
@@ -2059,8 +2049,6 @@
         </div>
       </div>
 
-    </div>
-
     <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
 
@@ -2070,29 +2058,29 @@
 
       <div class="crm-filters-row">
         <div class="crm-filter-group">
-          <span class="crm-filter-label">С даты</span>
-          <input type="date" class="crm-filter-input" id="crmDateFrom">
+        <span class="crm-filter-label" style="color:var(--accent);">С даты</span>
+        <input type="date" class="crm-filter-input" id="crmDateFrom">
         </div>
         <div class="crm-filter-group">
-          <span class="crm-filter-label">По дату</span>
+        <span class="crm-filter-label" style="color:var(--accent);">По дату</span>
           <input type="date" class="crm-filter-input" id="crmDateTo">
         </div>
         <div class="crm-filter-sep"></div>
         <div class="crm-filter-group">
-          <span class="crm-filter-label">Сотрудник</span>
+          <span class="crm-filter-label" style="color:var(--accent);">Сотрудник</span>
           <select class="crm-filter-select" id="crmMasterFilter">
             <option value="">Все</option>
           </select>
         </div>
         <div class="crm-filter-group">
-          <span class="crm-filter-label">Услуга</span>
+          <span class="crm-filter-label" style="color:var(--accent);">Услуга</span>
           <select class="crm-filter-select" id="crmServiceFilter">
             <option value="">Все</option>
           </select>
         </div>
         <div class="crm-filter-sep"></div>
         <div class="crm-filter-group" style="position:relative; z-index:10;">
-          <span class="crm-filter-label">Список сотрудников</span>
+          <span class="crm-filter-label" style="color:var(--accent);">Список сотрудников</span>
           <div style="display:flex; gap:6px;">
             <button class="chip-list-btn" id="btnStaffDropdown">Открыть список <span
                 style="color:var(--faint); font-size:9px;">▾</span></button>
@@ -2102,7 +2090,7 @@
         </div>
 
         <div class="crm-filter-group" style="position:relative; z-index:10;">
-          <span class="crm-filter-label">Список услуг</span>
+          <span class="crm-filter-label" style="color:var(--accent);">Список услуг</span>
           <div style="display:flex; gap:6px;">
             <button class="chip-list-btn" id="btnServiceDropdown">Открыть список <span
                 style="color:var(--faint); font-size:9px;">▾</span></button>
@@ -2869,13 +2857,15 @@
     }
 
     document.getElementById("btnOpenBusinessSettings").addEventListener("click", () => {
-      document.getElementById("businessSettingsCollapsed").style.display = "none";
-      document.getElementById("businessSettingsExpanded").style.display = "block";
+      document.getElementById("businessSettingsOverlay").classList.add("show");
     });
 
     document.getElementById("btnCancelBusinessSettings").addEventListener("click", () => {
-      document.getElementById("businessSettingsExpanded").style.display = "none";
-      document.getElementById("businessSettingsCollapsed").style.display = "flex";
+      document.getElementById("businessSettingsOverlay").classList.remove("show");
+    });
+
+    document.getElementById("bsOverlayClose").addEventListener("click", () => {
+      document.getElementById("businessSettingsOverlay").classList.remove("show");
     });
 
     document.getElementById("btnSaveBusinessSettings").addEventListener("click", async () => {
@@ -2895,8 +2885,7 @@
       if (error) { showToast("Ошибка: " + error.message); return; }
 
       showToast("Сохранено");
-      document.getElementById("businessSettingsExpanded").style.display = "none";
-      document.getElementById("businessSettingsCollapsed").style.display = "flex";
+      document.getElementById("businessSettingsOverlay").classList.remove("show");
       loadBusinessSettings();
     });
 
@@ -3919,7 +3908,6 @@
         });
       });
     }
-
 
   </script>
 
