@@ -220,6 +220,130 @@
       background: var(--surface);
     }
 
+    .chip-list-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 12.5px;
+      color: var(--ink);
+      background: var(--surface-2);
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .chip-list-btn:hover {
+      border-color: var(--accent);
+    }
+
+    .chip-add-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      background: transparent;
+      font-size: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .chip-add-btn:hover {
+      background: var(--accent-soft);
+    }
+
+    .chip-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      min-width: 220px;
+      max-height: 260px;
+      overflow-y: auto;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      box-shadow: 0 8px 24px rgba(28, 27, 31, 0.18);
+      z-index: 30;
+      padding: 4px;
+    }
+
+    .chip-dropdown.show {
+      display: block;
+    }
+
+    .chip-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 9px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12.5px;
+      color: var(--ink);
+    }
+
+    .chip-dropdown-item:hover {
+      background: var(--accent-soft);
+    }
+
+    .chip-dropdown-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .card-stat {
+      background: var(--surface-2);
+      border-radius: 4px;
+      padding: 9px 11px;
+    }
+
+    .card-stat-label {
+      font-size: 9px;
+      color: var(--faint);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .card-stat-value {
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .card-recent-item {
+      display: flex;
+      justify-content: space-between;
+      background: var(--surface-2);
+      border-radius: 4px;
+      padding: 7px 10px;
+      font-size: 11.5px;
+      margin-bottom: 6px;
+    }
+
     .btn-primary {
       width: 100%;
       padding: 12px;
@@ -421,86 +545,13 @@
     }
 
 
-    .ledger {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .ledger-head {
-      display: grid;
-      grid-template-columns: 1fr 90px 80px 70px;
-      gap: 10px;
-      padding: 12px 16px;
-      font-size: 10px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--faint);
-      font-weight: 700;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 90px 80px 70px;
-      gap: 10px;
-      align-items: center;
-      padding: 13px 16px;
-      border-bottom: 1px solid var(--line);
-      font-size: 14px;
-    }
-
-    .row:last-child {
-      border-bottom: none;
-    }
-
     .row-name {
       font-weight: 600;
     }
 
-    .row-duration {
-      color: var(--muted);
-      font-size: 12px;
-    }
 
-    .row-price {
-      font-family: 'Fraunces', serif;
-      font-weight: 700;
-      color: var(--accent);
-    }
 
-    .row-actions {
-      display: flex;
-      gap: 6px;
-      justify-content: flex-end;
-    }
 
-    .icon-btn {
-      width: 26px;
-      height: 26px;
-      border-radius: 4px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      cursor: pointer;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-    }
-
-    .icon-btn.danger:hover {
-      background: var(--danger-soft);
-      color: var(--danger);
-      border-color: var(--danger);
-    }
-
-    .icon-btn.edit:hover {
-      background: var(--accent-soft);
-      color: var(--accent);
-      border-color: var(--accent);
-    }
 
     .empty-state {
       padding: 48px 24px;
@@ -528,26 +579,10 @@
       line-height: 1.5;
     }
 
-    .add-bar {
-      margin-top: 14px;
-    }
 
-    .btn-add {
-      width: 100%;
-      padding: 12px;
-      border: 1.5px dashed var(--line);
-      background: transparent;
-      color: var(--muted);
-      border-radius: 4px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
 
-    .btn-add:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+
+
 
     .form-card {
       background: var(--surface);
@@ -1158,7 +1193,7 @@
       background: var(--danger-soft);
     }
 
-     .profile-close-btn {
+    .profile-close-btn {
       background: none;
       border: 1px solid var(--line);
       color: var(--faint);
@@ -1169,6 +1204,7 @@
       cursor: pointer;
       flex-shrink: 0;
     }
+
     .profile-close-btn:hover {
       border-color: var(--accent);
       color: var(--accent);
@@ -1281,47 +1317,289 @@
       cursor: pointer;
     }
 
-        /* ---------- Compact pricing (copied from landing) ---------- */
-    .pricing-mini-head { margin-bottom: 16px; }
-    .pricing-mini-eyebrow { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); font-weight: 800; margin-bottom: 6px; }
-    .pricing-mini-title { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 4px; }
-    .pricing-mini-sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
-    .billing-toggle-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-    .billing-label { font-size: 11.5px; font-weight: 600; color: var(--faint); cursor: pointer; }
-    .billing-label.active { color: var(--ink); }
-    .billing-toggle { width: 34px; height: 18px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; position: relative; }
-    .billing-toggle-dot { position: absolute; top: 1px; left: 1px; width: 14px; height: 14px; border-radius: 2px; background: var(--accent); transition: transform .3s ease; }
-    .billing-toggle.yearly .billing-toggle-dot { transform: translateX(16px); }
-    .billing-save { font-size: 9px; font-weight: 700; color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent); padding: 2px 6px; border-radius: 3px; }
-    .pricing-mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
-    .price-mini-card { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 14px 12px; display: flex; flex-direction: column; transition: transform .2s ease, border-color .2s ease; }
-    .price-mini-card:hover { transform: translateY(-3px); border-color: var(--accent); }
-    .price-mini-card.featured { border: 1.5px solid var(--accent); background: linear-gradient(170deg, var(--accent-soft) 0%, var(--surface) 40%); position: relative; }
-    .price-mini-ribbon { position: absolute; top: 7px; right: -18px; background: var(--accent); color: #fff; font-size: 7.5px; font-weight: 800; padding: 2px 18px; transform: rotate(45deg); }
-    .price-mini-icon { width: 22px; height: 22px; border-radius: 3px; background: var(--surface-2); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; color: var(--accent); margin-bottom: 6px; }
-    .price-mini-icon svg { width: 11px; height: 11px; }
-    .icon-featured { background: var(--accent); color: #fff; }
-    .price-mini-name { font-family: 'Fraunces', serif; font-size: 13px; font-weight: 700; }
-    .price-mini-desc { font-size: 9px; color: var(--faint); margin-bottom: 6px; }
-    .price-mini-amount { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: baseline; gap: 1px; }
-    .price-mini-currency { font-size: 11px; color: var(--faint); }
-    .price-mini-suffix { font-family: 'Inter', sans-serif; font-size: 9px; color: var(--faint); font-weight: 500; margin-left: 1px; }
-    .price-mini-yearly-badge { font-size: 9px; color: var(--accent); margin-left: 6px; }
-    .price-mini-features { list-style: none; display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px; flex: 1; }
-    .price-mini-features li { display: flex; align-items: center; gap: 4px; font-size: 9px; color: var(--muted); }
-    .price-mini-features li svg { width: 9px; height: 9px; flex-shrink: 0; color: var(--green); }
-    .price-mini-features li.feature-disabled { opacity: 0.4; text-decoration: line-through; }
-    .price-mini-features li.feature-disabled svg { color: var(--faint); }
-    .price-mini-btn { text-align: center; padding: 6px; border-radius: 3px; font-size: 10px; font-weight: 700; border: 1px solid var(--line); color: var(--ink); text-decoration: none; display: block; }
-    .price-mini-card.featured .price-mini-btn { background: linear-gradient(135deg, var(--accent), var(--accent-2, var(--accent))); color: #fff; border: none; }
-    .price-mini-note { text-align: center; font-size: 8.5px; color: var(--faint); margin-top: 4px; }
-    .pricing-mini-guarantee { display: flex; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px solid var(--line); }
-    .guarantee-mini-icon { width: 24px; height: 24px; border-radius: 50%; background: var(--accent-soft); display: flex; align-items: center; justify-content: center; color: var(--accent); flex-shrink: 0; }
-    .guarantee-mini-icon svg { width: 12px; height: 12px; }
-    .guarantee-mini-text { font-size: 11px; font-weight: 600; }
-    .guarantee-mini-sub { font-size: 9.5px; font-weight: 400; color: var(--faint); }
+    /* ---------- Compact pricing (copied from landing) ---------- */
+    .pricing-mini-head {
+      margin-bottom: 16px;
+    }
+
+    .pricing-mini-eyebrow {
+      font-size: 11px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .pricing-mini-title {
+      font-family: 'Fraunces', serif;
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin-bottom: 4px;
+    }
+
+    .pricing-mini-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .billing-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .billing-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--faint);
+      cursor: pointer;
+    }
+
+    .billing-label.active {
+      color: var(--ink);
+    }
+
+    .billing-toggle {
+      width: 34px;
+      height: 18px;
+      border-radius: 3px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .billing-toggle-dot {
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      background: var(--accent);
+      transition: transform .3s ease;
+    }
+
+    .billing-toggle.yearly .billing-toggle-dot {
+      transform: translateX(16px);
+    }
+
+    .billing-save {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    .pricing-mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .price-mini-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .price-mini-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+    }
+
+    .price-mini-card.featured {
+      border: 1.5px solid var(--accent);
+      background: linear-gradient(170deg, var(--accent-soft) 0%, var(--surface) 40%);
+      position: relative;
+    }
+
+    .price-mini-ribbon {
+      position: absolute;
+      top: 7px;
+      right: -18px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 7.5px;
+      font-weight: 800;
+      padding: 2px 18px;
+      transform: rotate(45deg);
+    }
+
+    .price-mini-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 3px;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .price-mini-icon svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    .icon-featured {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .price-mini-name {
+      font-family: 'Fraunces', serif;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .price-mini-desc {
+      font-size: 9px;
+      color: var(--faint);
+      margin-bottom: 6px;
+    }
+
+    .price-mini-amount {
+      font-family: 'Fraunces', serif;
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: baseline;
+      gap: 1px;
+    }
+
+    .price-mini-currency {
+      font-size: 11px;
+      color: var(--faint);
+    }
+
+    .price-mini-suffix {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      color: var(--faint);
+      font-weight: 500;
+      margin-left: 1px;
+    }
+
+    .price-mini-yearly-badge {
+      font-size: 9px;
+      color: var(--accent);
+      margin-left: 6px;
+    }
+
+    .price-mini-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-bottom: 8px;
+      flex: 1;
+    }
+
+    .price-mini-features li {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      color: var(--muted);
+    }
+
+    .price-mini-features li svg {
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+      color: var(--green);
+    }
+
+    .price-mini-features li.feature-disabled {
+      opacity: 0.4;
+      text-decoration: line-through;
+    }
+
+    .price-mini-features li.feature-disabled svg {
+      color: var(--faint);
+    }
+
+    .price-mini-btn {
+      text-align: center;
+      padding: 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      text-decoration: none;
+      display: block;
+    }
+
+    .price-mini-card.featured .price-mini-btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2, var(--accent)));
+      color: #fff;
+      border: none;
+    }
+
+    .price-mini-note {
+      text-align: center;
+      font-size: 8.5px;
+      color: var(--faint);
+      margin-top: 4px;
+    }
+
+    .pricing-mini-guarantee {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .guarantee-mini-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .guarantee-mini-icon svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .guarantee-mini-text {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .guarantee-mini-sub {
+      font-size: 9.5px;
+      font-weight: 400;
+      color: var(--faint);
+    }
+
     @media (max-width: 900px) {
-      .pricing-mini-grid { grid-template-columns: 1fr; }
+      .pricing-mini-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 900px) {
@@ -1364,6 +1642,7 @@
         max-width: 340px;
         margin: 0 auto;
       }
+
       .bot-status-row {
         flex-direction: column;
       }
@@ -1372,25 +1651,12 @@
         margin-top: 14px;
       }
 
-      .ledger-head,
-      .row {
-        grid-template-columns: 1.2fr 60px 55px 45px;
-        gap: 6px;
-        padding: 10px 12px;
-        font-size: 12px;
-      }
-
       .row-name {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
 
-      .icon-btn {
-        width: 22px;
-        height: 22px;
-        font-size: 11px;
-      }
     }
   </style>
 </head>
@@ -1648,42 +1914,6 @@
             <button class="btn-cancel" id="btnCancelBusinessSettings">Отмена</button>
           </div>
         </div>
-
-        <div class="ledger">
-          <div class="ledger-head">
-            <div>Услуга</div>
-            <div>Время</div>
-            <div>Цена</div>
-            <div></div>
-          </div>
-          <div id="rows"></div>
-        </div>
-
-        <div class="add-bar">
-          <button class="btn-add" id="btnShowAdd">+ Добавить услугу</button>
-        </div>
-
-        <div class="form-card" id="formCard">
-          <div class="input-group">
-            <label>Название услуги</label>
-            <input type="text" id="fName" placeholder="Например, Стрижка машинкой" />
-          </div>
-          <div class="form-grid">
-            <div class="input-group">
-              <label>Длительность</label>
-              <input type="text" id="fDuration" placeholder="25 мин" />
-            </div>
-            <div class="input-group">
-              <label>Цена</label>
-              <input type="number" id="fPrice" placeholder="60" />
-            </div>
-            <input type="hidden" id="fId" />
-          </div>
-          <div class="form-actions">
-            <button class="btn-save" id="btnSave">Сохранить</button>
-            <button class="btn-cancel" id="btnCancelForm">Отмена</button>
-          </div>
-        </div>
       </div>
 
       <div id="pricingSection">
@@ -1717,11 +1947,21 @@
               <span class="price-mini-suffix">/мес</span>
             </div>
             <ul class="price-mini-features">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>1 сотрудник</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>До 50 записей/мес</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>Уведомления в Telegram</span></li>
-              <li class="feature-disabled"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l8 8M12 4l-8 8" /></svg><span>Напоминания клиентам</span></li>
-              <li class="feature-disabled"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l8 8M12 4l-8 8" /></svg><span>Статистика</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>1 сотрудник</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>До 50 записей/мес</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>Уведомления в Telegram</span></li>
+              <li class="feature-disabled"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4l8 8M12 4l-8 8" />
+                </svg><span>Напоминания клиентам</span></li>
+              <li class="feature-disabled"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4l8 8M12 4l-8 8" />
+                </svg><span>Статистика</span></li>
             </ul>
             <a href="#" class="price-mini-btn">Начать бесплатно</a>
           </div>
@@ -1742,11 +1982,21 @@
               <span class="price-mini-yearly-badge" style="display:none;">$144/год</span>
             </div>
             <ul class="price-mini-features">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>До 5 сотрудников</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>Безлимитные записи</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>Напоминания клиентам</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>Перенос и отмена</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>Статистика и отчёты</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>До 5 сотрудников</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>Безлимитные записи</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>Напоминания клиентам</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>Перенос и отмена</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>Статистика и отчёты</span></li>
             </ul>
             <a href="#" class="price-mini-btn">Попробовать 14 дней</a>
             <div class="price-mini-note">Без банковской карты</div>
@@ -1767,11 +2017,21 @@
               <span class="price-mini-yearly-badge" style="display:none;">$288/год</span>
             </div>
             <ul class="price-mini-features">
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>Безлимит сотрудников</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>Несколько филиалов</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>Кастомные сценарии</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>CRM интеграция</span></li>
-              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l3.5 3.5L13 5" /></svg><span>API доступ</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>Безлимит сотрудников</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>Несколько филиалов</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>Кастомные сценарии</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>CRM интеграция</span></li>
+              <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l3.5 3.5L13 5" />
+                </svg><span>API доступ</span></li>
             </ul>
             <a href="#" class="price-mini-btn">Связаться с нами</a>
           </div>
@@ -1795,26 +2055,6 @@
 
     <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
-    <div>
-      <div class="dash-eyebrow" style="margin-top:28px;">Сотрудники</div>
-      <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши сотрудники</div>
-
-      <div class="ledger">
-        <div class="ledger-head">
-          <div>Имя</div>
-          <div>Роль</div>
-          <div>Инициалы</div>
-          <div></div>
-        </div>
-        <div id="masterRows"></div>
-      </div>
-
-      <div class="add-bar">
-        <button class="btn-add" id="btnShowAddMaster">+ Добавить сотрудника</button>
-      </div>
-    </div>
-
-    <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
     <div id="crmSection">
       <div class="dash-eyebrow" style="margin-top:28px;">CRM</div>
@@ -1842,88 +2082,137 @@
             <option value="">Все</option>
           </select>
         </div>
-      </div>
-
-      <div class="crm-kpi-grid" id="crmKpiGrid">
-        <div class="crm-kpi-card c1">
-          <div class="crm-kpi-label">Всего записей</div>
-          <div class="crm-kpi-value" id="crmKpiTotal">—</div>
-          <div class="crm-kpi-trend" id="crmKpiTotalTrend">—</div>
-        </div>
-        <div class="crm-kpi-card c2">
-          <div class="crm-kpi-label">Выручка</div>
-          <div class="crm-kpi-value" id="crmKpiRevenue">—</div>
-          <div class="crm-kpi-trend" id="crmKpiRevenueTrend">—</div>
-        </div>
-        <div class="crm-kpi-card c3">
-          <div class="crm-kpi-label">Средний чек</div>
-          <div class="crm-kpi-value" id="crmKpiAvg">—</div>
-          <div class="crm-kpi-trend" id="crmKpiAvgTrend">—</div>
-        </div>
-        <div class="crm-kpi-card c4">
-          <div class="crm-kpi-label">Отменено</div>
-          <div class="crm-kpi-value" id="crmKpiCancelled">—</div>
-          <div class="crm-kpi-trend" id="crmKpiCancelledTrend">—</div>
-        </div>
-      </div>
-
-      <div class="crm-charts-row">
-        <div class="crm-chart-card">
-          <div class="crm-chart-title">Записи по неделям</div>
-          <svg viewBox="0 0 320 120" width="100%" height="120" id="crmLineChart"></svg>
-        </div>
-        <div class="crm-chart-card">
-          <div class="crm-chart-title">Популярные услуги</div>
-          <div class="crm-donut-wrap">
-            <svg viewBox="0 0 42 42" width="100" height="100" id="crmServicesDonut"></svg>
-            <div class="crm-donut-legend" id="crmServicesLegend"></div>
+        <div class="crm-filter-sep"></div>
+        <div class="crm-filter-group" style="position:relative;">
+          <span class="crm-filter-label">Список сотрудников</span>
+          <div style="display:flex; gap:6px;">
+            <button class="chip-list-btn" id="btnStaffDropdown">Открыть список <span
+                style="color:var(--faint); font-size:9px;">▾</span></button>
+            <button class="chip-add-btn" id="btnAddStaffChip">+</button>
           </div>
+          <div class="chip-dropdown" id="staffDropdown"></div>
         </div>
-        <div class="crm-chart-card">
-          <div class="crm-chart-title">Статусы записей</div>
-          <div class="crm-donut-wrap">
-            <svg viewBox="0 0 42 42" width="100" height="100" id="crmStatusDonut"></svg>
-            <div class="crm-donut-legend" id="crmStatusLegend"></div>
-          </div>
-        </div>
-      </div>
 
-      <div class="crm-staff-rank-card">
-        <div class="crm-chart-title">Рейтинг сотрудников</div>
-        <div id="crmStaffRank"></div>
+        <div class="crm-filter-group" style="position:relative;">
+          <span class="crm-filter-label">Список услуг</span>
+          <div style="display:flex; gap:6px;">
+            <button class="chip-list-btn" id="btnServiceDropdown">Открыть список <span
+                style="color:var(--faint); font-size:9px;">▾</span></button>
+            <button class="chip-add-btn" id="btnAddServiceChip">+</button>
+          </div>
+          <div class="chip-dropdown" id="serviceDropdown"></div>
+        </div>
       </div>
     </div>
 
-    <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
-    <div id="clientsSection">
-      <div class="dash-eyebrow" style="margin-top:28px;">Клиенты</div>
-      <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши клиенты</div>
-      <div class="client-list" id="clientListRows"></div>
-      <div id="clientProfileCard"></div>
+
+    <div class="crm-kpi-grid" id="crmKpiGrid">
+      <div class="crm-kpi-card c1">
+        <div class="crm-kpi-label">Всего записей</div>
+        <div class="crm-kpi-value" id="crmKpiTotal">—</div>
+        <div class="crm-kpi-trend" id="crmKpiTotalTrend">—</div>
+      </div>
+      <div class="crm-kpi-card c2">
+        <div class="crm-kpi-label">Выручка</div>
+        <div class="crm-kpi-value" id="crmKpiRevenue">—</div>
+        <div class="crm-kpi-trend" id="crmKpiRevenueTrend">—</div>
+      </div>
+      <div class="crm-kpi-card c3">
+        <div class="crm-kpi-label">Средний чек</div>
+        <div class="crm-kpi-value" id="crmKpiAvg">—</div>
+        <div class="crm-kpi-trend" id="crmKpiAvgTrend">—</div>
+      </div>
+      <div class="crm-kpi-card c4">
+        <div class="crm-kpi-label">Отменено</div>
+        <div class="crm-kpi-value" id="crmKpiCancelled">—</div>
+        <div class="crm-kpi-trend" id="crmKpiCancelledTrend">—</div>
+      </div>
     </div>
 
-    <div class="form-card" id="masterFormCard">
-      <div class="input-group">
-        <label>Имя сотрудника</label>
-        <input type="text" id="mfName" placeholder="Например, Артур" />
+    <div class="crm-charts-row">
+      <div class="crm-chart-card">
+        <div class="crm-chart-title">Записи по неделям</div>
+        <svg viewBox="0 0 320 120" width="100%" height="120" id="crmLineChart"></svg>
       </div>
-      <div class="form-grid">
-        <div class="input-group">
-          <label>Роль</label>
-          <input type="text" id="mfRole" placeholder="Барбер" />
+      <div class="crm-chart-card">
+        <div class="crm-chart-title">Популярные услуги</div>
+        <div class="crm-donut-wrap">
+          <svg viewBox="0 0 42 42" width="100" height="100" id="crmServicesDonut"></svg>
+          <div class="crm-donut-legend" id="crmServicesLegend"></div>
         </div>
-        <div class="input-group">
-          <label>Инициалы</label>
-          <input type="text" id="mfInitials" placeholder="АР" maxlength="2" />
-        </div>
-        <input type="hidden" id="mfId" />
       </div>
+      <div class="crm-chart-card">
+        <div class="crm-chart-title">Статусы записей</div>
+        <div class="crm-donut-wrap">
+          <svg viewBox="0 0 42 42" width="100" height="100" id="crmStatusDonut"></svg>
+          <div class="crm-donut-legend" id="crmStatusLegend"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="crm-staff-rank-card">
+      <div class="crm-chart-title">Рейтинг сотрудников</div>
+      <div id="crmStaffRank"></div>
+    </div>
+  </div>
+
+  <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
+
+  <div id="clientsSection">
+    <div class="dash-eyebrow" style="margin-top:28px;">Клиенты</div>
+    <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши клиенты</div>
+    <div class="client-list" id="clientListRows"></div>
+    <div id="clientProfileCard"></div>
+  </div>
+
+  <div class="guide-overlay" id="staffCardOverlay">
+    <div class="guide-modal" id="staffCardModal" style="max-width:380px;"></div>
+  </div>
+
+  <div class="guide-overlay" id="serviceCardOverlay">
+    <div class="guide-modal" id="serviceCardModal" style="max-width:380px;"></div>
+  </div>
+
+  <div class="guide-overlay" id="addStaffOverlay">
+    <div class="guide-modal" style="max-width:360px;">
+      <div class="guide-header">
+        <div class="dash-eyebrow">Новый сотрудник</div>
+        <div class="dash-title" style="font-size:18px;">Добавить сотрудника</div>
+        <button class="guide-close" id="addStaffClose">✕</button>
+      </div>
+      <div class="input-group"><label>Имя</label><input type="text" id="addStaffName" placeholder="Например, Артур" />
+      </div>
+      <div class="input-group"><label>Роль</label><input type="text" id="addStaffRole" placeholder="Барбер" /></div>
+      <div class="input-group"><label>Инициалы</label><input type="text" id="addStaffInitials" placeholder="АР"
+          maxlength="2" /></div>
+      <div class="input-group"><label>Телефон</label><input type="text" id="addStaffPhone"
+          placeholder="+992 000 00 00 00" /></div>
       <div class="form-actions">
-        <button class="btn-save" id="btnSaveMaster">Сохранить</button>
-        <button class="btn-cancel" id="btnCancelMasterForm">Отмена</button>
+        <button class="btn-save" id="btnConfirmAddStaff">Создать</button>
+        <button class="btn-cancel" id="btnCancelAddStaff">Отмена</button>
       </div>
     </div>
+  </div>
+
+  <div class="guide-overlay" id="addServiceOverlay">
+    <div class="guide-modal" style="max-width:360px;">
+      <div class="guide-header">
+        <div class="dash-eyebrow">Новая услуга</div>
+        <div class="dash-title" style="font-size:18px;">Добавить услугу</div>
+        <button class="guide-close" id="addServiceClose">✕</button>
+      </div>
+      <div class="input-group"><label>Название</label><input type="text" id="addServiceName"
+          placeholder="Стрижка машинкой" /></div>
+      <div class="input-group"><label>Длительность</label><input type="text" id="addServiceDuration"
+          placeholder="25 мин" /></div>
+      <div class="input-group"><label>Цена</label><input type="number" id="addServicePrice" placeholder="60" /></div>
+      <div class="form-actions">
+        <button class="btn-save" id="btnConfirmAddService">Создать</button>
+        <button class="btn-cancel" id="btnCancelAddService">Отмена</button>
+      </div>
+    </div>
+  </div>
 
   </div>
 
@@ -2121,30 +2410,30 @@
       renderTrialBadge();
 
 
-          // Переключатель тарифов
-    (function () {
-      const toggle = document.getElementById('billingToggle');
-      const labelMonthly = document.getElementById('labelMonthly');
-      const labelYearly = document.getElementById('labelYearly');
-      if (!toggle) return;
+      // Переключатель тарифов
+      (function () {
+        const toggle = document.getElementById('billingToggle');
+        const labelMonthly = document.getElementById('labelMonthly');
+        const labelYearly = document.getElementById('labelYearly');
+        if (!toggle) return;
 
-      let isYearly = false;
+        let isYearly = false;
 
-      toggle.addEventListener('click', () => {
-        isYearly = !isYearly;
-        toggle.classList.toggle('yearly', isYearly);
-        labelMonthly.classList.toggle('active', !isYearly);
-        labelYearly.classList.toggle('active', isYearly);
+        toggle.addEventListener('click', () => {
+          isYearly = !isYearly;
+          toggle.classList.toggle('yearly', isYearly);
+          labelMonthly.classList.toggle('active', !isYearly);
+          labelYearly.classList.toggle('active', isYearly);
 
-        document.querySelectorAll('.price-value').forEach(el => {
-          const val = isYearly ? el.dataset.yearly : el.dataset.monthly;
-          el.textContent = val;
+          document.querySelectorAll('.price-value').forEach(el => {
+            const val = isYearly ? el.dataset.yearly : el.dataset.monthly;
+            el.textContent = val;
+          });
+          document.querySelectorAll('.price-mini-yearly-badge').forEach(badge => {
+            badge.style.display = isYearly ? 'inline' : 'none';
+          });
         });
-        document.querySelectorAll('.price-mini-yearly-badge').forEach(badge => {
-          badge.style.display = isYearly ? 'inline' : 'none';
-        });
-      });
-    })();
+      })();
 
 
       const listEl = document.getElementById("branchList");
@@ -2181,7 +2470,7 @@
       document.getElementById("deleteBranchOverlay").classList.remove("show");
     });
 
-    
+
     document.getElementById("btnCancelDeleteBranch").addEventListener("click", () => {
       document.getElementById("deleteBranchOverlay").classList.remove("show");
     });
@@ -2202,8 +2491,8 @@
       allBranches = allBranches.filter(b => b.id !== branchId);
       if (currentBranchId === branchId) {
         currentBranchId = allBranches[0].id;
-        loadServices();
-        loadMasters();
+
+
         loadClients();
         loadBotInfo();
         loadBusinessSettings();
@@ -2221,8 +2510,8 @@
       currentBranchId = branchId;
       localStorage.setItem("bookly_current_branch", String(branchId));
       document.getElementById("branchDropdown").style.display = "none";
-      loadServices();
-      loadMasters();
+
+
       loadClients()
       loadBotInfo();
       loadBusinessSettings();
@@ -2410,8 +2699,8 @@
         currentUserId = data.user.id;
         document.getElementById("loginWrap").style.display = "none";
         document.getElementById("dash").style.display = "block";
-        loadServices();
-        loadMasters();
+
+
         loadBotInfo();
         // Supabase просит подтвердить email, прежде чем войти
         errorBox.style.color = "var(--accent)";
@@ -2440,8 +2729,8 @@
       currentBranchId = savedBranchExists ? savedBranchId : (allBranches.length > 0 ? allBranches[0].id : null);
       document.getElementById("loginWrap").style.display = "none";
       document.getElementById("dash").style.display = "block";
-      loadServices();
-      loadMasters();
+
+
       loadClients();
       loadBotInfo();
       loadBusinessSettings();
@@ -2458,62 +2747,6 @@
       document.getElementById("dash").style.display = "none";
       document.getElementById("loginWrap").style.display = "flex";
     });
-
-    async function loadServices() {
-      const { data, error } = await sb
-        .from('services')
-        .select('*')
-        .eq('branch_id', currentBranchId)
-        .order('id', { ascending: true });
-
-      const rowsEl = document.getElementById("rows");
-
-      if (error) {
-        rowsEl.innerHTML = `<div class="empty-state">Не удалось загрузить услуги: ${error.message}</div>`;
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        rowsEl.innerHTML = `
-  <div class="empty-state">
-    <div class="empty-state-icon">📋</div>
-    <div class="empty-state-title">Пока нет ни одной услуги</div>
-    <div class="empty-state-text">Добавьте первую услугу, чтобы клиенты могли записаться через бота</div>
-    <button class="btn-save" id="btnEmptyAdd">+ Добавить первую услугу</button>
-  </div>
-`;
-        document.getElementById("btnEmptyAdd").addEventListener("click", () => {
-          document.getElementById("btnShowAdd").click();
-        });
-        return;
-      }
-
-      const { data: botData } = await sb
-        .from('bots')
-        .select('currency')
-        .eq('owner_id', currentUserId)
-        .maybeSingle();
-      const currentCurrency = botData?.currency || '₽';
-
-      rowsEl.innerHTML = data.map(s => `
-      <div class="row">
-        <div class="row-name">${s.name}</div>
-        <div class="row-duration">${s.duration || "—"}</div>
-        <div class="row-price">${s.price} ${currentCurrency}</div>
-        <div class="row-actions">
-          <button class="icon-btn edit" data-action="edit" data-id="${s.id}">✎</button>
-          <button class="icon-btn danger" data-action="delete" data-id="${s.id}">✕</button>
-        </div>
-      </div>
-    `).join("");
-
-      rowsEl.querySelectorAll('[data-action="edit"]').forEach(btn => {
-        btn.addEventListener("click", () => startEdit(Number(btn.dataset.id), data));
-      });
-      rowsEl.querySelectorAll('[data-action="delete"]').forEach(btn => {
-        btn.addEventListener("click", () => deleteService(Number(btn.dataset.id)));
-      });
-    }
 
     // ---------- Bot token management ----------
 
@@ -3164,7 +3397,7 @@
 
         if (error) { showToast("Ошибка: " + error.message); return; }
 
-          selectedClientKey = null;
+        selectedClientKey = null;
         showToast("Клиент удалён");
         loadClients();
         loadCrmDashboard();
@@ -3179,182 +3412,7 @@
 
     // ---------- Masters management ----------
 
-    async function loadMasters() {
-      const { data, error } = await sb
-        .from('masters')
-        .select('*')
-        .eq('branch_id', currentBranchId)
-        .order('id', { ascending: true });
 
-      const rowsEl = document.getElementById("masterRows");
-
-      if (error) {
-        rowsEl.innerHTML = `<div class="empty-state"><div class="empty-state-title">Ошибка</div><div class="empty-state-text">${error.message}</div></div>`;
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        rowsEl.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state-icon">👤</div>
-          <div class="empty-state-title">Пока нет ни одного сотрудника</div>
-          <div class="empty-state-text">Добавьте первого сотрудника, чтобы клиенты могли выбрать его при записи</div>
-        </div>
-      `;
-        return;
-      }
-
-      rowsEl.innerHTML = data.map(m => `
-      <div class="row">
-        <div class="row-name">${m.name}</div>
-        <div class="row-duration">${m.role || "—"}</div>
-        <div class="row-duration">${m.initials || "—"}</div>
-        <div class="row-actions">
-          <button class="icon-btn edit" data-action="edit" data-id="${m.id}">✎</button>
-          <button class="icon-btn danger" data-action="delete" data-id="${m.id}">✕</button>
-        </div>
-      </div>
-    `).join("");
-
-      rowsEl.querySelectorAll('[data-action="edit"]').forEach(btn => {
-        btn.addEventListener("click", () => startEditMaster(Number(btn.dataset.id), data));
-      });
-      rowsEl.querySelectorAll('[data-action="delete"]').forEach(btn => {
-        btn.addEventListener("click", () => deleteMaster(Number(btn.dataset.id)));
-      });
-    }
-
-    let editingMasterId = null;
-
-    document.getElementById("btnShowAddMaster").addEventListener("click", () => {
-      editingMasterId = null;
-      document.getElementById("mfName").value = "";
-      document.getElementById("mfRole").value = "";
-      document.getElementById("mfInitials").value = "";
-      document.getElementById("masterFormCard").classList.add("show");
-    });
-
-    document.getElementById("btnCancelMasterForm").addEventListener("click", () => {
-      document.getElementById("masterFormCard").classList.remove("show");
-    });
-
-    function startEditMaster(id, currentData) {
-      const master = currentData.find(m => m.id === id);
-      if (!master) return;
-      editingMasterId = id;
-      document.getElementById("mfName").value = master.name;
-      document.getElementById("mfRole").value = master.role || "";
-      document.getElementById("mfInitials").value = master.initials || "";
-      document.getElementById("masterFormCard").classList.add("show");
-    }
-
-    document.getElementById("btnSaveMaster").addEventListener("click", async () => {
-      const name = document.getElementById("mfName").value.trim();
-      const role = document.getElementById("mfRole").value.trim();
-      const initials = document.getElementById("mfInitials").value.trim().toUpperCase();
-
-      if (!name) {
-        showToast("Впишите имя сотрудника");
-        return;
-      }
-
-      if (editingMasterId) {
-        const { error } = await sb.from('masters')
-          .update({ name, role, initials })
-          .eq('id', editingMasterId)
-          .eq('owner_id', currentUserId);
-        if (error) { showToast("Ошибка: " + error.message); return; }
-        showToast("Сотрудник обновлён");
-      } else {
-        const { error } = await sb.from('masters')
-          .insert({ name, role, initials, owner_id: currentUserId, branch_id: currentBranchId });
-        if (error) { showToast("Ошибка: " + error.message); return; }
-        showToast("Сотрудник добавлен");
-      }
-
-      document.getElementById("masterFormCard").classList.remove("show");
-      loadMasters();
-    });
-
-    async function deleteMaster(id) {
-      if (!confirm("Удалить этого сотрудника?")) return;
-
-      const { error } = await sb.from('masters')
-        .delete()
-        .eq('id', id)
-        .eq('owner_id', currentUserId);
-
-      if (error) { showToast("Ошибка: " + error.message); return; }
-      showToast("Сотрудник удалён");
-      loadMasters();
-    }
-
-    document.getElementById("btnShowAdd").addEventListener("click", () => {
-      editingId = null;
-      document.getElementById("fName").value = "";
-      document.getElementById("fDuration").value = "";
-      document.getElementById("fPrice").value = "";
-      document.getElementById("formCard").classList.add("show");
-    });
-
-    document.getElementById("btnCancelForm").addEventListener("click", () => {
-      document.getElementById("formCard").classList.remove("show");
-    });
-
-    function startEdit(id, currentData) {
-      const service = currentData.find(s => s.id === id);
-      if (!service) return;
-      editingId = id;
-      document.getElementById("fName").value = service.name;
-      document.getElementById("fDuration").value = service.duration || "";
-      document.getElementById("fPrice").value = service.price;
-      document.getElementById("formCard").classList.add("show");
-    }
-
-    document.getElementById("btnSave").addEventListener("click", async () => {
-      const name = document.getElementById("fName").value.trim();
-      const duration = document.getElementById("fDuration").value.trim();
-      const price = Number(document.getElementById("fPrice").value);
-
-      if (!name || !price) {
-        showToast("Впишите название и цену");
-        return;
-      }
-
-      if (editingId) {
-        const { error } = await sb.from('services')
-          .update({ name, duration, price })
-          .eq('id', editingId)
-          .eq('owner_id', currentUserId);
-
-        if (error) { showToast("Ошибка: " + error.message); return; }
-        showToast("Услуга обновлена");
-      } else {
-        const { error } = await sb.from('services')
-          .insert({ name, duration, price, owner_id: currentUserId, branch_id: currentBranchId });
-
-        if (error) { showToast("Ошибка: " + error.message); return; }
-        showToast("Услуга добавлена");
-      }
-
-      document.getElementById("formCard").classList.remove("show");
-      loadServices();
-      loadMasters();
-    });
-
-    async function deleteService(id) {
-      if (!confirm("Удалить эту услугу?")) return;
-
-      const { error } = await sb.from('services')
-        .delete()
-        .eq('id', id)
-        .eq('owner_id', currentUserId);
-
-      if (error) { showToast("Ошибка: " + error.message); return; }
-      showToast("Услуга удалена");
-      loadServices();
-      loadMasters();
-    }
 
     document.getElementById("btnSetNewPassword").addEventListener("click", async () => {
       const newPassword = document.getElementById("newPasswordInput").value;
@@ -3406,8 +3464,8 @@
         currentBranchId = savedBranchExists ? savedBranchId : (allBranches.length > 0 ? allBranches[0].id : null);
         document.getElementById("initialLoader").style.display = "none";
         document.getElementById("dash").style.display = "block";
-        loadServices();
-        loadMasters();
+
+
         loadClients();
         loadBotInfo();
         loadBusinessSettings();
@@ -3431,6 +3489,8 @@
         });
       });
     }
+
+
   </script>
 
 </body>
