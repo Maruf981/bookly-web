@@ -3679,6 +3679,10 @@
             </div>
           `;
         }).join("");
+
+            setInterval(() => {
+      if (currentBranchId) loadActivityFeed();
+    }, 10000);
     }
 
     function renderStaffDropdown() {
