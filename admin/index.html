@@ -1821,6 +1821,13 @@
         <div class="bot-card-label" style="color:var(--accent);">Ваш Telegram-бот</div>
         <div id="botStatusView"></div>
       </div>
+      <div class="bot-card" id="activityFeedCard" style="height:auto; max-height:340px; overflow:hidden; position:relative;">
+        <div style="display:flex; align-items:center; gap:6px; margin-bottom:14px;">
+          <div style="width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent);"></div>
+          <div class="bot-card-label" style="margin-bottom:0; color:var(--accent);">Живая лента</div>
+        </div>
+        <div id="activityFeedList" style="position:relative; padding-left:20px;"></div>
+      </div>
     </div>
 
      <div class="bot-card" style="margin-top:16px; max-width:350px;">
@@ -2555,6 +2562,7 @@
         loadBusinessSettings();
         loadStaffAndServiceChips();
         loadCalendarData();
+        loadActivityFeed();
         populateCrmFilters().then(loadCrmDashboard);
       }
       renderBranchSwitcher();
@@ -2574,6 +2582,7 @@
       loadBusinessSettings();
       loadStaffAndServiceChips();
       loadCalendarData();
+      loadActivityFeed();
       renderBranchSwitcher();
       populateCrmFilters().then(loadCrmDashboard);
     }
@@ -2781,6 +2790,7 @@
       loadBusinessSettings();
       loadStaffAndServiceChips();
       loadCalendarData();
+      loadActivityFeed();
       renderBranchSwitcher();
       const crmDates = getCrmDefaultDates();
       document.getElementById("crmDateFrom").value = crmDates.from;
@@ -3618,6 +3628,59 @@
       renderServiceDropdown();
     }
 
+        async function loadActivityFeed() {
+      const { data, error } = await sb.from('bookings')
+        .select('*')
+        .eq('branch_id', currentBranchId)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      const listEl = document.getElementById("activityFeedList");
+      if (!listEl) return;
+
+      if (error || !data || data.length === 0) {
+        listEl.innerHTML = `<div style="font-size:11px; color:var(--faint);">Пока нет активности</div>`;
+        return;
+      }
+
+      const now = new Date();
+      function timeAgo(dateStr) {
+        if (!dateStr) return '';
+        const diffMs = now - new Date(dateStr);
+        const mins = Math.floor(diffMs / 60000);
+        if (mins < 1) return 'только что';
+        if (mins < 60) return `${mins} мин назад`;
+        const hours = Math.floor(mins / 60);
+        if (hours < 24) return `${hours} ч назад`;
+        const days = Math.floor(hours / 24);
+        return `${days} дн назад`;
+      }
+
+      listEl.innerHTML = `<div style="position:absolute; left:5px; top:4px; bottom:0; width:1px; background:linear-gradient(var(--line), transparent);"></div>` +
+        data.map((b, i) => {
+          let dotColor, title;
+          if (b.status === 'cancelled') {
+            dotColor = 'var(--danger)';
+            title = `Отмена — <b>${b.client_name || 'Клиент'}</b>`;
+          } else if (b.status === 'completed') {
+            dotColor = 'var(--faint)';
+            title = `Посещение — <b>${b.client_name || 'Клиент'}</b>`;
+          } else {
+            dotColor = 'var(--accent)';
+            title = `Новая запись — <b>${b.client_name || 'Клиент'}</b>`;
+          }
+          const opacity = Math.max(1 - i * 0.15, 0.3);
+          return `
+            <div style="position:relative; margin-bottom:16px; opacity:${opacity};">
+              <div style="position:absolute; left:-20px; top:2px; width:10px; height:10px; border-radius:50%; background:${dotColor}; border:2px solid var(--surface);"></div>
+              <div style="font-size:11px; color:var(--ink); margin-bottom:2px;">${title}</div>
+              <div style="font-size:9.5px; color:var(--muted);">${b.master ? 'к ' + b.master + ' · ' : ''}${b.service || ''}${b.time ? ' · ' + b.time : ''}</div>
+              <div style="font-size:8.5px; color:var(--faint); margin-top:2px;">${timeAgo(b.created_at)}</div>
+            </div>
+          `;
+        }).join("");
+    }
+
     function renderStaffDropdown() {
       const el = document.getElementById("staffDropdown");
       if (staffChipData.length === 0) {
@@ -3982,6 +4045,7 @@
       if (calCurrentMonth < 0) { calCurrentMonth = 11; calCurrentYear -= 1; }
       calSelectedDate = null;      
       loadCalendarData();
+
     });
 
     document.getElementById("calNextMonth").addEventListener("click", () => {
@@ -4045,7 +4109,8 @@
         loadBotInfo();
         loadBusinessSettings();
         loadStaffAndServiceChips();
-        loadCalendarData();
+        loadCalendarData();  
+        loadActivityFeed();      
         renderBranchSwitcher();
         const crmDates = getCrmDefaultDates();
         document.getElementById("crmDateFrom").value = crmDates.from;
