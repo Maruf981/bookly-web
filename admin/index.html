@@ -1259,6 +1259,122 @@
       font-weight: 700;
     }
 
+        .clients-table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .clients-table-head {
+      display: grid;
+      grid-template-columns: 24px 1.6fr 1fr 0.7fr 0.9fr 0.9fr 0.9fr 100px;
+      gap: 10px;
+      padding: 12px 16px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--faint);
+      font-weight: 700;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .clients-table-row {
+      display: grid;
+      grid-template-columns: 24px 1.6fr 1fr 0.7fr 0.9fr 0.9fr 0.9fr 100px;
+      gap: 10px;
+      padding: 12px 16px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      transition: background .15s ease;
+    }
+
+    .clients-table-row:last-child {
+      border-bottom: none;
+    }
+
+    .clients-table-row:hover {
+      background: var(--surface-2);
+    }
+
+    .clients-table-row.active {
+      background: var(--accent-soft);
+    }
+
+    .ct-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 4px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ct-name {
+      font-size: 12px;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .ct-username {
+      font-size: 9.5px;
+      color: var(--faint);
+    }
+
+    .ct-phone {
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+
+    .ct-tag {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .clients-table-pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .clients-page-num {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .clients-page-num.active {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    @media (max-width: 700px) {
+      .clients-table-head { display: none; }
+      .clients-table-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+    }
+
     .profile-section-title {
       font-size: 11px;
       letter-spacing: 1px;
@@ -2222,7 +2338,26 @@
     <div id="clientsSection">
       <div class="dash-eyebrow" style="margin-top:28px;">Клиенты</div>
       <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Ваши клиенты</div>
-      <div class="client-list" id="clientListRows"></div>
+
+      <div class="clients-table-wrap">
+        <div class="clients-table-head">
+          <div></div>
+          <div>Клиент</div>
+          <div>Телефон</div>
+          <div>Визиты</div>
+          <div>Посл. визит</div>
+          <div>Потрачено</div>
+          <div>Запись</div>
+          <div>Тег</div>
+        </div>
+        <div id="clientListRows"></div>
+        <div class="clients-table-pagination">
+          <button class="btn-cancel" id="clientsPrevPage">← Назад</button>
+          <div id="clientsPageNumbers" style="display:flex; gap:6px;"></div>
+          <button class="btn-cancel" id="clientsNextPage">Далее →</button>
+        </div>
+      </div>
+
       <div id="clientProfileCard"></div>
     </div>
 
@@ -3362,13 +3497,28 @@
     });
 
     let selectedClientKey = null;
-    let clientsExpanded = false;
+    let clientsCurrentPage = 1;
+    const CLIENTS_PER_PAGE = 4;
 
     function getClientTag(client) {
       if (client.visits >= 5) return { label: 'Постоянный', cls: 'regular' };
       const daysSinceLastVisit = Math.floor((Date.now() - new Date(client.lastVisit).getTime()) / (1000 * 60 * 60 * 24));
       if (daysSinceLastVisit > 45) return { label: 'Риск оттока', cls: 'risk' };
       return null;
+    }
+
+    function getBookingStatusTag(client) {
+      const sorted = [...client.bookings].sort((a, b) => (b.booking_date || '').localeCompare(a.booking_date || ''));
+      const latest = sorted[0];
+      if (!latest) return { label: '—', color: 'var(--faint)', bg: 'transparent' };
+
+      if (latest.status === 'cancelled') return { label: 'Отменена', color: 'var(--danger)', bg: 'var(--danger-soft)' };
+      if (latest.status === 'completed') return { label: 'Пришёл', color: 'var(--muted)', bg: 'var(--surface-2)' };
+      if (latest.status === 'no_show') return { label: 'Не пришёл', color: 'var(--danger)', bg: 'var(--danger-soft)' };
+
+      const isPast = isBookingPastForAdmin(latest.booking_date, latest.time);
+      if (isPast) return { label: 'Ждёт отметки', color: '#C99A2F', bg: 'rgba(201,154,47,0.15)' };
+      return { label: 'Ожидает', color: 'var(--accent)', bg: 'var(--accent-soft)' };
     }
 
     async function loadClients() {
@@ -3396,6 +3546,7 @@
         </div>
       `;
         profileEl.innerHTML = '';
+        document.querySelector(".clients-table-pagination").style.display = "none";
         return;
       }
 
@@ -3425,41 +3576,75 @@
 
       const clients = Array.from(clientsMap.values());
       window.__clientsData = clients;
-      clientsExpanded = false;
+
+      const totalPages = Math.max(1, Math.ceil(clients.length / CLIENTS_PER_PAGE));
+      if (clientsCurrentPage > totalPages) clientsCurrentPage = totalPages;
 
       function renderClientRows() {
-        const visibleClients = (clientsExpanded || clients.length <= 5) ? clients : clients.slice(0, 5);
+        const start = (clientsCurrentPage - 1) * CLIENTS_PER_PAGE;
+        const pageClients = clients.slice(start, start + CLIENTS_PER_PAGE);
 
-        listEl.innerHTML = visibleClients.map(c => {
+        listEl.innerHTML = pageClients.map(c => {
           const initials = (c.name || 'КЛ').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
           const tag = getClientTag(c);
+          const statusTag = getBookingStatusTag(c);
+          const totalSpent = c.bookings.filter(b => b.status !== 'cancelled').reduce((sum, b) => sum + (Number(b.price) || 0), 0);
           return `
-          <div class="client-row ${c.key === selectedClientKey ? 'active' : ''}" data-key="${c.key}">
-            <div class="row-avatar">${initials}</div>
-            <div>
-              <span class="row-name">${c.name}</span>${tag ? `<span class="row-tag ${tag.cls}">${tag.label}</span>` : ''}
-              <div class="row-meta">${c.username || 'без username'}</div>
+          <div class="clients-table-row ${c.key === selectedClientKey ? 'active' : ''}" data-key="${c.key}">
+            <input type="checkbox" onclick="event.stopPropagation()" style="accent-color:var(--accent);">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="ct-avatar">${initials}</div>
+              <div>
+                <div class="ct-name">${c.name}</div>
+                <div class="ct-username">${c.username || 'без username'}</div>
+              </div>
             </div>
-            <div class="row-right">${c.visits} визит(ов)<br>${c.lastVisit}</div>
+            <div class="ct-phone">${c.phone || '—'}</div>
+            <div style="font-size:11.5px; color:var(--ink);">${c.visits}</div>
+            <div style="font-size:11px; color:var(--muted);">${c.lastVisit}</div>
+            <div style="font-size:11.5px; color:var(--accent); font-weight:600;">${totalSpent.toLocaleString('ru-RU')} ${currencyLabel}</div>
+            <div><span class="ct-tag" style="background:${statusTag.bg}; color:${statusTag.color};">${statusTag.label}</span></div>
+            <div>${tag ? `<span class="ct-tag" style="background:${tag.cls === 'regular' ? 'var(--accent-soft)' : 'var(--danger-soft)'}; color:${tag.cls === 'regular' ? 'var(--accent)' : 'var(--danger)'};">${tag.label}</span>` : ''}</div>
           </div>
         `;
         }).join("");
 
-        if (clients.length > 5 && !clientsExpanded) {
-          listEl.innerHTML += `<button class="btn-cancel" id="btnShowAllClients" style="width:100%; margin-top:8px;">Показать всех (${clients.length})</button>`;
-        }
-
-        listEl.querySelectorAll(".client-row").forEach(row => {
+        listEl.querySelectorAll(".clients-table-row").forEach(row => {
           row.addEventListener("click", () => selectClient(row.dataset.key, currencyLabel));
         });
 
-        const showAllBtn = document.getElementById("btnShowAllClients");
-        if (showAllBtn) {
-          showAllBtn.addEventListener("click", () => {
-            clientsExpanded = true;
+        renderClientsPagination(totalPages);
+      }
+
+      function renderClientsPagination(totalPages) {
+        const pagWrap = document.querySelector(".clients-table-pagination");
+        pagWrap.style.display = "flex";
+
+        const prevBtn = document.getElementById("clientsPrevPage");
+        const nextBtn = document.getElementById("clientsNextPage");
+        prevBtn.disabled = clientsCurrentPage === 1;
+        nextBtn.disabled = clientsCurrentPage === totalPages;
+
+        const numsEl = document.getElementById("clientsPageNumbers");
+        let numsHtml = '';
+        for (let i = 1; i <= totalPages; i++) {
+          numsHtml += `<span class="clients-page-num ${i === clientsCurrentPage ? 'active' : ''}" data-page="${i}">${i}</span>`;
+        }
+        numsEl.innerHTML = numsHtml;
+
+        numsEl.querySelectorAll(".clients-page-num").forEach(el => {
+          el.addEventListener("click", () => {
+            clientsCurrentPage = Number(el.dataset.page);
             renderClientRows();
           });
-        }
+        });
+
+        prevBtn.onclick = () => {
+          if (clientsCurrentPage > 1) { clientsCurrentPage -= 1; renderClientRows(); }
+        };
+        nextBtn.onclick = () => {
+          if (clientsCurrentPage < totalPages) { clientsCurrentPage += 1; renderClientRows(); }
+        };
       }
 
       renderClientRows();
@@ -3474,7 +3659,7 @@
 
     function selectClient(key, currencyLabel) {
       selectedClientKey = key;
-      document.querySelectorAll(".client-row").forEach(row => {
+      document.querySelectorAll(".clients-table-row").forEach(row => {
         row.classList.toggle("active", row.dataset.key === key);
       });
       const client = window.__clientsData.find(c => c.key === key);
@@ -3598,12 +3783,11 @@
 
       document.getElementById("btnCloseProfile").addEventListener("click", () => {
         selectedClientKey = null;
-        document.querySelectorAll(".client-row").forEach(row => row.classList.remove("active"));
+        document.querySelectorAll(".clients-table-row").forEach(row => row.classList.remove("active"));
         document.getElementById("clientProfileCard").innerHTML = '';
       });
     }
 
-    // ---------- Masters management ----------
 
     // ---------- Masters management ----------
 
