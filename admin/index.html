@@ -1825,7 +1825,7 @@
       }
     }
 
-        @media (max-width: 760px) {
+    @media (max-width: 760px) {
       #mainHeader svg[width="28"] {
         width: 20px !important;
         height: 20px !important;
@@ -1837,6 +1837,10 @@
       #mainHeader button#btnBranchSwitcherHeader {
         padding: 7px 10px !important;
         font-size: 11px !important;
+      }
+      /* Сближаем бургер и логотип на мобильных экранах для экономии места */
+      #mainHeader > div > div[style*="gap:14px"] {
+        gap: 6px !important;
       }
     }
 
@@ -1928,17 +1932,12 @@
         </a>
         <div style="border-top:1px solid var(--line); margin:2px 0;"></div>
 
-        <a href="#" class="burger-link" style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-          <span style="font-size:13px;">Аудит</span>
-        </a>
-        <div style="border-top:1px solid var(--line); margin:2px 0;"></div>
-
-        <a href="#" class="burger-link" style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
+         <a href="#" id="burgerFinance" class="burger-link" style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          <span style="font-size:13px;">Расходы</span>
+          <span style="font-size:13px;">Финансы</span>
         </a>
         <div style="border-top:1px solid var(--line); margin:2px 0;"></div>
+ 
       </div>
     </div>
   </div>
@@ -2561,6 +2560,66 @@
 
         <!-- Сетка карточек-заметок, заполняется через JS -->
         <div id="notesGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+      </div>
+    </div>
+
+        <!-- Модальное окно раздела "Финансы" — карточки, график, зарплаты, расходы -->
+    <div class="guide-overlay" id="financeModalOverlay">
+      <div class="guide-modal" style="max-width:720px;">
+        <div class="guide-header">
+          <div class="dash-eyebrow">Финансы</div>
+          <div class="dash-title" style="font-size:18px;">Обзор бизнеса</div>
+          <button class="guide-close" id="financeModalClose">✕</button>
+        </div>
+
+        <!-- 4 карточки: выручка / расходы / зарплаты / чистая прибыль -->
+        <div id="financeCardsGrid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px;"></div>
+
+        <!-- График сравнения выручки и расходов по месяцам -->
+        <div style="background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:16px; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div style="font-size:12.5px; color:var(--ink); font-weight:700;">Выручка vs Расходы по месяцам</div>
+            <div style="display:flex; gap:12px; font-size:10px; color:var(--faint);">
+              <span><span style="color:var(--accent);">●</span> Выручка</span>
+              <span><span style="color:var(--danger);">●</span> Расходы</span>
+            </div>
+          </div>
+          <svg viewBox="0 0 400 120" width="100%" height="120" id="financeChart"></svg>
+        </div>
+
+        <!-- Раскрывающийся список зарплат сотрудников (появляется по клику на карточку "Зарплаты") -->
+        <div id="financeSalaryList" style="display:none; background:var(--surface-2); border-radius:4px; padding:14px; margin-bottom:20px;"></div>
+
+        <!-- Список расходов с кнопкой добавления -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div style="font-size:10px; color:var(--faint); text-transform:uppercase; letter-spacing:.5px;">Список расходов</div>
+          <button id="btnShowAddExpense" style="background:none; border:1px solid var(--line); color:var(--muted); width:24px; height:24px; border-radius:4px; font-size:14px; cursor:pointer;">+</button>
+        </div>
+
+        <!-- Форма добавления расхода (скрыта по умолчанию) -->
+        <div class="form-card" id="addExpenseForm" style="position:relative;">
+          <button id="btnCloseExpenseForm" style="position:absolute; top:12px; right:12px; background:none; border:none; color:var(--faint); font-size:16px; cursor:pointer;">✕</button>
+          <div class="input-group">
+            <label>Название расхода</label>
+            <input type="text" id="expenseTitleInput" placeholder="Например, Аренда помещения" />
+          </div>
+          <div class="form-grid">
+            <div class="input-group">
+              <label>Сумма</label>
+              <input type="number" id="expenseAmountInput" placeholder="5000" />
+            </div>
+            <div class="input-group">
+              <label>Дата</label>
+              <input type="date" id="expenseDateInput" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-save" id="btnSaveExpense">Сохранить</button>
+            <button class="btn-cancel" id="btnCancelExpense">Отмена</button>
+          </div>
+        </div>
+
+        <div id="expensesList" style="display:flex; flex-direction:column; gap:6px;"></div>
       </div>
     </div>
 
@@ -4433,6 +4492,426 @@
       loadCalendarData();
     });
 
+        // ---------- Раздел "Финансы" ----------
+
+    let financeSalaryExpanded = false; // флаг: развёрнут ли список зарплат
+
+    // Вспомогательная функция: возвращает даты начала месяца и сегодня в формате YYYY-MM-DD
+    function financeGetDateRanges() {
+      const today = new Date();
+      const fmt = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+      const weekStart = new Date(today);
+      weekStart.setDate(today.getDate() - 6);
+
+      return {
+        todayStr: fmt(today),
+        weekStartStr: fmt(weekStart),
+        monthStartStr: fmt(monthStart),
+        todayFull: today,
+      };
+    }
+
+
+
+    // Главная функция загрузки и отрисовки всего раздела "Финансы"
+    async function loadFinance() {
+      const ranges = financeGetDateRanges();
+
+      // Загружаем все записи текущего месяца (для выручки и разбивки по сотрудникам)
+      const { data: monthBookings } = await sb.from('bookings')
+        .select('*')
+        .eq('branch_id', currentBranchId)
+        .gte('booking_date', ranges.monthStartStr)
+        .lte('booking_date', ranges.todayStr)
+        .neq('status', 'cancelled');
+
+      // Загружаем выручку за сегодня и за неделю отдельно (для карточек)
+      const { data: todayBookings } = await sb.from('bookings')
+        .select('price')
+        .eq('branch_id', currentBranchId)
+        .eq('booking_date', ranges.todayStr)
+        .neq('status', 'cancelled');
+
+      const { data: weekBookings } = await sb.from('bookings')
+        .select('price')
+        .eq('branch_id', currentBranchId)
+        .gte('booking_date', ranges.weekStartStr)
+        .lte('booking_date', ranges.todayStr)
+        .neq('status', 'cancelled');
+       
+               // Загружаем данные прошлого месяца для расчёта процента изменения
+      const prevMonthStart = new Date(ranges.todayFull.getFullYear(), ranges.todayFull.getMonth() - 1, 1);
+      const prevMonthEnd = new Date(ranges.todayFull.getFullYear(), ranges.todayFull.getMonth(), 0);
+      const fmtPrev = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+
+      const { data: prevMonthBookings } = await sb.from('bookings').select('price')
+        .eq('branch_id', currentBranchId)
+        .gte('booking_date', fmtPrev(prevMonthStart)).lte('booking_date', fmtPrev(prevMonthEnd))
+        .neq('status', 'cancelled');
+      const { data: prevMonthExpenses } = await sb.from('expenses').select('amount')
+        .eq('branch_id', currentBranchId)
+        .gte('expense_date', fmtPrev(prevMonthStart)).lte('expense_date', fmtPrev(prevMonthEnd));
+
+
+
+      // Загружаем расходы текущего месяца
+      const { data: monthExpenses } = await sb.from('expenses')
+        .select('*')
+        .eq('branch_id', currentBranchId)
+        .gte('expense_date', ranges.monthStartStr)
+        .lte('expense_date', ranges.todayStr)
+        .order('expense_date', { ascending: false });
+
+      // Загружаем сотрудников (для расчёта зарплат)
+      const { data: masters } = await sb.from('masters')
+        .select('*')
+        .eq('branch_id', currentBranchId);
+
+      // Загружаем валюту бизнеса
+      const { data: botData } = await sb.from('bots').select('currency').eq('branch_id', currentBranchId).maybeSingle();
+      const currencyLabel = botData?.currency || '₽';
+
+      // ---- Считаем суммы ----
+      const revenueMonth = (monthBookings || []).reduce((s, b) => s + (Number(b.price) || 0), 0);
+      const prevRevenueMonth = (prevMonthBookings || []).reduce((s, b) => s + (Number(b.price) || 0), 0);
+      const prevExpensesMonth = (prevMonthExpenses || []).reduce((s, e) => s + (Number(e.amount) || 0), 0);
+
+      // Функция расчёта процента изменения относительно прошлого месяца
+      function calcTrendPercent(current, previous) {
+        if (!previous) return null;
+        return Math.round(((current - previous) / previous) * 100);
+      }
+      const revenueToday = (todayBookings || []).reduce((s, b) => s + (Number(b.price) || 0), 0);
+      const revenueWeek = (weekBookings || []).reduce((s, b) => s + (Number(b.price) || 0), 0);
+      const expensesMonth = (monthExpenses || []).reduce((s, e) => s + (Number(e.amount) || 0), 0);
+
+      // Считаем выручку каждого сотрудника за месяц (для процентной части зарплаты)
+      const revenueByMaster = {};
+      (monthBookings || []).forEach(b => {
+        if (!b.master) return;
+        revenueByMaster[b.master] = (revenueByMaster[b.master] || 0) + (Number(b.price) || 0);
+      });
+
+      // Считаем зарплату каждого сотрудника: фикс + процент от его личной выручки
+      const salaryData = (masters || []).map(m => {
+        const masterRevenue = revenueByMaster[m.name] || 0;
+        const fixed = Number(m.salary_fixed) || 0;
+        const percent = Number(m.salary_percent) || 0;
+        const percentAmount = Math.round(masterRevenue * percent / 100);
+        const total = fixed + percentAmount;
+        return { ...m, masterRevenue, fixed, percent, percentAmount, total };
+      });
+
+            const totalSalaries = salaryData.reduce((s, m) => s + m.total, 0);
+      const netProfit = revenueMonth - expensesMonth - totalSalaries;
+
+      // Считаем зарплаты и прибыль за прошлый месяц (для процента изменения)
+      const prevRevenueByMaster = {};
+      (prevMonthBookings || []).forEach(b => {
+        if (!b.master) return;
+        prevRevenueByMaster[b.master] = (prevRevenueByMaster[b.master] || 0) + (Number(b.price) || 0);
+      });
+      const prevTotalSalaries = (masters || []).reduce((sum, m) => {
+        const masterRevenue = prevRevenueByMaster[m.name] || 0;
+        const fixed = Number(m.salary_fixed) || 0;
+        const percent = Number(m.salary_percent) || 0;
+        return sum + fixed + Math.round(masterRevenue * percent / 100);
+      }, 0);
+      const prevNetProfit = prevRevenueMonth - prevExpensesMonth - prevTotalSalaries;
+
+      // Сохраняем данные глобально, чтобы форма зарплаты могла их использовать
+      window.__financeSalaryData = salaryData;
+      window.__financeCurrency = currencyLabel;
+
+       const revenueTrend = calcTrendPercent(revenueMonth, prevRevenueMonth);
+      const expensesTrend = calcTrendPercent(expensesMonth, prevExpensesMonth);
+      const salaryTrend = calcTrendPercent(totalSalaries, prevTotalSalaries);
+      const profitTrend = calcTrendPercent(netProfit, prevNetProfit);
+
+      renderFinanceCards({ revenueToday, revenueWeek, revenueMonth, expensesMonth, totalSalaries, netProfit, currencyLabel, salaryCount: salaryData.length, revenueTrend, expensesTrend, salaryTrend, profitTrend });
+      renderFinanceExpensesList(monthExpenses || [], currencyLabel);
+      renderFinanceChart();
+      if (financeSalaryExpanded) renderFinanceSalaryList();
+    }
+
+        // Строит график "Выручка vs Расходы" по месяцам с августа текущего года до декабря
+    async function renderFinanceChart() {
+      const svg = document.getElementById("financeChart");
+      if (!svg) return;
+
+      const year = new Date().getFullYear();
+      const monthNames = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+
+      // Месяцы с августа (индекс 7) по декабрь (индекс 11)
+      const monthsRange = [7, 8, 9, 10, 11];
+
+      const revenueByMonth = [];
+      const expensesByMonth = [];
+
+      for (const monthIdx of monthsRange) {
+        const start = new Date(year, monthIdx, 1);
+        const end = new Date(year, monthIdx + 1, 0);
+        const fmt = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+
+        const { data: bookings } = await sb.from('bookings').select('price')
+          .eq('branch_id', currentBranchId)
+          .gte('booking_date', fmt(start)).lte('booking_date', fmt(end))
+          .neq('status', 'cancelled');
+        const { data: expenses } = await sb.from('expenses').select('amount')
+          .eq('branch_id', currentBranchId)
+          .gte('expense_date', fmt(start)).lte('expense_date', fmt(end));
+
+        revenueByMonth.push((bookings || []).reduce((s, b) => s + (Number(b.price) || 0), 0));
+        expensesByMonth.push((expenses || []).reduce((s, e) => s + (Number(e.amount) || 0), 0));
+      }
+
+      const maxVal = Math.max(1, ...revenueByMonth, ...expensesByMonth);
+      const w = 400, sidePad = 20, topPad = 15, bottomPad = 20, plotH = 70;
+      const plotW = w - sidePad * 2;
+      const n = monthsRange.length;
+      const stepX = n > 1 ? plotW / (n - 1) : 0;
+      const xFor = i => sidePad + i * stepX;
+      const yFor = val => topPad + (1 - val / maxVal) * plotH;
+
+      const revPoints = revenueByMonth.map((v, i) => `${xFor(i)},${yFor(v)}`).join(" ");
+      const expPoints = expensesByMonth.map((v, i) => `${xFor(i)},${yFor(v)}`).join(" ");
+
+      // Тонкие горизонтальные линии-сетка
+      const gridLines = [topPad, topPad + plotH / 2, topPad + plotH].map(y =>
+        `<line x1="${sidePad}" y1="${y}" x2="${w - sidePad}" y2="${y}" stroke="var(--line)" stroke-width="0.5"/>`
+      ).join("");
+
+      const monthLabels = monthsRange.map((m, i) =>
+        `<text x="${xFor(i)}" y="${topPad + plotH + bottomPad}" text-anchor="middle" font-size="9" fill="var(--faint)">${monthNames[m]}</text>`
+      ).join("");
+
+      svg.innerHTML = `
+        ${gridLines}
+        <polyline points="${revPoints}" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="${expPoints}" fill="none" stroke="var(--danger)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        ${monthLabels}
+      `;
+    }
+
+    // Отрисовка 4 верхних карточек
+    function renderFinanceCards(d) {
+      const el = document.getElementById("financeCardsGrid");
+      if (!el) return;
+
+      el.innerHTML = `
+        <div style="background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:9px; color:var(--faint);">Выручка (месяц)</span>
+            ${d.revenueTrend !== null ? `<span style="font-size:9px; color:${d.revenueTrend >= 0 ? 'var(--accent)' : 'var(--danger)'};">${d.revenueTrend >= 0 ? '+' : ''}${d.revenueTrend}%</span>` : ''}
+          </div>
+          <div style="font-family:'Fraunces',serif; font-size:17px; font-weight:700; color:var(--ink);">${d.revenueMonth.toLocaleString('ru-RU')} ${d.currencyLabel}</div>
+        </div>
+        <div style="background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:9px; color:var(--faint);">Расходы (месяц)</span>
+            ${d.expensesTrend !== null ? `<span style="font-size:9px; color:${d.expensesTrend <= 0 ? 'var(--accent)' : 'var(--danger)'};">${d.expensesTrend >= 0 ? '+' : ''}${d.expensesTrend}%</span>` : ''}
+          </div>
+          <div style="font-family:'Fraunces',serif; font-size:17px; font-weight:700; color:var(--danger);">${d.expensesMonth.toLocaleString('ru-RU')} ${d.currencyLabel}</div>
+        </div>
+
+        <div id="financeSalaryCard" style="background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:14px; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:9px; color:var(--faint);">Зарплаты ▾</span>
+            ${d.salaryTrend !== null ? `<span style="font-size:9px; color:${d.salaryTrend <= 0 ? 'var(--accent)' : 'var(--danger)'};">${d.salaryTrend >= 0 ? '+' : ''}${d.salaryTrend}%</span>` : ''}
+          </div>
+          <div style="font-family:'Fraunces',serif; font-size:17px; font-weight:700; color:var(--danger);">${d.totalSalaries.toLocaleString('ru-RU')} ${d.currencyLabel}</div>
+        </div>
+        <div style="background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:9px; color:var(--faint);">Чистая прибыль</span>
+            ${d.profitTrend !== null ? `<span style="font-size:9px; color:${d.profitTrend >= 0 ? 'var(--accent)' : 'var(--danger)'};">${d.profitTrend >= 0 ? '+' : ''}${d.profitTrend}%</span>` : ''}
+          </div>
+          <div style="font-family:'Fraunces',serif; font-size:17px; font-weight:700; color:var(--accent);">${d.netProfit.toLocaleString('ru-RU')} ${d.currencyLabel}</div>
+        </div>
+      `;
+
+      // Клик по карточке "Зарплаты" разворачивает/сворачивает список сотрудников
+      document.getElementById("financeSalaryCard").addEventListener("click", () => {
+        financeSalaryExpanded = !financeSalaryExpanded;
+        const listEl = document.getElementById("financeSalaryList");
+        if (financeSalaryExpanded) {
+          listEl.style.display = "block";
+          renderFinanceSalaryList();
+        } else {
+          listEl.style.display = "none";
+        }
+      });
+    }
+
+        // Отрисовка списка зарплат сотрудников с возможностью редактирования
+    function renderFinanceSalaryList() {
+      const el = document.getElementById("financeSalaryList");
+      const salaryData = window.__financeSalaryData || [];
+      const currencyLabel = window.__financeCurrency || '₽';
+
+      if (salaryData.length === 0) {
+        el.innerHTML = `<div style="font-size:11.5px; color:var(--faint);">Нет сотрудников</div>`;
+        return;
+      }
+
+      el.innerHTML = salaryData.map(m => {
+        const initials = (m.initials || m.name || '?').slice(0, 2).toUpperCase();
+        return `
+          <div style="display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--line);" data-master-row="${m.id}">
+            <div style="width:24px; height:24px; border-radius:4px; background:var(--accent); color:#fff; font-size:9.5px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">${initials}</div>
+            <span style="font-size:12px; color:var(--ink); flex:1;">${m.name}</span>
+            <span style="font-size:10px; color:var(--faint);">${m.fixed > 0 ? m.fixed + ' фикс.' : ''}${m.fixed > 0 && m.percent > 0 ? ' + ' : ''}${m.percent > 0 ? m.percent + '%' : ''}</span>
+            <span style="font-size:12px; color:var(--accent); font-weight:700; width:80px; text-align:right;">${m.total.toLocaleString('ru-RU')} ${currencyLabel}</span>
+            <button data-action="edit-salary" data-id="${m.id}" style="background:none; border:1px solid var(--line); color:var(--muted); width:22px; height:22px; border-radius:4px; font-size:10px; cursor:pointer; flex-shrink:0;">✎</button>
+          </div>
+        `;
+      }).join("");
+
+      // Клик по карандашу открывает мини-форму редактирования зарплаты прямо под сотрудником
+      el.querySelectorAll('[data-action="edit-salary"]').forEach(btn => {
+        btn.addEventListener("click", () => {
+          const masterId = btn.dataset.id;
+          const master = salaryData.find(m => String(m.id) === masterId);
+          if (!master) return;
+          openSalaryEditForm(master);
+        });
+      });
+    }
+
+    // Открывает всплывающую мини-форму редактирования зарплаты (фикс + процент) для одного сотрудника
+    function openSalaryEditForm(master) {
+      const row = document.querySelector(`[data-master-row="${master.id}"]`);
+      if (!row) return;
+
+      // Если форма уже открыта под этой строкой — просто убираем её (переключатель)
+      const existing = row.nextElementSibling;
+      if (existing && existing.dataset.salaryForm === String(master.id)) {
+        existing.remove();
+        return;
+      }
+
+      // Убираем любую другую открытую форму редактирования
+      document.querySelectorAll('[data-salary-form]').forEach(f => f.remove());
+
+      const formEl = document.createElement("div");
+      formEl.dataset.salaryForm = master.id;
+      formEl.style.cssText = "padding:10px 0; border-bottom:1px solid var(--line); display:flex; gap:8px; align-items:flex-end;";
+      formEl.innerHTML = `
+        <div style="flex:1;">
+          <label style="display:block; font-size:9.5px; color:var(--faint); margin-bottom:3px;">Фикс. ставка</label>
+          <input type="number" value="${master.fixed}" id="salaryFixedInput_${master.id}" style="width:100%; padding:7px 9px; border:1px solid var(--line); border-radius:4px; font-size:12px; background:var(--surface); color:var(--ink);" />
+        </div>
+        <div style="flex:1;">
+          <label style="display:block; font-size:9.5px; color:var(--faint); margin-bottom:3px;">Процент от выручки</label>
+          <input type="number" value="${master.percent}" id="salaryPercentInput_${master.id}" style="width:100%; padding:7px 9px; border:1px solid var(--line); border-radius:4px; font-size:12px; background:var(--surface); color:var(--ink);" />
+        </div>
+        <button data-action="save-salary" data-id="${master.id}" style="background:var(--accent); color:#fff; border:none; padding:8px 12px; border-radius:4px; font-size:11px; cursor:pointer;">✓</button>
+      `;
+
+      row.after(formEl);
+
+      formEl.querySelector('[data-action="save-salary"]').addEventListener("click", async () => {
+        const fixed = Number(document.getElementById(`salaryFixedInput_${master.id}`).value) || 0;
+        const percent = Number(document.getElementById(`salaryPercentInput_${master.id}`).value) || 0;
+
+        const { error } = await sb.from('masters')
+          .update({ salary_fixed: fixed, salary_percent: percent })
+          .eq('id', master.id);
+
+        if (error) { showToast("Ошибка: " + error.message); return; }
+        showToast("Зарплата обновлена");
+        formEl.remove();
+        loadFinance(); // перезагружаем весь раздел, чтобы пересчитать суммы
+      });
+    }
+
+    // Отрисовка списка расходов
+    function renderFinanceExpensesList(expenses, currencyLabel) {
+      const el = document.getElementById("expensesList");
+      if (!el) return;
+
+      if (expenses.length === 0) {
+        el.innerHTML = `<div style="font-size:11.5px; color:var(--faint); padding:8px 0;">Пока нет расходов за этот месяц</div>`;
+        return;
+      }
+
+      el.innerHTML = expenses.map(exp => {
+        const dateLabel = new Date(exp.expense_date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+        return `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface-2); border-radius:4px; padding:9px 12px;">
+            <div>
+              <span style="font-size:11.5px; color:var(--ink);">${exp.title}</span>
+              <div style="font-size:9.5px; color:var(--faint); margin-top:2px;">${dateLabel}</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:11.5px; color:var(--danger); font-weight:600;">−${Number(exp.amount).toLocaleString('ru-RU')} ${currencyLabel}</span>
+              <button data-id="${exp.id}" data-action="delete-expense" style="background:none; border:1px solid var(--line); color:var(--muted); width:20px; height:20px; border-radius:4px; font-size:10px; cursor:pointer;">✕</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      el.querySelectorAll('[data-action="delete-expense"]').forEach(btn => {
+        btn.addEventListener("click", async () => {
+          if (!(await showConfirm("Удалить этот расход?"))) return;
+          const { error } = await sb.from('expenses').delete().eq('id', btn.dataset.id);
+          if (error) { showToast("Ошибка: " + error.message); return; }
+          showToast("Расход удалён");
+          loadFinance();
+        });
+      });
+    }
+
+        // Открытие модалки "Финансы" через бургер-меню
+    document.getElementById("burgerFinance").addEventListener("click", (e) => {
+      e.preventDefault();
+      document.getElementById("burgerMenuOverlay").style.display = "none";
+      document.getElementById("financeModalOverlay").classList.add("show");
+      financeSalaryExpanded = false;
+      document.getElementById("financeSalaryList").style.display = "none";
+      loadFinance();
+    });
+
+    document.getElementById("financeModalClose").addEventListener("click", () => {
+      document.getElementById("financeModalOverlay").classList.remove("show");
+    });
+
+    // Показ/скрытие формы добавления расхода
+    document.getElementById("btnShowAddExpense").addEventListener("click", () => {
+      document.getElementById("expenseTitleInput").value = "";
+      document.getElementById("expenseAmountInput").value = "";
+      document.getElementById("expenseDateInput").value = "";
+      document.getElementById("addExpenseForm").classList.add("show");
+    });
+
+        document.getElementById("btnCloseExpenseForm").addEventListener("click", () => {
+      document.getElementById("addExpenseForm").classList.remove("show");
+    });
+
+    document.getElementById("btnCancelExpense").addEventListener("click", () => {
+      document.getElementById("addExpenseForm").classList.remove("show");
+    });
+
+
+    // Сохранение нового расхода в базу
+    document.getElementById("btnSaveExpense").addEventListener("click", async () => {
+      const title = document.getElementById("expenseTitleInput").value.trim();
+      const amount = Number(document.getElementById("expenseAmountInput").value);
+      const expenseDate = document.getElementById("expenseDateInput").value;
+
+      if (!title || !amount || !expenseDate) { showToast("Заполните все поля"); return; }
+
+      const { error } = await sb.from('expenses').insert({
+        title, amount, expense_date: expenseDate, owner_id: currentUserId, branch_id: currentBranchId
+      });
+      if (error) { showToast("Ошибка: " + error.message); return; }
+
+      showToast("Расход добавлен");
+      document.getElementById("addExpenseForm").classList.remove("show");
+      loadFinance();
+    });
 
 
     document.getElementById("btnSetNewPassword").addEventListener("click", async () => {
