@@ -693,7 +693,7 @@
 
     /* ---------- Guide modal ---------- */
 
-     .guide-overlay {
+    .guide-overlay {
       position: fixed;
       inset: 0;
       background: rgba(28, 27, 31, 0.5);
@@ -702,7 +702,7 @@
       justify-content: center;
       padding: 20px;
       padding-top: 100px;
-      z-index: 100;      
+      z-index: 100;
     }
 
     .guide-overlay.show {
@@ -1892,7 +1892,7 @@
               style="margin-left:-1px;">.</span></div>
         </div>
         <span id="headerPageTitle"
-          style="font-family:'Fraunces',serif; font-size:30px; font-weight:700; color:var(--accent); border-left:1px solid var(--line); padding-left:14px;">Личный
+          style="font-family:'Fraunces',serif; font-size:25px; font-weight:700; color:var(--accent); border-left:1px solid var(--line); padding-left:14px;">Личный
           кабинет</span>
       </div>
 
@@ -3602,22 +3602,82 @@
       }
 
       let cumulative = 0;
+      // Базовый серый круг-подложка (фон доната)
       let circles = `<circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--line)" stroke-width="6"/>`;
       let legendHtml = "";
 
-      entries.forEach(e => {
+      entries.forEach((e, i) => {
         const percent = Math.round((e.value / total) * 100);
         if (percent > 0) {
-          circles += `<circle cx="21" cy="21" r="15.9" fill="none" stroke="${e.color}" stroke-width="6"
-            stroke-dasharray="${percent} 100" stroke-dashoffset="${25 - cumulative}" transform="rotate(-90 21 21)"/>`;
+          // Каждому сегменту даём класс + data-атрибуты, чтобы навесить на них hover
+          circles += `<circle class="crm-donut-segment" cx="21" cy="21" r="15.9" fill="none" stroke="${e.color}" stroke-width="6"
+        stroke-dasharray="${percent} 100" stroke-dashoffset="${25 - cumulative}" transform="rotate(-90 21 21)"
+        style="cursor:pointer; transition: stroke-width 0.15s ease, filter 0.15s ease;"
+        data-label="${e.label}" data-value="${e.value}" data-percent="${percent}" data-color="${e.color}"/>`;
         }
         cumulative += percent;
         legendHtml += `<div class="crm-legend-item"><span class="crm-legend-dot" style="background:${e.color};"></span>
-          <span class="crm-legend-label">${e.label}</span><span class="crm-legend-val">${percent}%</span></div>`;
+      <span class="crm-legend-label">${e.label}</span><span class="crm-legend-val">${percent}%</span></div>`;
       });
 
       svg.innerHTML = circles;
       legend.innerHTML = legendHtml;
+
+      // Подключаем hover-эффект и тултип к только что отрисованным сегментам
+      attachDonutHoverEffects(svg);
+    }
+
+    // ---------- Hover-эффект для донат-чартов (подъём сегмента + тултип) ----------
+    // Универсальная функция: работает для любого доната (услуги, статусы),
+    // т.к. использует data-атрибуты, которые проставлены в renderCrmDonut выше.
+    function attachDonutHoverEffects(svg) {
+      // Тултип создаём один раз в родителе svg (карточка донат-чарта), а не в самом svg,
+      // т.к. текстовый div внутри svg работать не будет.
+      const container = svg.parentElement;
+      let tooltip = container.querySelector(".crm-donut-tooltip");
+      if (!tooltip) {
+        tooltip = document.createElement("div");
+        tooltip.className = "crm-donut-tooltip";
+        // Инлайн-стили тултипа: тёмная плашка, скрыта по умолчанию, позиционируется абсолютно
+        // Фон тултипа зафиксирован (не берём var(--ink)), т.к. в тёмной теме
+        // Светлый фон + тёмный текст, зафиксировано (не зависит от темы)
+        tooltip.style.cssText = `
+  position:absolute; display:none; pointer-events:none; z-index:20;
+  background:rgba(255,255,255,0.95); color:#111; font-size:11px; font-weight:600;
+  padding:6px 10px; border-radius:4px; white-space:nowrap;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+`;
+        container.style.position = "relative"; // нужно, чтобы тултип позиционировался внутри карточки
+        container.appendChild(tooltip);
+      }
+
+      svg.querySelectorAll(".crm-donut-segment").forEach(seg => {
+        seg.addEventListener("mouseenter", () => {
+          // "Подъём" сегмента — увеличиваем толщину линии + добавляем свечение цветом сегмента
+          seg.setAttribute("stroke-width", "9");
+          seg.style.filter = `drop-shadow(0 0 4px ${seg.dataset.color})`;
+
+          const { label, value, percent } = seg.dataset;
+          tooltip.textContent = `${label}: ${value} (${percent}%)`;
+          tooltip.style.display = "block";
+        });
+
+        seg.addEventListener("mousemove", (e) => {
+          const rect = container.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          tooltip.style.left = x + "px";
+          tooltip.style.top = (y - 36) + "px";
+          tooltip.style.transform = "translateX(-50%)";
+        });
+
+        seg.addEventListener("mouseleave", () => {
+          // Возвращаем сегмент в исходное состояние
+          seg.setAttribute("stroke-width", "6");
+          seg.style.filter = "none";
+          tooltip.style.display = "none";
+        });
+      });
     }
 
     function renderCrmStaffRank(bookings, currencyLabel) {
