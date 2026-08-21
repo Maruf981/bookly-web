@@ -1922,7 +1922,7 @@
         </a>
         <div style="border-top:1px solid var(--line); margin:2px 0;"></div>
 
-        <a href="#" class="burger-link" style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
+        <a href="#" id="burgerNotes" class="burger-link" style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
           <span style="font-size:13px;">Заметки</span>
         </a>
@@ -2535,7 +2535,51 @@
       </div>
     </div>
 
+        <!-- Модальное окно раздела "Заметки" -->
+    <div class="guide-overlay" id="notesModalOverlay">
+      <div class="guide-modal" style="max-width:600px;">
+        <div class="guide-header">
+          <div class="dash-eyebrow">Заметки</div>
+          <div class="dash-title" style="font-size:18px;">Ваши заметки</div>
+          <button class="guide-close" id="notesModalClose">✕</button>
+        </div>
+
+        <!-- Кнопка создания новой заметки — открывает форму ввода текста -->
+        <button id="btnShowAddNote" style="width:100%; padding:10px; border:1.5px dashed var(--line); background:transparent; color:var(--muted); border-radius:4px; font-size:12px; margin-bottom:14px; cursor:pointer;">+ Новая заметка</button>
+
+        <!-- Форма добавления заметки (скрыта по умолчанию) -->
+        <div class="form-card" id="addNoteForm">
+          <div class="input-group">
+            <label>Текст заметки</label>
+            <textarea id="noteTextInput" rows="3" placeholder="Например, заказать новые ножницы..." style="width:100%; padding:11px 13px; border:1.5px solid var(--accent); border-radius:4px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink); resize:vertical;"></textarea>
+          </div>
+          <div class="form-actions">
+            <button class="btn-save" id="btnSaveNote">Сохранить</button>
+            <button class="btn-cancel" id="btnCancelNote">Отмена</button>
+          </div>
+        </div>
+
+        <!-- Сетка карточек-заметок, заполняется через JS -->
+        <div id="notesGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+      </div>
     </div>
+
+        <!-- Универсальная модалка подтверждения удаления — переиспользуется для всех действий -->
+    <div class="guide-overlay" id="confirmDeleteOverlay">
+      <div class="guide-modal" style="max-width:360px;">
+        <div class="guide-header">
+          <div class="dash-eyebrow" style="color:var(--danger);">Подтверждение</div>
+          <div class="dash-title" style="font-size:18px;" id="confirmDeleteText">Вы уверены?</div>
+          <button class="guide-close" id="confirmDeleteClose">✕</button>
+        </div>
+        <div class="form-actions">
+          <button class="btn-save" id="confirmDeleteYes" style="background:var(--danger);">Удалить</button>
+          <button class="btn-cancel" id="confirmDeleteNo">Отмена</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
     <div class="guide-overlay" id="staffCardOverlay">
       <div class="guide-modal" id="staffCardModal" style="max-width:380px;"></div>
@@ -3975,8 +4019,9 @@
         });
       });
 
-      document.getElementById("btnDeleteClient").addEventListener("click", async () => {
-        if (!confirm(`Удалить клиента "${client.name}" и все его записи (${client.visits} шт.)? Это необратимо.`)) return;
+        document.getElementById("btnDeleteClient").addEventListener("click", async () => {
+        // Заменили системный confirm() на красивую модалку подтверждения
+        if (!(await showConfirm(`Удалить клиента "${client.name}" и все его записи (${client.visits} шт.)? Это необратимо.`))) return;
 
         const ids = client.bookings.map(b => b.id);
         const { error } = await sb.from('bookings').delete().in('id', ids).eq('branch_id', currentBranchId);
@@ -4139,7 +4184,8 @@
       });
 
       document.getElementById("btnDeleteStaffCard").addEventListener("click", async () => {
-        if (!confirm(`Удалить сотрудника "${master.name}"?`)) return;
+        // Заменили системный confirm() на красивую модалку подтверждения
+        if (!(await showConfirm(`Удалить сотрудника "${master.name}"?`))) return;
         const { error } = await sb.from('masters').delete().eq('id', master.id);
         if (error) { showToast("Ошибка: " + error.message); return; }
         showToast("Сотрудник удалён");
@@ -4213,7 +4259,8 @@
       });
 
       document.getElementById("btnDeleteServiceCard").addEventListener("click", async () => {
-        if (!confirm(`Удалить услугу "${service.name}"?`)) return;
+        // Заменили системный confirm() на красивую модалку подтверждения
+        if (!(await showConfirm(`Удалить услугу "${service.name}"?`))) return;
         const { error } = await sb.from('services').delete().eq('id', service.id);
         if (error) { showToast("Ошибка: " + error.message); return; }
         showToast("Услуга удалена");
@@ -4521,14 +4568,15 @@
               <div style="font-size:12.5px; color:var(--ink); font-weight:600;">${notifyIcon}${ev.title}</div>
               <div style="font-size:10.5px; color:var(--faint); margin-top:2px;">${dateLabel}</div>
             </div>
-            <button class="icon-btn danger" data-id="${ev.id}" data-action="delete-event">✕</button>
+            <button data-id="${ev.id}" data-action="delete-event" style="background:none; border:1px solid var(--line); color:var(--muted); width:22px; height:22px; border-radius:4px; font-size:11px; cursor:pointer;">✕</button>
           </div>
         `;
       }).join("");
 
-      listEl.querySelectorAll('[data-action="delete-event"]').forEach(btn => {
+    listEl.querySelectorAll('[data-action="delete-event"]').forEach(btn => {
         btn.addEventListener("click", async () => {
-          if (!confirm("Удалить это событие?")) return;
+          // Заменили системный confirm() на красивую модалку подтверждения
+          if (!(await showConfirm("Удалить это событие?"))) return;
           const { error } = await sb.from('events').delete().eq('id', btn.dataset.id);
           if (error) { showToast("Ошибка: " + error.message); return; }
           showToast("Событие удалено");
@@ -4573,6 +4621,114 @@
       showToast("Событие добавлено");
       document.getElementById("addEventForm").classList.remove("show");
       loadEvents();
+    });
+
+
+         // ---------- Универсальная функция подтверждения вместо системного confirm() ----------
+    // Использование: const ok = await showConfirm("Удалить эту запись?"); if (!ok) return;
+    function showConfirm(message) {
+      return new Promise((resolve) => {
+        document.getElementById("confirmDeleteText").textContent = message;
+        document.getElementById("confirmDeleteOverlay").classList.add("show");
+
+        const yesBtn = document.getElementById("confirmDeleteYes");
+        const noBtn = document.getElementById("confirmDeleteNo");
+        const closeBtn = document.getElementById("confirmDeleteClose");
+
+        function cleanup(result) {
+          document.getElementById("confirmDeleteOverlay").classList.remove("show");
+          yesBtn.removeEventListener("click", onYes);
+          noBtn.removeEventListener("click", onNo);
+          closeBtn.removeEventListener("click", onNo);
+          resolve(result);
+        }
+
+        function onYes() { cleanup(true); }
+        function onNo() { cleanup(false); }
+
+        yesBtn.addEventListener("click", onYes);
+        noBtn.addEventListener("click", onNo);
+        closeBtn.addEventListener("click", onNo);
+      });
+    }
+
+
+        // ---------- Раздел "Заметки" ----------
+
+    // Загружает все заметки текущего филиала и отрисовывает их сеткой карточек
+    async function loadNotes() {
+      const { data, error } = await sb.from('notes')
+        .select('*')
+        .eq('branch_id', currentBranchId)
+        .order('created_at', { ascending: false });
+
+      const gridEl = document.getElementById("notesGrid");
+      if (!gridEl) return;
+
+      if (error || !data || data.length === 0) {
+        gridEl.innerHTML = `<div style="grid-column:1/-1; font-size:12px; color:var(--faint); padding:12px 0;">Пока нет заметок</div>`;
+        return;
+      }
+
+      gridEl.innerHTML = data.map(note => {
+        const dateLabel = new Date(note.created_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+        return `
+          <div style="background:var(--surface-2); border-radius:4px; padding:14px; min-height:110px; display:flex; flex-direction:column; position:relative;">
+            <button data-id="${note.id}" data-action="delete-note" style="position:absolute; top:8px; right:8px; background:none; border:none; color:var(--faint); font-size:12px; cursor:pointer;">✕</button>
+            <div style="font-size:12px; color:var(--ink); line-height:1.5; flex:1; white-space:pre-wrap;">${note.text}</div>
+            <div style="font-size:9px; color:var(--faint); margin-top:8px;">${dateLabel}</div>
+          </div>
+        `;
+      }).join("");
+
+      // Подключаем удаление к каждому крестику
+      gridEl.querySelectorAll('[data-action="delete-note"]').forEach(btn => {
+        btn.addEventListener("click", async () => {
+          // Заменили системный confirm() на красивую модалку подтверждения
+          if (!(await showConfirm("Удалить эту заметку?"))) return;
+          const { error } = await sb.from('notes').delete().eq('id', btn.dataset.id);
+          if (error) { showToast("Ошибка: " + error.message); return; }
+          showToast("Заметка удалена");
+          loadNotes();
+        });
+      });
+    }
+
+    // Открытие модалки "Заметки" через бургер-меню
+    document.getElementById("burgerNotes").addEventListener("click", (e) => {
+      e.preventDefault();
+      document.getElementById("burgerMenuOverlay").style.display = "none";
+      document.getElementById("notesModalOverlay").classList.add("show");
+      loadNotes();
+    });
+
+    document.getElementById("notesModalClose").addEventListener("click", () => {
+      document.getElementById("notesModalOverlay").classList.remove("show");
+    });
+
+    // Показ/скрытие формы добавления заметки
+    document.getElementById("btnShowAddNote").addEventListener("click", () => {
+      document.getElementById("noteTextInput").value = "";
+      document.getElementById("addNoteForm").classList.add("show");
+    });
+
+    document.getElementById("btnCancelNote").addEventListener("click", () => {
+      document.getElementById("addNoteForm").classList.remove("show");
+    });
+
+    // Сохранение новой заметки в базу
+    document.getElementById("btnSaveNote").addEventListener("click", async () => {
+      const text = document.getElementById("noteTextInput").value.trim();
+      if (!text) { showToast("Впишите текст заметки"); return; }
+
+      const { error } = await sb.from('notes').insert({
+        text, owner_id: currentUserId, branch_id: currentBranchId
+      });
+      if (error) { showToast("Ошибка: " + error.message); return; }
+
+      showToast("Заметка добавлена");
+      document.getElementById("addNoteForm").classList.remove("show");
+      loadNotes();
     });
 
   </script>
