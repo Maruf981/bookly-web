@@ -114,10 +114,7 @@
     .login-wrap,
     .dash,
     .toast,
-    .guide-overlay {
-      position: relative;
-      z-index: 1;
-    }
+
 
     .login-wrap {
       min-height: 100vh;
@@ -696,15 +693,16 @@
 
     /* ---------- Guide modal ---------- */
 
-    .guide-overlay {
+     .guide-overlay {
       position: fixed;
       inset: 0;
       background: rgba(28, 27, 31, 0.5);
       display: none;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 20px;
-      z-index: 100;
+      padding-top: 100px;
+      z-index: 100;      
     }
 
     .guide-overlay.show {
@@ -1259,7 +1257,7 @@
       font-weight: 700;
     }
 
-        .clients-table-wrap {
+    .clients-table-wrap {
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: 4px;
@@ -1368,7 +1366,10 @@
     }
 
     @media (max-width: 700px) {
-      .clients-table-head { display: none; }
+      .clients-table-head {
+        display: none;
+      }
+
       .clients-table-row {
         grid-template-columns: 1fr;
         gap: 4px;
@@ -1703,7 +1704,7 @@
       align-items: center;
       gap: 8px;
       padding-top: 10px;
-      
+
     }
 
     .guarantee-mini-icon {
@@ -1795,54 +1796,58 @@
         white-space: nowrap;
       }
 
-          .burger-link {
-      display: block;
-      padding: 10px 12px;
-      border-radius: 4px;
-      font-size: 13.5px;
-      color: var(--ink);
-      text-decoration: none;
-      transition: background .15s ease;
-    }
-
-    .burger-link:hover {
-      background: var(--surface-2);
-    }
-
-    .dash {
-      padding-top: 130px !important;
-    }
-
-        @media (max-width: 760px) {
-      #headerPageTitle {
-        display: none;
-      }
-    }
-
-        @media (max-width: 760px) {
-      #mobilePageTitle {
+      .burger-link {
         display: block;
+        padding: 10px 12px;
+        border-radius: 4px;
+        font-size: 13.5px;
+        color: var(--ink);
+        text-decoration: none;
+        transition: background .15s ease;
       }
-    }
 
-    @media (max-width: 760px) {
-      #mainHeader svg[width="28"] {
-        width: 20px !important;
-        height: 20px !important;
+      .burger-link:hover {
+        background: var(--surface-2);
       }
-      #mainHeader div[style*="font-size:24px"] {
-        font-size: 17px !important;
+
+
+      .dash {
+        padding-top: 130px !important;
       }
-      #mainHeader button#btnLogoutHeader,
-      #mainHeader button#btnBranchSwitcherHeader {
-        padding: 7px 10px !important;
-        font-size: 11px !important;
+
+      @media (max-width: 760px) {
+        #headerPageTitle {
+          display: none;
+        }
       }
-      /* Сближаем бургер и логотип на мобильных экранах для экономии места */
-      #mainHeader > div > div[style*="gap:14px"] {
-        gap: 6px !important;
+
+      @media (max-width: 760px) {
+        #mobilePageTitle {
+          display: block;
+        }
       }
-    }
+
+      @media (max-width: 760px) {
+        #mainHeader svg[width="28"] {
+          width: 20px !important;
+          height: 20px !important;
+        }
+
+        #mainHeader div[style*="font-size:24px"] {
+          font-size: 17px !important;
+        }
+
+        #mainHeader button#btnLogoutHeader,
+        #mainHeader button#btnBranchSwitcherHeader {
+          padding: 7px 10px !important;
+          font-size: 11px !important;
+        }
+
+        /* Сближаем бургер и логотип на мобильных экранах для экономии места */
+        #mainHeader>div>div[style*="gap:14px"] {
+          gap: 6px !important;
+        }
+      }
 
     }
   </style>
@@ -1863,12 +1868,16 @@
     <div class="orb orb-2"></div>
   </div>
   <div class="bg-grid"></div>
-  
-   <header id="mainHeader" style="display:none; position:fixed; top:0; left:0; right:0; z-index:50; background:color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); height:76px;">
-    <div style="max-width:1100px; height:100%; margin:0 auto; padding:0 20px; display:flex; align-items:center; justify-content:space-between;">
+
+  <header id="mainHeader"
+    style="display:none; position:fixed; top:0; left:0; right:0; z-index:50; background:color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); height:76px;">
+    <div
+      style="max-width:1100px; height:100%; margin:0 auto; padding:0 20px; display:flex; align-items:center; justify-content:space-between;">
       <div style="display:flex; align-items:center; gap:14px;">
-        <button id="btnBurgerMenu" style="background:none; border:none; color:var(--accent); width:44px; height:44px; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <button id="btnBurgerMenu"
+          style="background:none; border:none; color:var(--accent); width:44px; height:44px; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round">
             <line x1="3" y1="6" x2="21" y2="6" />
             <line x1="3" y1="12" x2="21" y2="12" />
             <line x1="3" y1="18" x2="21" y2="18" />
@@ -1879,9 +1888,12 @@
             <path d="M10 8 L10 36 L18 30 L18 8 Z" fill="var(--accent)" />
             <path d="M26 8 L26 30 L34 36 L34 8 Z" fill="none" stroke="var(--accent)" stroke-width="2.5" />
           </svg>
-          <div style="font-family:'Fraunces',serif; font-size:24px; font-weight:700; color:var(--accent);">Bookly<span style="margin-left:-1px;">.</span></div>
+          <div style="font-family:'Fraunces',serif; font-size:24px; font-weight:700; color:var(--accent);">Bookly<span
+              style="margin-left:-1px;">.</span></div>
         </div>
-      <span id="headerPageTitle" style="font-family:'Fraunces',serif; font-size:30px; font-weight:700; color:var(--accent); border-left:1px solid var(--line); padding-left:14px;">Личный кабинет</span>
+        <span id="headerPageTitle"
+          style="font-family:'Fraunces',serif; font-size:30px; font-weight:700; color:var(--accent); border-left:1px solid var(--line); padding-left:14px;">Личный
+          кабинет</span>
       </div>
 
       <div style="display:flex; align-items:center; gap:10px;">
@@ -1900,44 +1912,70 @@
               + Добавить филиал</div>
           </div>
         </div>
-       <button id="btnLogoutHeader" style="display:flex; align-items:center; background:var(--surface); border:1px solid var(--accent); color:var(--accent); padding:9px 14px; border-radius: 4px; font-size:13px; cursor:pointer;">Выйти</button>
+        <button id="btnLogoutHeader"
+          style="display:flex; align-items:center; background:var(--surface); border:1px solid var(--accent); color:var(--accent); padding:9px 14px; border-radius: 4px; font-size:13px; cursor:pointer;">Выйти</button>
       </div>
     </div>
   </header>
 
 
-<!-- Бургер -->
+  <!-- Бургер -->
   <div id="burgerMenuOverlay" style="display:none; position:fixed; inset:0; background:rgba(28,27,31,0.5); z-index:60;">
-    <div id="burgerMenuPanel" style="position:absolute; top:0; left:0; bottom:0; width:260px; background:var(--surface); border-right:1px solid var(--line); padding:20px;">
+    <div id="burgerMenuPanel"
+      style="position:absolute; top:0; left:0; bottom:0; width:260px; background:var(--surface); border-right:1px solid var(--line); padding:20px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
         <div style="font-family:'Fraunces',serif; font-size:17px; font-weight:700; color:var(--accent);">Bookly</div>
-        <button id="btnCloseBurger" style="background:none; border:none; color:var(--faint); font-size:18px; cursor:pointer;">✕</button>
+        <button id="btnCloseBurger"
+          style="background:none; border:none; color:var(--faint); font-size:18px; cursor:pointer;">✕</button>
       </div>
       <div style="display:flex; flex-direction:column;">
-        <a href="#" id="burgerClients" class="burger-link" style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--ink);">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <a href="#" id="burgerClients" class="burger-link"
+          style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--ink);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
           <span style="font-size:13px; font-weight:600;">Клиенты</span>
         </a>
         <div style="border-top:1px solid var(--line); margin:2px 0;"></div>
 
-        <a href="#" id="burgerEvents" class="burger-link" style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01"/></svg>
+        <a href="#" id="burgerEvents" class="burger-link"
+          style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <path d="M8 14h.01M12 14h.01M16 14h.01" />
+          </svg>
           <span style="font-size:13px;">События</span>
         </a>
         <div style="border-top:1px solid var(--line); margin:2px 0;"></div>
 
-        <a href="#" id="burgerNotes" class="burger-link" style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+        <a href="#" id="burgerNotes" class="burger-link"
+          style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="8" y1="13" x2="16" y2="13" />
+            <line x1="8" y1="17" x2="16" y2="17" />
+          </svg>
           <span style="font-size:13px;">Заметки</span>
         </a>
         <div style="border-top:1px solid var(--line); margin:2px 0;"></div>
 
-         <a href="#" id="burgerFinance" class="burger-link" style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <a href="#" id="burgerFinance" class="burger-link"
+          style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <line x1="12" y1="1" x2="12" y2="23" />
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
           <span style="font-size:13px;">Финансы</span>
         </a>
         <div style="border-top:1px solid var(--line); margin:2px 0;"></div>
- 
+
       </div>
     </div>
   </div>
@@ -2060,7 +2098,8 @@
       </div>
     </div>
 
-    <div class="dash-title" id="mobilePageTitle" style="display:none; font-size:22px; margin-bottom:16px;">Личный кабинет</div>
+    <div class="dash-title" id="mobilePageTitle" style="display:none; font-size:22px; margin-bottom:16px;">Личный
+      кабинет</div>
 
     <div class="bot-section">
       <div class="bot-card">
@@ -2071,12 +2110,14 @@
       <div class="bot-card" style="display:flex; flex-direction:column;">
         <div class="bot-card-label" style="color:var(--accent);">Настройки бизнеса</div>
         <div id="googleCalendarStatus" style="margin-bottom:12px;"></div>
-        <div id="businessSettingsCollapsed" style="background:transparent; padding:0; display:flex; justify-content:space-between; align-items:flex-end; flex:1;">
+        <div id="businessSettingsCollapsed"
+          style="background:transparent; padding:0; display:flex; justify-content:space-between; align-items:flex-end; flex:1;">
           <div>
             <div id="bsName" style="font-size:13px; font-weight:700; color:var(--ink);">—</div>
             <div id="bsSummary" style="font-size:11px; color:var(--faint); margin-top:2px;">—</div>
           </div>
-          <button id="btnOpenBusinessSettings" class="btn-cancel" style="border-color:var(--accent); color:var(--accent);">Настройки</button>
+          <button id="btnOpenBusinessSettings" class="btn-cancel"
+            style="border-color:var(--accent); color:var(--accent);">Настройки</button>
         </div>
       </div>
     </div>
@@ -2174,31 +2215,37 @@
 
     <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
-          <div class="two-col-section">
+    <div class="two-col-section">
       <div>
         <div class="dash-eyebrow" style="margin-top:0; color:var(--accent);">Записи</div>
         <div class="dash-title" style="font-size:18px; margin-bottom:16px;">Календарь записей</div>
 
         <div id="bookingsCalendarCard" class="bot-card" style="position:relative;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <button id="calPrevMonth" style="background:none; border:1px solid var(--line); color:var(--muted); width:26px; height:26px; border-radius:4px; cursor:pointer;">‹</button>
-          <div id="calMonthLabel" style="font-family:'Fraunces',serif; font-size:14px; font-weight:700; color:var(--ink);">—</div>
-          <button id="calNextMonth" style="background:none; border:1px solid var(--line); color:var(--muted); width:26px; height:26px; border-radius:4px; cursor:pointer;">›</button>
-        </div>
-        <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-bottom:5px;">
-          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ПН</div>
-          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ВТ</div>
-          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">СР</div>
-          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ЧТ</div>
-          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ПТ</div>
-          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">СБ</div>
-          <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ВС</div>
-        </div>
-        <div id="calGrid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; position:relative;"></div>
-        <div id="calDayTooltip" style="display:none; position:absolute; background:var(--ink); color:var(--bg); padding:7px 11px; border-radius:4px; font-size:11px; font-weight:600; pointer-events:none; white-space:nowrap; z-index:20; box-shadow:0 6px 16px rgba(0,0,0,0.25);"></div>
+            <button id="calPrevMonth"
+              style="background:none; border:1px solid var(--line); color:var(--muted); width:26px; height:26px; border-radius:4px; cursor:pointer;">‹</button>
+            <div id="calMonthLabel"
+              style="font-family:'Fraunces',serif; font-size:14px; font-weight:700; color:var(--ink);">—</div>
+            <button id="calNextMonth"
+              style="background:none; border:1px solid var(--line); color:var(--muted); width:26px; height:26px; border-radius:4px; cursor:pointer;">›</button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-bottom:5px;">
+            <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ПН</div>
+            <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ВТ</div>
+            <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">СР</div>
+            <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ЧТ</div>
+            <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ПТ</div>
+            <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">СБ</div>
+            <div style="text-align:center; font-size:8.5px; color:var(--faint); font-weight:700;">ВС</div>
+          </div>
+          <div id="calGrid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:3px; position:relative;">
+          </div>
+          <div id="calDayTooltip"
+            style="display:none; position:absolute; background:var(--ink); color:var(--bg); padding:7px 11px; border-radius:4px; font-size:11px; font-weight:600; pointer-events:none; white-space:nowrap; z-index:20; box-shadow:0 6px 16px rgba(0,0,0,0.25);">
+          </div>
         </div>
       </div>
-    
+
       <div id="pricingSection">
         <div class="pricing-mini-head">
           <div class="pricing-mini-eyebrow">Тарифы</div>
@@ -2331,8 +2378,8 @@
             <div class="guarantee-mini-text">14 дней бесплатно на всех тарифах</div>
             <div class="guarantee-mini-sub">Отмена в один клик, без вопросов</div>
           </div>
+        </div>
       </div>
-    </div>
     </div>
 
     <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
@@ -2344,11 +2391,11 @@
 
       <div class="crm-filters-row">
         <div class="crm-filter-group">
-        <span class="crm-filter-label" style="color:var(--accent);">С даты</span>
-        <input type="date" class="crm-filter-input" id="crmDateFrom">
+          <span class="crm-filter-label" style="color:var(--accent);">С даты</span>
+          <input type="date" class="crm-filter-input" id="crmDateFrom">
         </div>
         <div class="crm-filter-group">
-        <span class="crm-filter-label" style="color:var(--accent);">По дату</span>
+          <span class="crm-filter-label" style="color:var(--accent);">По дату</span>
           <input type="date" class="crm-filter-input" id="crmDateTo">
         </div>
         <div class="crm-filter-sep"></div>
@@ -2437,17 +2484,20 @@
       <div class="crm-staff-rank-card" style="flex:1; min-width:280px; max-width:445px; position:relative;">
         <div class="crm-chart-title">Рейтинг сотрудников по выручке</div>
         <svg viewBox="0 0 400 140" width="100%" height="140" id="crmStaffRankChart"></svg>
-        <div id="crmStaffTooltip" style="display:none; position:absolute; background:var(--ink); color:var(--bg); padding:7px 11px; border-radius:4px; font-size:11.5px; font-weight:600; pointer-events:none; white-space:nowrap; z-index:20; box-shadow:0 6px 16px rgba(0,0,0,0.25);"></div>
+        <div id="crmStaffTooltip"
+          style="display:none; position:absolute; background:var(--ink); color:var(--bg); padding:7px 11px; border-radius:4px; font-size:11.5px; font-weight:600; pointer-events:none; white-space:nowrap; z-index:20; box-shadow:0 6px 16px rgba(0,0,0,0.25);">
+        </div>
       </div>
 
-            <div class="crm-staff-rank-card" style="flex:1; min-width:280px; max-width:605px; position:relative;">
+      <div class="crm-staff-rank-card" style="flex:1; min-width:280px; max-width:605px; position:relative;">
         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
           <div>
             <div class="crm-chart-title" style="margin-bottom:2px;">Загруженность по дням недели</div>
             <div style="font-size:10.5px; color:var(--faint);">Записи за выбранный период</div>
           </div>
           <div style="text-align:right;">
-            <div id="crmPeakDayValue" style="font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--accent);">—</div>
+            <div id="crmPeakDayValue"
+              style="font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--accent);">—</div>
             <div style="font-size:9.5px; color:var(--faint);">пиковый день</div>
           </div>
         </div>
@@ -2456,11 +2506,13 @@
           <span><span style="color:#E24B4A;">●</span> низкая загрузка</span>
           <span><span style="color:var(--accent);">●</span> высокая загрузка</span>
         </div>
-        <div id="crmWeekdayTooltip" style="display:none; position:absolute; background:var(--ink); color:var(--bg); padding:7px 11px; border-radius:4px; font-size:11.5px; font-weight:600; pointer-events:none; white-space:nowrap; z-index:20; box-shadow:0 6px 16px rgba(0,0,0,0.25);"></div>
+        <div id="crmWeekdayTooltip"
+          style="display:none; position:absolute; background:var(--ink); color:var(--bg); padding:7px 11px; border-radius:4px; font-size:11.5px; font-weight:600; pointer-events:none; white-space:nowrap; z-index:20; box-shadow:0 6px 16px rgba(0,0,0,0.25);">
+        </div>
       </div>
     </div>
 
-    
+
 
     <div style="border-top: 1px solid var(--line); margin: 28px 0;"></div>
 
@@ -2473,23 +2525,23 @@
         </div>
 
         <div class="clients-table-wrap">
-        <div class="clients-table-head">
-          <div></div>
-          <div>Клиент</div>
-          <div>Телефон</div>
-          <div>Визиты</div>
-          <div>Посл. визит</div>
-          <div>Потрачено</div>
-          <div>Запись</div>
-          <div>Тег</div>
+          <div class="clients-table-head">
+            <div></div>
+            <div>Клиент</div>
+            <div>Телефон</div>
+            <div>Визиты</div>
+            <div>Посл. визит</div>
+            <div>Потрачено</div>
+            <div>Запись</div>
+            <div>Тег</div>
+          </div>
+          <div id="clientListRows"></div>
+          <div class="clients-table-pagination">
+            <button class="btn-cancel" id="clientsPrevPage">← Назад</button>
+            <div id="clientsPageNumbers" style="display:flex; gap:6px;"></div>
+            <button class="btn-cancel" id="clientsNextPage">Далее →</button>
+          </div>
         </div>
-        <div id="clientListRows"></div>
-        <div class="clients-table-pagination">
-          <button class="btn-cancel" id="clientsPrevPage">← Назад</button>
-          <div id="clientsPageNumbers" style="display:flex; gap:6px;"></div>
-          <button class="btn-cancel" id="clientsNextPage">Далее →</button>
-        </div>
-      </div>
         <div id="clientProfileCard"></div>
       </div>
     </div>
@@ -2505,7 +2557,9 @@
         <div id="eventsList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;"></div>
 
         <!-- Кнопка добавления нового события — пунктирная рамка в стиле остальных кнопок "добавить" в кабинете -->
-        <button id="btnShowAddEvent" style="width:100%; padding:12px; border:1.5px dashed var(--line); background:transparent; color:var(--muted); border-radius:4px; font-size:13px; font-weight:600; cursor:pointer;">+ Добавить событие</button>
+        <button id="btnShowAddEvent"
+          style="width:100%; padding:12px; border:1.5px dashed var(--line); background:transparent; color:var(--muted); border-radius:4px; font-size:13px; font-weight:600; cursor:pointer;">+
+          Добавить событие</button>
 
         <div class="form-card" id="addEventForm">
 
@@ -2522,8 +2576,11 @@
           </div>
           <!-- Чекбокс: присылать ли напоминание через Telegram-бота в этот день -->
           <div class="input-group" style="display:flex; align-items:center; gap:8px;">
-            <input type="checkbox" id="eventNotifyCheckbox" style="accent-color:var(--accent); width:16px; height:16px;" />
-            <label for="eventNotifyCheckbox" style="margin-bottom:0; text-transform:none; font-weight:400; font-size:13px; color:var(--ink);">Напомнить через бота в этот день</label>
+            <input type="checkbox" id="eventNotifyCheckbox"
+              style="accent-color:var(--accent); width:16px; height:16px;" />
+            <label for="eventNotifyCheckbox"
+              style="margin-bottom:0; text-transform:none; font-weight:400; font-size:13px; color:var(--ink);">Напомнить
+              через бота в этот день</label>
           </div>
 
           <div class="form-actions">
@@ -2534,7 +2591,7 @@
       </div>
     </div>
 
-        <!-- Модальное окно раздела "Заметки" -->
+    <!-- Модальное окно раздела "Заметки" -->
     <div class="guide-overlay" id="notesModalOverlay">
       <div class="guide-modal" style="max-width:600px;">
         <div class="guide-header">
@@ -2544,13 +2601,16 @@
         </div>
 
         <!-- Кнопка создания новой заметки — открывает форму ввода текста -->
-        <button id="btnShowAddNote" style="width:100%; padding:10px; border:1.5px dashed var(--line); background:transparent; color:var(--muted); border-radius:4px; font-size:12px; margin-bottom:14px; cursor:pointer;">+ Новая заметка</button>
+        <button id="btnShowAddNote"
+          style="width:100%; padding:10px; border:1.5px dashed var(--line); background:transparent; color:var(--muted); border-radius:4px; font-size:12px; margin-bottom:14px; cursor:pointer;">+
+          Новая заметка</button>
 
         <!-- Форма добавления заметки (скрыта по умолчанию) -->
         <div class="form-card" id="addNoteForm">
           <div class="input-group">
             <label>Текст заметки</label>
-            <textarea id="noteTextInput" rows="3" placeholder="Например, заказать новые ножницы..." style="width:100%; padding:11px 13px; border:1.5px solid var(--accent); border-radius:4px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink); resize:vertical;"></textarea>
+            <textarea id="noteTextInput" rows="3" placeholder="Например, заказать новые ножницы..."
+              style="width:100%; padding:11px 13px; border:1.5px solid var(--accent); border-radius:4px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink); resize:vertical;"></textarea>
           </div>
           <div class="form-actions">
             <button class="btn-save" id="btnSaveNote">Сохранить</button>
@@ -2563,7 +2623,7 @@
       </div>
     </div>
 
-        <!-- Модальное окно раздела "Финансы" — карточки, график, зарплаты, расходы -->
+    <!-- Модальное окно раздела "Финансы" — карточки, график, зарплаты, расходы -->
     <div class="guide-overlay" id="financeModalOverlay">
       <div class="guide-modal" style="max-width:720px;">
         <div class="guide-header">
@@ -2573,10 +2633,12 @@
         </div>
 
         <!-- 4 карточки: выручка / расходы / зарплаты / чистая прибыль -->
-        <div id="financeCardsGrid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px;"></div>
+        <div id="financeCardsGrid"
+          style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px;"></div>
 
         <!-- График сравнения выручки и расходов по месяцам -->
-        <div style="background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:16px; margin-bottom:20px;">
+        <div
+          style="background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:16px; margin-bottom:20px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
             <div style="font-size:12.5px; color:var(--ink); font-weight:700;">Выручка vs Расходы по месяцам</div>
             <div style="display:flex; gap:12px; font-size:10px; color:var(--faint);">
@@ -2588,17 +2650,21 @@
         </div>
 
         <!-- Раскрывающийся список зарплат сотрудников (появляется по клику на карточку "Зарплаты") -->
-        <div id="financeSalaryList" style="display:none; background:var(--surface-2); border-radius:4px; padding:14px; margin-bottom:20px;"></div>
+        <div id="financeSalaryList"
+          style="display:none; background:var(--surface-2); border-radius:4px; padding:14px; margin-bottom:20px;"></div>
 
         <!-- Список расходов с кнопкой добавления -->
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <div style="font-size:10px; color:var(--faint); text-transform:uppercase; letter-spacing:.5px;">Список расходов</div>
-          <button id="btnShowAddExpense" style="background:none; border:1px solid var(--line); color:var(--muted); width:24px; height:24px; border-radius:4px; font-size:14px; cursor:pointer;">+</button>
+          <div style="font-size:10px; color:var(--faint); text-transform:uppercase; letter-spacing:.5px;">Список
+            расходов</div>
+          <button id="btnShowAddExpense"
+            style="background:none; border:1px solid var(--line); color:var(--muted); width:24px; height:24px; border-radius:4px; font-size:14px; cursor:pointer;">+</button>
         </div>
 
         <!-- Форма добавления расхода (скрыта по умолчанию) -->
         <div class="form-card" id="addExpenseForm" style="position:relative;">
-          <button id="btnCloseExpenseForm" style="position:absolute; top:12px; right:12px; background:none; border:none; color:var(--faint); font-size:16px; cursor:pointer;">✕</button>
+          <button id="btnCloseExpenseForm"
+            style="position:absolute; top:12px; right:12px; background:none; border:none; color:var(--faint); font-size:16px; cursor:pointer;">✕</button>
           <div class="input-group">
             <label>Название расхода</label>
             <input type="text" id="expenseTitleInput" placeholder="Например, Аренда помещения" />
@@ -2623,7 +2689,7 @@
       </div>
     </div>
 
-        <!-- Универсальная модалка подтверждения удаления — переиспользуется для всех действий -->
+    <!-- Универсальная модалка подтверждения удаления — переиспользуется для всех действий -->
     <div class="guide-overlay" id="confirmDeleteOverlay">
       <div class="guide-modal" style="max-width:360px;">
         <div class="guide-header">
@@ -2640,53 +2706,53 @@
 
   </div>
 
-    <div class="guide-overlay" id="staffCardOverlay">
-      <div class="guide-modal" id="staffCardModal" style="max-width:380px;"></div>
-    </div>
+  <div class="guide-overlay" id="staffCardOverlay">
+    <div class="guide-modal" id="staffCardModal" style="max-width:380px;"></div>
+  </div>
 
-    <div class="guide-overlay" id="serviceCardOverlay">
-      <div class="guide-modal" id="serviceCardModal" style="max-width:380px;"></div>
-    </div>
+  <div class="guide-overlay" id="serviceCardOverlay">
+    <div class="guide-modal" id="serviceCardModal" style="max-width:380px;"></div>
+  </div>
 
-    <div class="guide-overlay" id="addStaffOverlay">
-      <div class="guide-modal" style="max-width:360px;">
-        <div class="guide-header">
-          <div class="dash-eyebrow">Новый сотрудник</div>
-          <div class="dash-title" style="font-size:18px;">Добавить сотрудника</div>
-          <button class="guide-close" id="addStaffClose">✕</button>
-        </div>
-        <div class="input-group"><label>Имя</label><input type="text" id="addStaffName" placeholder="Например, Артур" />
-        </div>
-        <div class="input-group"><label>Роль</label><input type="text" id="addStaffRole" placeholder="Барбер" /></div>
-        <div class="input-group"><label>Инициалы</label><input type="text" id="addStaffInitials" placeholder="АР"
-            maxlength="2" /></div>
-        <div class="input-group"><label>Телефон</label><input type="text" id="addStaffPhone"
-            placeholder="+992 000 00 00 00" /></div>
-        <div class="form-actions">
-          <button class="btn-save" id="btnConfirmAddStaff">Создать</button>
-          <button class="btn-cancel" id="btnCancelAddStaff">Отмена</button>
-        </div>
+  <div class="guide-overlay" id="addStaffOverlay">
+    <div class="guide-modal" style="max-width:360px;">
+      <div class="guide-header">
+        <div class="dash-eyebrow">Новый сотрудник</div>
+        <div class="dash-title" style="font-size:18px;">Добавить сотрудника</div>
+        <button class="guide-close" id="addStaffClose">✕</button>
+      </div>
+      <div class="input-group"><label>Имя</label><input type="text" id="addStaffName" placeholder="Например, Артур" />
+      </div>
+      <div class="input-group"><label>Роль</label><input type="text" id="addStaffRole" placeholder="Барбер" /></div>
+      <div class="input-group"><label>Инициалы</label><input type="text" id="addStaffInitials" placeholder="АР"
+          maxlength="2" /></div>
+      <div class="input-group"><label>Телефон</label><input type="text" id="addStaffPhone"
+          placeholder="+992 000 00 00 00" /></div>
+      <div class="form-actions">
+        <button class="btn-save" id="btnConfirmAddStaff">Создать</button>
+        <button class="btn-cancel" id="btnCancelAddStaff">Отмена</button>
       </div>
     </div>
+  </div>
 
-    <div class="guide-overlay" id="addServiceOverlay">
-      <div class="guide-modal" style="max-width:360px;">
-        <div class="guide-header">
-          <div class="dash-eyebrow">Новая услуга</div>
-          <div class="dash-title" style="font-size:18px;">Добавить услугу</div>
-          <button class="guide-close" id="addServiceClose">✕</button>
-        </div>
-        <div class="input-group"><label>Название</label><input type="text" id="addServiceName"
-            placeholder="Стрижка машинкой" /></div>
-        <div class="input-group"><label>Длительность</label><input type="text" id="addServiceDuration"
-            placeholder="25 мин" /></div>
-        <div class="input-group"><label>Цена</label><input type="number" id="addServicePrice" placeholder="60" /></div>
-        <div class="form-actions">
-          <button class="btn-save" id="btnConfirmAddService">Создать</button>
-          <button class="btn-cancel" id="btnCancelAddService">Отмена</button>
-        </div>
+  <div class="guide-overlay" id="addServiceOverlay">
+    <div class="guide-modal" style="max-width:360px;">
+      <div class="guide-header">
+        <div class="dash-eyebrow">Новая услуга</div>
+        <div class="dash-title" style="font-size:18px;">Добавить услугу</div>
+        <button class="guide-close" id="addServiceClose">✕</button>
+      </div>
+      <div class="input-group"><label>Название</label><input type="text" id="addServiceName"
+          placeholder="Стрижка машинкой" /></div>
+      <div class="input-group"><label>Длительность</label><input type="text" id="addServiceDuration"
+          placeholder="25 мин" /></div>
+      <div class="input-group"><label>Цена</label><input type="number" id="addServicePrice" placeholder="60" /></div>
+      <div class="form-actions">
+        <button class="btn-save" id="btnConfirmAddService">Создать</button>
+        <button class="btn-cancel" id="btnCancelAddService">Отмена</button>
       </div>
     </div>
+  </div>
 
   </div>
 
@@ -2989,7 +3055,7 @@
         loadBotInfo();
         loadBusinessSettings();
         loadStaffAndServiceChips();
-        loadCalendarData();      
+        loadCalendarData();
         populateCrmFilters().then(loadCrmDashboard);
       }
       renderBranchSwitcher();
@@ -3008,7 +3074,7 @@
       loadBotInfo();
       loadBusinessSettings();
       loadStaffAndServiceChips();
-      loadCalendarData();      
+      loadCalendarData();
       renderBranchSwitcher();
       populateCrmFilters().then(loadCrmDashboard);
     }
@@ -3018,7 +3084,7 @@
       dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
     });
 
-        document.addEventListener("click", (e) => {
+    document.addEventListener("click", (e) => {
       const dropdownHeader = document.getElementById("branchDropdownHeader");
       const btnHeader = document.getElementById("btnBranchSwitcherHeader");
       if (dropdownHeader.style.display !== "none" && !dropdownHeader.contains(e.target) && !btnHeader.contains(e.target)) {
@@ -3223,7 +3289,7 @@
       loadBotInfo();
       loadBusinessSettings();
       loadStaffAndServiceChips();
-      loadCalendarData();      
+      loadCalendarData();
       renderBranchSwitcher();
       const crmDates = getCrmDefaultDates();
       document.getElementById("crmDateFrom").value = crmDates.from;
@@ -3636,7 +3702,7 @@
 
 
     //----------------
-        function renderCrmWeekdayChart(bookings) {
+    function renderCrmWeekdayChart(bookings) {
       const svg = document.getElementById("crmWeekdayChart");
       const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
       const counts = [0, 0, 0, 0, 0, 0, 0];
@@ -4078,7 +4144,7 @@
         });
       });
 
-        document.getElementById("btnDeleteClient").addEventListener("click", async () => {
+      document.getElementById("btnDeleteClient").addEventListener("click", async () => {
         // Заменили системный confirm() на красивую модалку подтверждения
         if (!(await showConfirm(`Удалить клиента "${client.name}" и все его записи (${client.visits} шт.)? Это необратимо.`))) return;
 
@@ -4377,12 +4443,12 @@
       loadStaffAndServiceChips();
     });
 
-        let calCurrentYear = new Date().getFullYear();
+    let calCurrentYear = new Date().getFullYear();
     let calCurrentMonth = new Date().getMonth();
     let calSelectedDate = null;
     let calBookingsCache = [];
 
-    const CAL_MONTH_NAMES = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+    const CAL_MONTH_NAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
 
     async function loadCalendarData() {
       const monthStart = new Date(calCurrentYear, calCurrentMonth, 1);
@@ -4480,7 +4546,7 @@
     document.getElementById("calPrevMonth").addEventListener("click", () => {
       calCurrentMonth -= 1;
       if (calCurrentMonth < 0) { calCurrentMonth = 11; calCurrentYear -= 1; }
-      calSelectedDate = null;      
+      calSelectedDate = null;
       loadCalendarData();
 
     });
@@ -4488,11 +4554,11 @@
     document.getElementById("calNextMonth").addEventListener("click", () => {
       calCurrentMonth += 1;
       if (calCurrentMonth > 11) { calCurrentMonth = 0; calCurrentYear += 1; }
-      calSelectedDate = null;      
+      calSelectedDate = null;
       loadCalendarData();
     });
 
-        // ---------- Раздел "Финансы" ----------
+    // ---------- Раздел "Финансы" ----------
 
     let financeSalaryExpanded = false; // флаг: развёрнут ли список зарплат
 
@@ -4540,8 +4606,8 @@
         .gte('booking_date', ranges.weekStartStr)
         .lte('booking_date', ranges.todayStr)
         .neq('status', 'cancelled');
-       
-               // Загружаем данные прошлого месяца для расчёта процента изменения
+
+      // Загружаем данные прошлого месяца для расчёта процента изменения
       const prevMonthStart = new Date(ranges.todayFull.getFullYear(), ranges.todayFull.getMonth() - 1, 1);
       const prevMonthEnd = new Date(ranges.todayFull.getFullYear(), ranges.todayFull.getMonth(), 0);
       const fmtPrev = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
@@ -4604,7 +4670,7 @@
         return { ...m, masterRevenue, fixed, percent, percentAmount, total };
       });
 
-            const totalSalaries = salaryData.reduce((s, m) => s + m.total, 0);
+      const totalSalaries = salaryData.reduce((s, m) => s + m.total, 0);
       const netProfit = revenueMonth - expensesMonth - totalSalaries;
 
       // Считаем зарплаты и прибыль за прошлый месяц (для процента изменения)
@@ -4625,7 +4691,7 @@
       window.__financeSalaryData = salaryData;
       window.__financeCurrency = currencyLabel;
 
-       const revenueTrend = calcTrendPercent(revenueMonth, prevRevenueMonth);
+      const revenueTrend = calcTrendPercent(revenueMonth, prevRevenueMonth);
       const expensesTrend = calcTrendPercent(expensesMonth, prevExpensesMonth);
       const salaryTrend = calcTrendPercent(totalSalaries, prevTotalSalaries);
       const profitTrend = calcTrendPercent(netProfit, prevNetProfit);
@@ -4636,7 +4702,7 @@
       if (financeSalaryExpanded) renderFinanceSalaryList();
     }
 
-        // Строит график "Выручка vs Расходы" по месяцам с августа текущего года до декабря
+    // Строит график "Выручка vs Расходы" по месяцам с августа текущего года до декабря
     async function renderFinanceChart() {
       const svg = document.getElementById("financeChart");
       if (!svg) return;
@@ -4745,7 +4811,7 @@
       });
     }
 
-        // Отрисовка списка зарплат сотрудников с возможностью редактирования
+    // Отрисовка списка зарплат сотрудников с возможностью редактирования
     function renderFinanceSalaryList() {
       const el = document.getElementById("financeSalaryList");
       const salaryData = window.__financeSalaryData || [];
@@ -4864,7 +4930,7 @@
       });
     }
 
-        // Открытие модалки "Финансы" через бургер-меню
+    // Открытие модалки "Финансы" через бургер-меню
     document.getElementById("burgerFinance").addEventListener("click", (e) => {
       e.preventDefault();
       document.getElementById("burgerMenuOverlay").style.display = "none";
@@ -4886,7 +4952,7 @@
       document.getElementById("addExpenseForm").classList.add("show");
     });
 
-        document.getElementById("btnCloseExpenseForm").addEventListener("click", () => {
+    document.getElementById("btnCloseExpenseForm").addEventListener("click", () => {
       document.getElementById("addExpenseForm").classList.remove("show");
     });
 
@@ -4968,7 +5034,7 @@
         loadBotInfo();
         loadBusinessSettings();
         loadStaffAndServiceChips();
-        loadCalendarData();             
+        loadCalendarData();
         renderBranchSwitcher();
         const crmDates = getCrmDefaultDates();
         document.getElementById("crmDateFrom").value = crmDates.from;
@@ -4990,7 +5056,7 @@
       });
     }
 
-      document.getElementById("btnBurgerMenu").addEventListener("click", () => {
+    document.getElementById("btnBurgerMenu").addEventListener("click", () => {
       document.getElementById("burgerMenuOverlay").style.display = "block";
     });
 
@@ -5022,7 +5088,7 @@
 
 
     //------- Событие ---------------//
-        async function loadEvents() {
+    async function loadEvents() {
       const { data, error } = await sb.from('events')
         .select('*')
         .eq('branch_id', currentBranchId)
@@ -5052,7 +5118,7 @@
         `;
       }).join("");
 
-    listEl.querySelectorAll('[data-action="delete-event"]').forEach(btn => {
+      listEl.querySelectorAll('[data-action="delete-event"]').forEach(btn => {
         btn.addEventListener("click", async () => {
           // Заменили системный confirm() на красивую модалку подтверждения
           if (!(await showConfirm("Удалить это событие?"))) return;
@@ -5103,7 +5169,7 @@
     });
 
 
-         // ---------- Универсальная функция подтверждения вместо системного confirm() ----------
+    // ---------- Универсальная функция подтверждения вместо системного confirm() ----------
     // Использование: const ok = await showConfirm("Удалить эту запись?"); if (!ok) return;
     function showConfirm(message) {
       return new Promise((resolve) => {
@@ -5132,7 +5198,7 @@
     }
 
 
-        // ---------- Раздел "Заметки" ----------
+    // ---------- Раздел "Заметки" ----------
 
     // Загружает все заметки текущего филиала и отрисовывает их сеткой карточек
     async function loadNotes() {
