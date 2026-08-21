@@ -378,7 +378,7 @@
       display: none;
       max-width: 1100px;
       margin: 0 auto;
-      padding: 28px 20px 60px;
+      padding: 130px 20px 60px;
     }
 
     .dash-header {
@@ -446,7 +446,7 @@
 
     @media (min-width: 900px) {
       .bot-section {
-        grid-template-columns: 33% 1fr;
+        grid-template-columns: 340px 340px;
       }
 
       .bot-card-decoration {
@@ -1795,6 +1795,51 @@
         white-space: nowrap;
       }
 
+          .burger-link {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 13.5px;
+      color: var(--ink);
+      text-decoration: none;
+      transition: background .15s ease;
+    }
+
+    .burger-link:hover {
+      background: var(--surface-2);
+    }
+
+    .dash {
+      padding-top: 130px !important;
+    }
+
+        @media (max-width: 760px) {
+      #headerPageTitle {
+        display: none;
+      }
+    }
+
+        @media (max-width: 760px) {
+      #mobilePageTitle {
+        display: block;
+      }
+    }
+
+        @media (max-width: 760px) {
+      #mainHeader svg[width="28"] {
+        width: 20px !important;
+        height: 20px !important;
+      }
+      #mainHeader div[style*="font-size:24px"] {
+        font-size: 17px !important;
+      }
+      #mainHeader button#btnLogoutHeader,
+      #mainHeader button#btnBranchSwitcherHeader {
+        padding: 7px 10px !important;
+        font-size: 11px !important;
+      }
+    }
+
     }
   </style>
 </head>
@@ -1814,6 +1859,60 @@
     <div class="orb orb-2"></div>
   </div>
   <div class="bg-grid"></div>
+  
+   <header id="mainHeader" style="display:none; position:fixed; top:0; left:0; right:0; z-index:50; background:color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); height:76px;">
+    <div style="max-width:1100px; height:100%; margin:0 auto; padding:0 20px; display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <button id="btnBurgerMenu" style="background:none; border:none; color:var(--accent); width:44px; height:44px; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <svg width="28" height="28" viewBox="0 0 44 44">
+            <path d="M10 8 L10 36 L18 30 L18 8 Z" fill="var(--accent)" />
+            <path d="M26 8 L26 30 L34 36 L34 8 Z" fill="none" stroke="var(--accent)" stroke-width="2.5" />
+          </svg>
+          <div style="font-family:'Fraunces',serif; font-size:24px; font-weight:700; color:var(--accent);">Bookly<span style="margin-left:-1px;">.</span></div>
+        </div>
+      <span id="headerPageTitle" style="font-family:'Fraunces',serif; font-size:30px; font-weight:700; color:var(--accent); border-left:1px solid var(--line); padding-left:14px;">Личный кабинет</span>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="position:relative;">
+          <button id="btnBranchSwitcherHeader"
+            style="display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--accent); color:var(--accent); padding:9px 14px; border-radius: 4px; font-size:13px; cursor:pointer;">
+            <span id="branchSwitcherLabelHeader">Филиал</span>
+            <span style="color:var(--faint); font-size:10px;">▾</span>
+          </button>
+          <div id="branchDropdownHeader"
+            style="display:none; position:absolute; top:calc(100% + 6px); right:0; min-width:240px; background:var(--surface); border:1px solid var(--line); border-radius: 4px; overflow:hidden; z-index:20; box-shadow:0 8px 24px rgba(28,27,31,0.18);">
+            <div id="branchListHeader"></div>
+            <div id="btnAddBranchHeader"
+              style="padding:12px 14px; border-top:1px solid var(--line); color:var(--accent); font-size:13px; font-weight:600; cursor:pointer; transition:background .15s ease;"
+              onmouseover="this.style.background='var(--accent-soft)'" onmouseout="this.style.background='transparent'">
+              + Добавить филиал</div>
+          </div>
+        </div>
+       <button id="btnLogoutHeader" style="display:flex; align-items:center; background:var(--surface); border:1px solid var(--accent); color:var(--accent); padding:9px 14px; border-radius: 4px; font-size:13px; cursor:pointer;">Выйти</button>
+      </div>
+    </div>
+  </header>
+
+
+<!-- Бургер -->
+  <div id="burgerMenuOverlay" style="display:none; position:fixed; inset:0; background:rgba(28,27,31,0.5); z-index:60;">
+    <div id="burgerMenuPanel" style="position:absolute; top:0; left:0; bottom:0; width:260px; background:var(--surface); border-right:1px solid var(--line); padding:20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <div style="font-family:'Fraunces',serif; font-size:17px; font-weight:700; color:var(--accent);">Bookly</div>
+        <button id="btnCloseBurger" style="background:none; border:none; color:var(--faint); font-size:18px; cursor:pointer;">✕</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:4px;">
+      </div>
+    </div>
+  </div>
 
   <div id="initialLoader"
     style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--bg); position:relative; z-index:1;">
@@ -1906,12 +2005,13 @@
   </div>
 
   <div class="dash" id="dash">
-    <div class="dash-header">
+    <div id="dashTop"></div>
+    <div class="dash-header" style="display:none;">
       <div>
         <div class="dash-title" style="font-size:28px;">Личный кабинет</div>
         <div id="trialBadge" style="font-size:12px; color:var(--accent); margin-top:6px;"></div>
       </div>
-      <div style="display:flex; align-items:center; gap:10px;">
+      <div style="display:none;">
         <div style="position:relative;">
           <button id="btnBranchSwitcher"
             style="display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--accent); color:var(--accent); padding:9px 14px; border-radius: 4px; font-size:13px; cursor:pointer;">
@@ -1932,113 +2032,114 @@
       </div>
     </div>
 
+    <div class="dash-title" id="mobilePageTitle" style="display:none; font-size:22px; margin-bottom:16px;">Личный кабинет</div>
+
     <div class="bot-section">
       <div class="bot-card">
         <div class="bot-card-label" style="color:var(--accent);">Ваш Telegram-бот</div>
         <div id="botStatusView"></div>
       </div>
 
+      <div class="bot-card" style="display:flex; flex-direction:column;">
+        <div class="bot-card-label" style="color:var(--accent);">Настройки бизнеса</div>
+        <div id="googleCalendarStatus" style="margin-bottom:12px;"></div>
+        <div id="businessSettingsCollapsed" style="background:transparent; padding:0; display:flex; justify-content:space-between; align-items:flex-end; flex:1;">
+          <div>
+            <div id="bsName" style="font-size:13px; font-weight:700; color:var(--ink);">—</div>
+            <div id="bsSummary" style="font-size:11px; color:var(--faint); margin-top:2px;">—</div>
+          </div>
+          <button id="btnOpenBusinessSettings" class="btn-cancel" style="border-color:var(--accent); color:var(--accent);">Настройки</button>
+        </div>
+      </div>
     </div>
 
-     <div class="bot-card" style="margin-top:16px; max-width:350px;">
-      <div class="bot-card-label" style="color:var(--accent);">Настройки бизнеса</div>
-            <div id="businessSettingsCollapsed"
-        style="background: transparent; padding: 0; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <div id="bsName" style="font-size:13px; font-weight:700; color:var(--ink);">—</div>
-          <div id="bsSummary" style="font-size:11px; color:var(--faint); margin-top:2px;">—</div>
+    <div class="guide-overlay" id="businessSettingsOverlay">
+      <div class="guide-modal" style="max-width:420px;">
+        <div class="guide-header">
+          <div class="dash-eyebrow">Настройки бизнеса</div>
+          <div class="dash-title" style="font-size:18px;">Изменить параметры</div>
+          <button class="guide-close" id="bsOverlayClose">✕</button>
         </div>
-        <button id="btnOpenBusinessSettings" class="btn-cancel" style="align-self:flex-end; margin-top:10px; border-color:var(--accent); color:var(--accent);">Настройки</button>
-      </div>
 
-       <div class="guide-overlay" id="businessSettingsOverlay">
-        <div class="guide-modal" style="max-width:420px;">
-          <div class="guide-header">
-            <div class="dash-eyebrow">Настройки бизнеса</div>
-            <div class="dash-title" style="font-size:18px;">Изменить параметры</div>
-            <button class="guide-close" id="bsOverlayClose">✕</button>
-          </div>
-
-          <div class="input-group">
-            <label>Название бизнеса</label>
-            <input type="text" id="bsNameInput" placeholder="Например, СТРОП" />
-          </div>
-          <div class="input-group">
-            <label>Валюта</label>
-            <select id="bsCurrencyInput"
-              style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius: 4px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
-              <option value="$">Доллар США ($)</option>
-              <option value="€">Евро (€)</option>
-              <option value="£">Фунт стерлингов (£)</option>
-              <option value="₽">Российский рубль (₽)</option>
-              <option value="₴">Украинская гривна (₴)</option>
-              <option value="смн">Таджикский сомони (смн)</option>
-              <option value="сум">Узбекский сум (сум)</option>
-              <option value="₸">Казахстанский тенге (₸)</option>
-              <option value="с">Киргизский сом (с)</option>
-              <option value="₼">Азербайджанский манат (₼)</option>
-              <option value="֏">Армянский драм (֏)</option>
-              <option value="₾">Грузинский лари (₾)</option>
-              <option value="лей">Молдавский лей (лей)</option>
-              <option value="Br">Белорусский рубль (Br)</option>
-              <option value="₺">Турецкая лира (₺)</option>
-              <option value="₹">Индийская рупия (₹)</option>
-              <option value="¥">Китайский юань (¥)</option>
-              <option value="AED">Дирхам ОАЭ (AED)</option>
-              <option value="﷼">Саудовский риял (﷼)</option>
-              <option value="R">Южноафриканский рэнд (R)</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label>Часовой пояс</label>
-            <select id="bsTimezoneInput"
-              style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius: 4px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
-              <option value="-12">UTC-12</option>
-              <option value="-11">UTC-11 — Самоа</option>
-              <option value="-10">UTC-10 — Гавайи</option>
-              <option value="-9">UTC-9 — Аляска</option>
-              <option value="-8">UTC-8 — Лос-Анджелес, Ванкувер</option>
-              <option value="-7">UTC-7 — Денвер, Финикс</option>
-              <option value="-6">UTC-6 — Чикаго, Мехико</option>
-              <option value="-5">UTC-5 — Нью-Йорк, Торонто, Богота</option>
-              <option value="-4">UTC-4 — Каракас, Ла-Пас</option>
-              <option value="-3">UTC-3 — Буэнос-Айрес, Сан-Паулу</option>
-              <option value="-2">UTC-2</option>
-              <option value="-1">UTC-1 — Азорские острова</option>
-              <option value="0">UTC+0 — Лондон, Лиссабон, Аккра</option>
-              <option value="1">UTC+1 — Берлин, Париж, Рим, Лагос</option>
-              <option value="2">UTC+2 — Киев, Кишинёв, Каир, Йоханнесбург</option>
-              <option value="3">UTC+3 — Москва, Стамбул, Найроби, Эр-Рияд</option>
-              <option value="4">UTC+4 — Баку, Тбилиси, Ереван, Дубай</option>
-              <option value="4.5">UTC+4:30 — Кабул</option>
-              <option value="5">UTC+5 — Душанбе, Ташкент, Екатеринбург, Карачи</option>
-              <option value="5.5">UTC+5:30 — Дели, Мумбаи</option>
-              <option value="5.75">UTC+5:45 — Катманду</option>
-              <option value="6">UTC+6 — Алматы, Бишкек, Омск, Дакка</option>
-              <option value="6.5">UTC+6:30 — Янгон</option>
-              <option value="7">UTC+7 — Новосибирск, Бангкок, Джакарта</option>
-              <option value="8">UTC+8 — Иркутск, Пекин, Сингапур, Манила</option>
-              <option value="9">UTC+9 — Токио, Сеул, Владивосток</option>
-              <option value="9.5">UTC+9:30 — Аделаида</option>
-              <option value="10">UTC+10 — Сидней, Мельбурн, Владивосток</option>
-              <option value="11">UTC+11 — Магадан, Соломоновы острова</option>
-              <option value="12">UTC+12 — Окленд, Фиджи</option>
-              <option value="13">UTC+13 — Тонга</option>
-              <option value="14">UTC+14 — Кирибати</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label>Время записи через запятую</label>
-            <input type="text" id="bsWorkTimesInput" placeholder="10:00,11:30,12:00" />
-          </div>
-          <div class="input-group">
-            <label>Выходные дни</label>
-            <div id="bsDaysOffCheckboxes"></div>
-          </div>
-          <div class="form-actions">
-            <button class="btn-save" id="btnSaveBusinessSettings">Сохранить</button>
-            <button class="btn-cancel" id="btnCancelBusinessSettings">Отмена</button>
-          </div>
+        <div class="input-group">
+          <label>Название бизнеса</label>
+          <input type="text" id="bsNameInput" placeholder="Например, СТРОП" />
+        </div>
+        <div class="input-group">
+          <label>Валюта</label>
+          <select id="bsCurrencyInput"
+            style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius: 4px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
+            <option value="$">Доллар США ($)</option>
+            <option value="€">Евро (€)</option>
+            <option value="£">Фунт стерлингов (£)</option>
+            <option value="₽">Российский рубль (₽)</option>
+            <option value="₴">Украинская гривна (₴)</option>
+            <option value="смн">Таджикский сомони (смн)</option>
+            <option value="сум">Узбекский сум (сум)</option>
+            <option value="₸">Казахстанский тенге (₸)</option>
+            <option value="с">Киргизский сом (с)</option>
+            <option value="₼">Азербайджанский манат (₼)</option>
+            <option value="֏">Армянский драм (֏)</option>
+            <option value="₾">Грузинский лари (₾)</option>
+            <option value="лей">Молдавский лей (лей)</option>
+            <option value="Br">Белорусский рубль (Br)</option>
+            <option value="₺">Турецкая лира (₺)</option>
+            <option value="₹">Индийская рупия (₹)</option>
+            <option value="¥">Китайский юань (¥)</option>
+            <option value="AED">Дирхам ОАЭ (AED)</option>
+            <option value="﷼">Саудовский риял (﷼)</option>
+            <option value="R">Южноафриканский рэнд (R)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Часовой пояс</label>
+          <select id="bsTimezoneInput"
+            style="width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius: 4px; font-size:14px; font-family:inherit; background:var(--surface-2); color:var(--ink);">
+            <option value="-12">UTC-12</option>
+            <option value="-11">UTC-11 — Самоа</option>
+            <option value="-10">UTC-10 — Гавайи</option>
+            <option value="-9">UTC-9 — Аляска</option>
+            <option value="-8">UTC-8 — Лос-Анджелес, Ванкувер</option>
+            <option value="-7">UTC-7 — Денвер, Финикс</option>
+            <option value="-6">UTC-6 — Чикаго, Мехико</option>
+            <option value="-5">UTC-5 — Нью-Йорк, Торонто, Богота</option>
+            <option value="-4">UTC-4 — Каракас, Ла-Пас</option>
+            <option value="-3">UTC-3 — Буэнос-Айрес, Сан-Паулу</option>
+            <option value="-2">UTC-2</option>
+            <option value="-1">UTC-1 — Азорские острова</option>
+            <option value="0">UTC+0 — Лондон, Лиссабон, Аккра</option>
+            <option value="1">UTC+1 — Берлин, Париж, Рим, Лагос</option>
+            <option value="2">UTC+2 — Киев, Кишинёв, Каир, Йоханнесбург</option>
+            <option value="3">UTC+3 — Москва, Стамбул, Найроби, Эр-Рияд</option>
+            <option value="4">UTC+4 — Баку, Тбилиси, Ереван, Дубай</option>
+            <option value="4.5">UTC+4:30 — Кабул</option>
+            <option value="5">UTC+5 — Душанбе, Ташкент, Екатеринбург, Карачи</option>
+            <option value="5.5">UTC+5:30 — Дели, Мумбаи</option>
+            <option value="5.75">UTC+5:45 — Катманду</option>
+            <option value="6">UTC+6 — Алматы, Бишкек, Омск, Дакка</option>
+            <option value="6.5">UTC+6:30 — Янгон</option>
+            <option value="7">UTC+7 — Новосибирск, Бангкок, Джакарта</option>
+            <option value="8">UTC+8 — Иркутск, Пекин, Сингапур, Манила</option>
+            <option value="9">UTC+9 — Токио, Сеул, Владивосток</option>
+            <option value="9.5">UTC+9:30 — Аделаида</option>
+            <option value="10">UTC+10 — Сидней, Мельбурн, Владивосток</option>
+            <option value="11">UTC+11 — Магадан, Соломоновы острова</option>
+            <option value="12">UTC+12 — Окленд, Фиджи</option>
+            <option value="13">UTC+13 — Тонга</option>
+            <option value="14">UTC+14 — Кирибати</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Время записи через запятую</label>
+          <input type="text" id="bsWorkTimesInput" placeholder="10:00,11:30,12:00" />
+        </div>
+        <div class="input-group">
+          <label>Выходные дни</label>
+          <div id="bsDaysOffCheckboxes"></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-save" id="btnSaveBusinessSettings">Сохранить</button>
+          <button class="btn-cancel" id="btnCancelBusinessSettings">Отмена</button>
         </div>
       </div>
     </div>
@@ -2616,6 +2717,9 @@
     function renderBranchSwitcher() {
       const currentBranch = allBranches.find(b => b.id === currentBranchId);
       document.getElementById("branchSwitcherLabel").textContent = currentBranch ? currentBranch.name : "Филиал";
+      document.getElementById("branchSwitcherLabelHeader").textContent = currentBranch ? currentBranch.name : "Филиал";
+      document.getElementById("mainHeader").style.display = "block";
+      document.body.classList.add("has-header");
       renderTrialBadge();
 
 
@@ -2644,23 +2748,26 @@
         });
       })();
 
-
-      const listEl = document.getElementById("branchList");
-      listEl.innerHTML = allBranches.map(b => `
+      const branchListHtml = allBranches.map(b => `
         <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 14px; font-size:13px; ${b.id === currentBranchId ? 'background:var(--accent-soft); color:var(--accent);' : 'color:var(--ink);'}">
           <span class="branch-option" data-id="${b.id}" style="cursor:pointer; flex:1;">${b.name}</span>
           ${allBranches.length > 1 ? `<span class="branch-delete" data-id="${b.id}" style="cursor:pointer; color:var(--faint); padding-left:8px;">✕</span>` : ''}
         </div>
       `).join("");
 
-      listEl.querySelectorAll(".branch-option").forEach(el => {
-        el.addEventListener("click", () => switchBranch(Number(el.dataset.id)));
-      });
+      ["branchList", "branchListHeader"].forEach(id => {
+        const listEl = document.getElementById(id);
+        listEl.innerHTML = branchListHtml;
 
-      listEl.querySelectorAll(".branch-delete").forEach(el => {
-        el.addEventListener("click", (e) => {
-          e.stopPropagation();
-          deleteBranch(Number(el.dataset.id));
+        listEl.querySelectorAll(".branch-option").forEach(el => {
+          el.addEventListener("click", () => switchBranch(Number(el.dataset.id)));
+        });
+
+        listEl.querySelectorAll(".branch-delete").forEach(el => {
+          el.addEventListener("click", (e) => {
+            e.stopPropagation();
+            deleteBranch(Number(el.dataset.id));
+          });
         });
       });
     }
@@ -2728,22 +2835,27 @@
       populateCrmFilters().then(loadCrmDashboard);
     }
 
-    document.getElementById("btnBranchSwitcher").addEventListener("click", () => {
-      const dropdown = document.getElementById("branchDropdown");
+    document.getElementById("btnBranchSwitcherHeader").addEventListener("click", () => {
+      const dropdown = document.getElementById("branchDropdownHeader");
       dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
     });
 
-    document.addEventListener("click", (e) => {
-      const dropdown = document.getElementById("branchDropdown");
-      const btn = document.getElementById("btnBranchSwitcher");
-      if (dropdown.style.display !== "none" && !dropdown.contains(e.target) && !btn.contains(e.target)) {
-        dropdown.style.display = "none";
+        document.addEventListener("click", (e) => {
+      const dropdownHeader = document.getElementById("branchDropdownHeader");
+      const btnHeader = document.getElementById("btnBranchSwitcherHeader");
+      if (dropdownHeader.style.display !== "none" && !dropdownHeader.contains(e.target) && !btnHeader.contains(e.target)) {
+        dropdownHeader.style.display = "none";
       }
     });
 
     document.getElementById("btnAddBranch").addEventListener("click", async () => {
       const { data: botCheck } = await sb.from('bots').select('bot_token').eq('branch_id', currentBranchId).maybeSingle();
 
+      if (!botCheck || !botCheck.bot_token) {
+        showToast("Сначала подключите бота к текущему филиалу");
+        document.getElementById("branchDropdown").style.display = "none";
+        return;
+      }
       if (!botCheck || !botCheck.bot_token) {
         showToast("Сначала подключите бота к текущему филиалу");
         document.getElementById("branchDropdown").style.display = "none";
@@ -2977,10 +3089,6 @@
           ? `<div style="font-size:13px; font-weight:700; margin-bottom:2px;">${data.business_name}</div>`
           : `<div style="font-size:12px; color:var(--danger); margin-bottom:4px;">⚠ Не указано название бизнеса</div>`;
 
-        const calendarStatusLine = data.google_calendar_connected
-          ? `<div style="font-size:12px; color:var(--accent); margin-top:8px;">✓ Google Calendar подключён</div>`
-          : `<button id="btnConnectGoogle" style="margin-top:10px; background:none; border:1px solid var(--line); color:var(--muted); padding:7px 12px; border-radius: 4px; font-size:12px; cursor:pointer;">📅 Подключить Google Calendar</button>`;
-
         view.innerHTML = `
         <div class="bot-status-row">
           <div>
@@ -2989,20 +3097,28 @@
             <span style="font-size:13px; font-weight:600;">${data.is_active ? 'Подключён' : 'Отключён'}</span>
             <div style="font-size:12px; color:var(--faint); margin-top:4px; font-family: 'Fraunces', serif;">${maskedToken}</div>
             ${chatIdLine}
-            ${calendarStatusLine}
           </div>
           <button class="btn-cancel" id="btnChangeToken" style="align-self:flex-end; margin-top:10px; border-color:var(--accent); color:var(--accent);">Изменить</button>
         </div>
       `;
         document.getElementById("btnChangeToken").addEventListener("click", showBotForm);
 
-        const connectGoogleBtn = document.getElementById("btnConnectGoogle");
-        if (connectGoogleBtn) {
-          connectGoogleBtn.addEventListener("click", () => {
-            window.open(`https://my-bot-project-eoc1.onrender.com/oauth/google/start?owner_id=${currentUserId}`, '_blank');
-          });
+        const gcalEl = document.getElementById("googleCalendarStatus");
+        if (gcalEl) {
+          gcalEl.innerHTML = data.google_calendar_connected
+            ? `<div style="font-size:12px; color:var(--accent);">✓ Google Calendar подключён</div>`
+            : `<button id="btnConnectGoogle" style="background:none; border:1px solid var(--line); color:var(--muted); padding:7px 12px; border-radius: 4px; font-size:12px; cursor:pointer;">📅 Подключить Google Calendar</button>`;
+
+          const connectGoogleBtn = document.getElementById("btnConnectGoogle");
+          if (connectGoogleBtn) {
+            connectGoogleBtn.addEventListener("click", () => {
+              window.open(`https://my-bot-project-eoc1.onrender.com/oauth/google/start?owner_id=${currentUserId}`, '_blank');
+            });
+          }
         }
       } else {
+        const gcalEl = document.getElementById("googleCalendarStatus");
+        if (gcalEl) gcalEl.innerHTML = '';
         view.innerHTML = `
         <div style="font-size:13px; color:var(--muted); margin-bottom:8px;">
           Бот ещё не подключён.
@@ -4270,6 +4386,26 @@
         });
       });
     }
+
+        document.getElementById("btnBurgerMenu").addEventListener("click", () => {
+      document.getElementById("burgerMenuOverlay").style.display = "block";
+    });
+    document.getElementById("btnCloseBurger").addEventListener("click", () => {
+      document.getElementById("burgerMenuOverlay").style.display = "none";
+    });
+    document.getElementById("burgerMenuOverlay").addEventListener("click", (e) => {
+      if (e.target.id === "burgerMenuOverlay") {
+        document.getElementById("burgerMenuOverlay").style.display = "none";
+      }
+    });
+    document.querySelectorAll(".burger-link").forEach(link => {
+      link.addEventListener("click", () => {
+        document.getElementById("burgerMenuOverlay").style.display = "none";
+      });
+    });
+    document.getElementById("btnLogoutHeader").addEventListener("click", () => {
+      document.getElementById("btnLogout").click();
+    });
 
   </script>
 
