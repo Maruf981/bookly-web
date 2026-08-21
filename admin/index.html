@@ -841,7 +841,7 @@
       outline: none;
     }
 
-    [data-theme="dark"] .crm-filter-input::-webkit-calendar-picker-indicator {
+    [data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
       filter: invert(1);
       cursor: pointer;
     }
@@ -1916,7 +1916,7 @@
         </a>
         <div style="border-top:1px solid var(--line); margin:2px 0;"></div>
 
-        <a href="#" class="burger-link" style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
+        <a href="#" id="burgerEvents" class="burger-link" style="display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:4px; text-decoration:none; color:var(--muted);">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01"/></svg>
           <span style="font-size:13px;">События</span>
         </a>
@@ -2494,6 +2494,47 @@
         <div id="clientProfileCard"></div>
       </div>
     </div>
+
+    <div class="guide-overlay" id="eventsModalOverlay">
+      <div class="guide-modal" style="max-width:520px;">
+        <div class="guide-header">
+          <div class="dash-eyebrow">События</div>
+          <div class="dash-title" style="font-size:18px;">Ваши события</div>
+          <button class="guide-close" id="eventsModalClose">✕</button>
+        </div>
+
+        <div id="eventsList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;"></div>
+
+        <!-- Кнопка добавления нового события — пунктирная рамка в стиле остальных кнопок "добавить" в кабинете -->
+        <button id="btnShowAddEvent" style="width:100%; padding:12px; border:1.5px dashed var(--line); background:transparent; color:var(--muted); border-radius:4px; font-size:13px; font-weight:600; cursor:pointer;">+ Добавить событие</button>
+
+        <div class="form-card" id="addEventForm">
+
+
+          <!-- Поле названия события -->
+          <div class="input-group">
+            <label>Название события</label>
+            <input type="text" id="eventTitleInput" placeholder="Например, День рождения Артура" />
+          </div>
+          <!-- Поле даты события -->
+          <div class="input-group">
+            <label>Дата</label>
+            <input type="date" id="eventDateInput" />
+          </div>
+          <!-- Чекбокс: присылать ли напоминание через Telegram-бота в этот день -->
+          <div class="input-group" style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="eventNotifyCheckbox" style="accent-color:var(--accent); width:16px; height:16px;" />
+            <label for="eventNotifyCheckbox" style="margin-bottom:0; text-transform:none; font-weight:400; font-size:13px; color:var(--ink);">Напомнить через бота в этот день</label>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-save" id="btnSaveEvent">Сохранить</button>
+            <button class="btn-cancel" id="btnCancelEvent">Отмена</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     </div>
 
     <div class="guide-overlay" id="staffCardOverlay">
@@ -4451,6 +4492,87 @@
     });
     document.getElementById("btnLogoutHeader").addEventListener("click", () => {
       document.getElementById("btnLogout").click();
+    });
+
+
+    //------- Событие ---------------//
+        async function loadEvents() {
+      const { data, error } = await sb.from('events')
+        .select('*')
+        .eq('branch_id', currentBranchId)
+        .order('event_date', { ascending: true });
+
+      const listEl = document.getElementById("eventsList");
+      if (!listEl) return;
+
+      if (error || !data || data.length === 0) {
+        listEl.innerHTML = `<div style="font-size:12px; color:var(--faint); padding:12px 0;">Пока нет событий</div>`;
+        return;
+      }
+
+      // Формируем HTML для каждого события: дата + иконка колокольчика, если включено напоминание
+      listEl.innerHTML = data.map(ev => {
+        const date = new Date(ev.event_date);
+        const dateLabel = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+        const notifyIcon = ev.notify ? '🔔 ' : '';
+        return `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface-2); border-radius:4px; padding:10px 12px;">
+            <div>
+              <div style="font-size:12.5px; color:var(--ink); font-weight:600;">${notifyIcon}${ev.title}</div>
+              <div style="font-size:10.5px; color:var(--faint); margin-top:2px;">${dateLabel}</div>
+            </div>
+            <button class="icon-btn danger" data-id="${ev.id}" data-action="delete-event">✕</button>
+          </div>
+        `;
+      }).join("");
+
+      listEl.querySelectorAll('[data-action="delete-event"]').forEach(btn => {
+        btn.addEventListener("click", async () => {
+          if (!confirm("Удалить это событие?")) return;
+          const { error } = await sb.from('events').delete().eq('id', btn.dataset.id);
+          if (error) { showToast("Ошибка: " + error.message); return; }
+          showToast("Событие удалено");
+          loadEvents();
+        });
+      });
+    }
+
+    document.getElementById("burgerEvents").addEventListener("click", (e) => {
+      e.preventDefault();
+      document.getElementById("burgerMenuOverlay").style.display = "none";
+      document.getElementById("eventsModalOverlay").classList.add("show");
+      loadEvents();
+    });
+
+    document.getElementById("eventsModalClose").addEventListener("click", () => {
+      document.getElementById("eventsModalOverlay").classList.remove("show");
+    });
+
+    document.getElementById("btnShowAddEvent").addEventListener("click", () => {
+      document.getElementById("eventTitleInput").value = "";
+      document.getElementById("eventDateInput").value = "";
+      document.getElementById("addEventForm").classList.add("show");
+    });
+
+    document.getElementById("btnCancelEvent").addEventListener("click", () => {
+      document.getElementById("addEventForm").classList.remove("show");
+    });
+
+    // Сохранение нового события в базу (с учётом флага "напоминать через бота")
+    document.getElementById("btnSaveEvent").addEventListener("click", async () => {
+      const title = document.getElementById("eventTitleInput").value.trim();
+      const eventDate = document.getElementById("eventDateInput").value;
+      const notify = document.getElementById("eventNotifyCheckbox").checked;
+      if (!title || !eventDate) { showToast("Впишите название и дату"); return; }
+
+      const { error } = await sb.from('events').insert({
+        title, event_date: eventDate, owner_id: currentUserId, branch_id: currentBranchId, notify
+      });
+      if (error) { showToast("Ошибка: " + error.message); return; }
+
+      showToast("Событие добавлено");
+      document.getElementById("addEventForm").classList.remove("show");
+      loadEvents();
     });
 
   </script>
