@@ -2900,7 +2900,8 @@
 
         loadBotInfo();
         renderBranchSwitcher();
-        // Supabase просит подтвердить email, прежде чем войти
+      } else {
+        // Confirm email включён — нужно подтвердить почту перед входом
         errorBox.style.color = "var(--accent)";
         errorBox.textContent = "Аккаунт создан! Проверьте почту, чтобы подтвердить email, затем войдите.";
         errorBox.style.display = "block";
@@ -2921,7 +2922,7 @@
       }
 
       currentUserId = data.user.id;
-      allBranches = await ensureDefaultBranch();
+      allBranches = await loadBranches();
       const savedBranchId = Number(localStorage.getItem("bookly_current_branch"));
       const savedBranchExists = allBranches.some(b => b.id === savedBranchId);
       currentBranchId = savedBranchExists ? savedBranchId : (allBranches.length > 0 ? allBranches[0].id : null);
@@ -4238,7 +4239,7 @@
 
       if (data.session) {
         currentUserId = data.session.user.id;
-        allBranches = await ensureDefaultBranch();
+        allBranches = await loadBranches();
         const savedBranchId = Number(localStorage.getItem("bookly_current_branch"));
         const savedBranchExists = allBranches.some(b => b.id === savedBranchId);
         currentBranchId = savedBranchExists ? savedBranchId : (allBranches.length > 0 ? allBranches[0].id : null);
