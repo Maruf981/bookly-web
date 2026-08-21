@@ -2893,11 +2893,13 @@
       if (data.session) {
         // Регистрация без подтверждения email — сразу входим
         currentUserId = data.user.id;
+        allBranches = await ensureDefaultBranch();
+        currentBranchId = allBranches.length > 0 ? allBranches[0].id : null;
         document.getElementById("loginWrap").style.display = "none";
         document.getElementById("dash").style.display = "block";
 
-
         loadBotInfo();
+        renderBranchSwitcher();
         // Supabase просит подтвердить email, прежде чем войти
         errorBox.style.color = "var(--accent)";
         errorBox.textContent = "Аккаунт создан! Проверьте почту, чтобы подтвердить email, затем войдите.";
@@ -2919,7 +2921,7 @@
       }
 
       currentUserId = data.user.id;
-      allBranches = await loadBranches();
+      allBranches = await ensureDefaultBranch();
       const savedBranchId = Number(localStorage.getItem("bookly_current_branch"));
       const savedBranchExists = allBranches.some(b => b.id === savedBranchId);
       currentBranchId = savedBranchExists ? savedBranchId : (allBranches.length > 0 ? allBranches[0].id : null);
@@ -4236,7 +4238,7 @@
 
       if (data.session) {
         currentUserId = data.session.user.id;
-        allBranches = await loadBranches();
+        allBranches = await ensureDefaultBranch();
         const savedBranchId = Number(localStorage.getItem("bookly_current_branch"));
         const savedBranchExists = allBranches.some(b => b.id === savedBranchId);
         currentBranchId = savedBranchExists ? savedBranchId : (allBranches.length > 0 ? allBranches[0].id : null);
