@@ -2540,6 +2540,20 @@
       return data;
     }
 
+    async function ensureDefaultBranch() {
+      let branches = await loadBranches();
+      if (branches.length === 0) {
+        const { data: newBranch, error } = await sb.from('branches')
+          .insert({ owner_id: currentUserId, name: 'Основной' })
+          .select()
+          .single();
+        if (!error && newBranch) {
+          branches = [newBranch];
+        }
+      }
+      return branches;
+    }
+
     let allBranches = [];
 
 
