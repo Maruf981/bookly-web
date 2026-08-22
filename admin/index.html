@@ -111,9 +111,7 @@
       mask-image: radial-gradient(ellipse 70% 55% at 55% 5%, black, transparent 78%);
     }
 
-    .login-wrap,
-    .dash,
-    .toast,
+
 
 
     .login-wrap {
@@ -606,37 +604,53 @@
       margin-bottom: 12px;
     }
 
-    .input-group label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      color: var(--faint);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
+   .input-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--faint);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  transition: color .15s ease, transform .15s ease; /* лейбл "подпрыгивает" и меняет цвет при фокусе на поле рядом */
+}
 
-    .input-group input {
-      width: 100%;
-      padding: 11px 13px;
-      border: 1.5px solid var(--accent);
-      border-radius: 4px;
-      font-size: 14px;
-      font-family: inherit;
-      background: var(--surface-2);
-      color: var(--ink);
-      transition: border-color .15s ease, background .15s ease;
-    }
+/* Убрали рамку со всех сторон и фон — оставили только нижнюю линию (как в референсе) */
+.input-group input {
+  width: 100%;
+  padding: 11px 2px;
+  border: none;
+  border-bottom: 1.5px solid var(--line);
+  border-radius: 0;
+  font-size: 14px;
+  font-family: inherit;
+  background: transparent;
+  color: var(--ink);
+  transition: border-color .15s ease, transform .15s ease;
+}
 
-    .input-group input::placeholder {
-      color: var(--faint);
-    }
+.input-group input::placeholder {
+  color: var(--faint);
+  transition: opacity .15s ease, transform .15s ease; /* плейсхолдер тоже слегка сдвигается при фокусе */
+}
 
-    .input-group input:focus {
-      outline: none;
-      border-color: var(--accent);
-      background: var(--surface);
-    }
+.input-group input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--accent); /* линия внизу утолщается и становится изумрудной */
+  transform: translateY(-1px); /* лёгкий "подъём" самого поля */
+}
+
+.input-group input:focus::placeholder {
+  opacity: 0.5;
+  transform: translateX(3px);
+}
+
+/* Лейбл над полем при фокусе на этом поле — подсвечивается и приподнимается */
+.input-group:focus-within label {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+ 
 
     .form-grid {
       display: grid;
@@ -662,22 +676,16 @@
       cursor: pointer;
     }
 
-.toast {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--ink);
-  color: var(--bg);
-  padding: 11px 18px;
-  border-radius: 4px;
-  font-size: 13px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s ease;
-  z-index: 999; /* выше любых модалок, чтобы тост всегда был поверх всего, а не перекрывался белой полосой overlay */
-  max-width: 90vw; /* на всякий случай, чтобы длинный текст тоста не растягивался на весь экран */
-}
+
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+    }
 
     .toast {
       position: fixed;
@@ -694,9 +702,10 @@
       transition: opacity .2s ease;
     }
 
-    .toast.show {
+  .toast.show {
       opacity: 1;
     }
+
 
     /* ---------- Guide modal ---------- */
 
@@ -716,16 +725,41 @@
       display: flex;
     }
 
-    .guide-modal {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      padding: 24px;
-      max-width: 460px;
-      width: 100%;
-      max-height: 85vh;
-      overflow-y: auto;
-    }
+.guide-modal {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 24px;
+  max-width: 460px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+/* Скроллбар скрыт по умолчанию, появляется тонкой изумрудной полоской только при наведении на модалку */
+.guide-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.guide-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.guide-modal::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.guide-modal:hover::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+.guide-modal:hover {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
 
     .guide-header {
       position: relative;
@@ -1856,6 +1890,25 @@
         }
       }
 
+      @media (max-width: 760px) {
+        #mainHeader>div>div[style*="gap:14px"] {
+          gap: 6px !important;
+        }
+      }
+
+    }
+
+    .finance-cards-grid {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 760px) {
+      .finance-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
   </style>
 </head>
@@ -2630,71 +2683,67 @@
       </div>
     </div>
 
-    <!-- Модальное окно раздела "Финансы" — карточки, график, зарплаты, расходы -->
+
+
+    <!-- Модальное окно раздела "Финансы" — размер модалки подогнан впритык под саму карточку графика, без лишнего пустого пространства -->
     <div class="guide-overlay" id="financeModalOverlay">
-      <div class="guide-modal" style="max-width:720px;">
-        <div class="guide-header">
-          <div class="dash-eyebrow">Финансы</div>
-          <div class="dash-title" style="font-size:18px;">Обзор бизнеса</div>
-          <button class="guide-close" id="financeModalClose">✕</button>
-        </div>
+      <div class="guide-modal" style="max-width:778px; padding:0; background:transparent; border:none; position:relative;">
+        <button class="guide-close" id="financeModalClose" style="position:absolute; top:-32px; right:0; z-index:2; color:#eef0f5;">✕</button>
 
-        <!-- 4 карточки: выручка / расходы / зарплаты / чистая прибыль -->
-        <div id="financeCardsGrid"
-          style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px;"></div>
+        <div id="financeContent">
 
-        <!-- График сравнения выручки и расходов по месяцам -->
-        <div
-          style="background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:16px; margin-bottom:20px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <div style="font-size:12.5px; color:var(--ink); font-weight:700;">Выручка vs Расходы по месяцам</div>
-            <div style="display:flex; gap:12px; font-size:10px; color:var(--faint);">
-              <span><span style="color:var(--accent);">●</span> Выручка</span>
-              <span><span style="color:var(--danger);">●</span> Расходы</span>
+          <!-- Блок 0: столбцы Выручка/Расходы/Зарплаты/Прибыль в стиле референса -->
+          <div style="background:#26272a; border-radius:12px; padding:16px; margin-bottom:16px; position:relative;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <div style="font-size:12px; color:#eef0f5; font-weight:700;">Показатели</div>
+              <button id="btnCloseFinanceBars" style="background:none; border:none; color:#eef0f5; font-size:14px; cursor:pointer; padding:2px 6px;">✕</button>
+            </div>
+            <div id="financeBarsGrid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; height:130px;"></div>
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; text-align:center; margin-top:8px;">
+              <span style="font-size:10px; color:#c8ccd2;">Выручка</span>
+              <span style="font-size:10px; color:#c8ccd2;">Расходы</span>
+              <span style="font-size:10px; color:#c8ccd2;">Зарплаты</span>
+              <span style="font-size:10px; color:#c8ccd2;">Прибыль</span>
             </div>
           </div>
-          <svg viewBox="0 0 400 120" width="100%" height="120" id="financeChart"></svg>
-        </div>
 
-        <!-- Раскрывающийся список зарплат сотрудников (появляется по клику на карточку "Зарплаты") -->
-        <div id="financeSalaryList"
-          style="display:none; background:var(--surface-2); border-radius:4px; padding:14px; margin-bottom:20px;"></div>
-
-        <!-- Список расходов с кнопкой добавления -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <div style="font-size:10px; color:var(--faint); text-transform:uppercase; letter-spacing:.5px;">Список
-            расходов</div>
-          <button id="btnShowAddExpense"
-            style="background:none; border:1px solid var(--line); color:var(--muted); width:24px; height:24px; border-radius:4px; font-size:14px; cursor:pointer;">+</button>
-        </div>
-
-        <!-- Форма добавления расхода (скрыта по умолчанию) -->
-        <div class="form-card" id="addExpenseForm" style="position:relative;">
-          <button id="btnCloseExpenseForm"
-            style="position:absolute; top:12px; right:12px; background:none; border:none; color:var(--faint); font-size:16px; cursor:pointer;">✕</button>
-          <div class="input-group">
-            <label>Название расхода</label>
-            <input type="text" id="expenseTitleInput" placeholder="Например, Аренда помещения" />
-          </div>
-          <div class="form-grid">
-            <div class="input-group">
-              <label>Сумма</label>
-              <input type="number" id="expenseAmountInput" placeholder="5000" />
+          <!-- Блок 1: верхний график выручки с суммой и % изменения -->
+          <div style="background:#484a51; border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;">
+              <div style="font-size:12px; color:#eef0f5; font-weight:700;">Выручка</div>
+              <div style="display:flex; gap:10px; font-size:11px; color:#9aa1b2;">
+                <span class="finance-period-btn" data-period="day">День</span>
+                <span class="finance-period-btn" data-period="week">Нед.</span>
+                <span class="finance-period-btn active" data-period="month">Мес.</span>
+                <span class="finance-period-btn" data-period="year">1 год</span>
+                <span class="finance-period-btn" data-period="all">Все</span>
+              </div>
             </div>
-            <div class="input-group">
-              <label>Дата</label>
-              <input type="date" id="expenseDateInput" />
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+              <div id="financeRevenueValue" style="font-family:'Fraunces',serif; font-size:24px; font-weight:700; color:#eef0f5;">—</div>
+              <div id="financeRevenueTrend" style="font-size:11px; padding:2px 8px; border-radius:12px;"></div>
             </div>
+            <svg viewBox="0 0 740 130" width="100%" height="130" id="financeRevenueChart"></svg>
           </div>
-          <div class="form-actions">
-            <button class="btn-save" id="btnSaveExpense">Сохранить</button>
-            <button class="btn-cancel" id="btnCancelExpense">Отмена</button>
-          </div>
-        </div>
 
-        <div id="expensesList" style="display:flex; flex-direction:column; gap:6px;"></div>
+          <!-- Блок: круговой индикатор сравнения выручки сегодня/вчера -->
+          <div style="background:#26272a; border-radius:12px; padding:16px 16px 40px; margin-top:16px; max-width:340px;">
+            <div style="font-size:12px; color:#eef0f5; font-weight:700; margin-bottom:6px;">Сегодня против вчера</div>
+            <div style="display:flex; align-items:baseline; gap:4px; margin-bottom:8px;">
+              <span id="financeTodayVsYesterdayValue" style="font-family:'Fraunces',serif; font-size:28px; font-weight:700; color:#eef0f5;">—</span>
+              <span id="financeTodayVsYesterdayCurrency" style="font-size:13px; color:#9aa1b2;"></span>
+            </div>
+           <svg viewBox="0 0 200 110" width="100%" height="110" style="display:block; margin-bottom:20px; overflow:visible;" id="financeGaugeChart"></svg>
+            <div id="financeGaugeSubtext" style="text-align:center; font-size:11px; color:#9aa1b2; margin-top:8px;">—</div>
+          </div>
+
+          <div style="height:40px;"></div>
+
+        </div>
       </div>
     </div>
+
+
 
     <!-- Универсальная модалка подтверждения удаления — переиспользуется для всех действий -->
     <div class="guide-overlay" id="confirmDeleteOverlay">
@@ -3099,26 +3148,32 @@
       }
     });
 
-    document.getElementById("btnAddBranch").addEventListener("click", async () => {
-      const { data: botCheck } = await sb.from('bots').select('bot_token').eq('branch_id', currentBranchId).maybeSingle();
+document.getElementById("btnAddBranch").addEventListener("click", async () => {
+  await handleAddBranchClick();
+});
 
-      if (!botCheck || !botCheck.bot_token) {
-        showToast("Сначала подключите бота к текущему филиалу");
-        document.getElementById("branchDropdown").style.display = "none";
-        return;
-      }
-      if (!botCheck || !botCheck.bot_token) {
-        showToast("Сначала подключите бота к текущему филиалу");
-        document.getElementById("branchDropdown").style.display = "none";
-        return;
-      }
+// Кнопка "+ Добавить филиал" в новом фиксированном хедере — раньше была без обработчика,
+// поэтому не реагировала на клик. Используем ту же логику, что и у старой кнопки.
+document.getElementById("btnAddBranchHeader").addEventListener("click", async () => {
+  await handleAddBranchClick();
+});
 
+// Общая функция для обеих кнопок "Добавить филиал" (старой и в хедере)
+async function handleAddBranchClick() {
+  const { data: botCheck } = await sb.from('bots').select('bot_token').eq('branch_id', currentBranchId).maybeSingle();
 
+  if (!botCheck || !botCheck.bot_token) {
+    showToast("Сначала подключите бота к текущему филиалу");
+    document.getElementById("branchDropdown").style.display = "none";
+    document.getElementById("branchDropdownHeader").style.display = "none";
+    return;
+  }
 
-      document.getElementById("branchDropdown").style.display = "none";
-      document.getElementById("newBranchNameInput").value = "";
-      document.getElementById("addBranchOverlay").classList.add("show");
-    });
+  document.getElementById("branchDropdown").style.display = "none";
+  document.getElementById("branchDropdownHeader").style.display = "none";
+  document.getElementById("newBranchNameInput").value = "";
+  document.getElementById("addBranchOverlay").classList.add("show");
+}
 
     document.getElementById("addBranchClose").addEventListener("click", () => {
       document.getElementById("addBranchOverlay").classList.remove("show");
@@ -4627,6 +4682,8 @@
 
     // ---------- Раздел "Финансы" ----------
 
+        // ---------- Раздел "Финансы" (временно отключено, пересобираем разметку и логику по частям) ----------
+    /*
     let financeSalaryExpanded = false; // флаг: развёрнут ли список зарплат
 
     // Вспомогательная функция: возвращает даты начала месяца и сегодня в формате YYYY-MM-DD
@@ -5046,6 +5103,324 @@ el.innerHTML = `
       showToast("Расход добавлен");
       document.getElementById("addExpenseForm").classList.remove("show");
       loadFinance();
+    });
+    */
+
+    // ---------- Раздел "Финансы" (пересобираем заново, блок за блоком) ----------
+
+    // Возвращает даты текущего периода (последние 30 дней) и предыдущего периода той же длины
+    function financeGetDateRanges() {
+      const fmt = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+      const to = new Date();
+      const from = new Date();
+      from.setDate(from.getDate() - 30);
+      const prevTo = new Date(from);
+      prevTo.setDate(prevTo.getDate() - 1);
+      const prevFrom = new Date(prevTo);
+      prevFrom.setDate(prevFrom.getDate() - 30);
+      return { fromStr: fmt(from), toStr: fmt(to), prevFromStr: fmt(prevFrom), prevToStr: fmt(prevTo) };
+    }
+
+    // Рисует линейный график выручки по всем 12 месяцам года — точь-в-точь как референс:
+    // жёлтая линия, полосатая штриховка под ней, шкала значений слева, подписи всех месяцев снизу
+    async function renderFinanceRevenueChart() {
+      const svg = document.getElementById("financeRevenueChart");
+      const year = new Date().getFullYear();
+      const monthNames = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+
+      const sums = [];
+      for (let m = 0; m < 12; m++) {
+        const start = new Date(year, m, 1);
+        const end = new Date(year, m + 1, 0);
+        const fmt = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+        const { data } = await sb.from('bookings').select('price')
+          .eq('branch_id', currentBranchId)
+          .gte('booking_date', fmt(start)).lte('booking_date', fmt(end))
+          .neq('status', 'cancelled');
+        sums.push((data || []).reduce((s, b) => s + (Number(b.price) || 0), 0));
+      }
+
+      const w = 740, leftPad = 34, rightPad = 16, topPad = 10, bottomPad = 22, plotH = 90;
+      const plotW = w - leftPad - rightPad;
+      const maxSum = Math.max(1, ...sums);
+      const n = 12;
+      const stepX = plotW / (n - 1);
+      const xFor = i => leftPad + i * stepX;
+      const yFor = v => topPad + (1 - v / maxSum) * plotH;
+
+      const points = sums.map((v, i) => `${xFor(i)},${yFor(v)}`).join(" ");
+      const areaBottom = topPad + plotH;
+      const areaPoints = `${points} ${xFor(n - 1)},${areaBottom} ${xFor(0)},${areaBottom}`;
+
+      // Шкала значений слева — два уровня (максимум и половина), как $90K / $70K на референсе
+      const yLabels = [maxSum, maxSum / 2].map(v =>
+        `${Math.round(v).toLocaleString('ru-RU')}`
+      );
+
+      const monthLabels = monthNames.map((name, i) =>
+        `<text x="${xFor(i)}" y="${areaBottom + bottomPad - 6}" text-anchor="middle" font-size="8.5" fill="#9aa1b2">${name}</text>`
+      ).join("");
+
+      svg.innerHTML = `
+        <defs>
+          <pattern id="financeStripe" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+            <rect width="6" height="6" fill="transparent"/>
+            <line x1="0" y1="0" x2="0" y2="6" stroke="#4a5164" stroke-width="1.5"/>
+          </pattern>
+        </defs>
+        <text x="0" y="${topPad + 4}" font-size="8.5" fill="#9aa1b2">${yLabels[0]}</text>
+        <text x="0" y="${topPad + plotH / 2 + 4}" font-size="8.5" fill="#9aa1b2">${yLabels[1]}</text>
+        <polygon points="${areaPoints}" fill="url(#financeStripe)" stroke="none"/>
+        <polyline points="${points}" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 3px 3px rgba(0,0,0,0.4));"/>
+        ${monthLabels}
+      `;
+    }
+
+    // Главная функция: загружает выручку за текущий и предыдущий период, заполняет Блок 1
+    async function loadFinance() {
+      const { fromStr, toStr, prevFromStr, prevToStr } = financeGetDateRanges();
+
+      const { data: bookings } = await sb.from('bookings').select('price, booking_date')
+        .eq('branch_id', currentBranchId)
+        .gte('booking_date', fromStr).lte('booking_date', toStr)
+        .neq('status', 'cancelled');
+
+      const { data: prevBookings } = await sb.from('bookings').select('price')
+        .eq('branch_id', currentBranchId)
+        .gte('booking_date', prevFromStr).lte('booking_date', prevToStr)
+        .neq('status', 'cancelled');
+
+      const { data: botData } = await sb.from('bots').select('currency').eq('branch_id', currentBranchId).maybeSingle();
+      const currencyLabel = botData?.currency || '₽';
+
+      const revenue = (bookings || []).reduce((s, b) => s + (Number(b.price) || 0), 0);
+      const prevRevenue = (prevBookings || []).reduce((s, b) => s + (Number(b.price) || 0), 0);
+
+      document.getElementById("financeRevenueValue").textContent = revenue.toLocaleString('ru-RU') + " " + currencyLabel;
+
+      const trendEl = document.getElementById("financeRevenueTrend");
+      if (prevRevenue > 0) {
+        const change = Math.round(((revenue - prevRevenue) / prevRevenue) * 100);
+        trendEl.textContent = (change >= 0 ? "+" : "") + change + "%";
+        trendEl.style.background = change >= 0 ? "var(--accent-soft)" : "var(--danger-soft)";
+        trendEl.style.color = change >= 0 ? "var(--accent)" : "var(--danger)";
+      } else {
+        trendEl.textContent = revenue > 0 ? "Новые данные" : "";
+        trendEl.style.background = "var(--surface-2)";
+        trendEl.style.color = "var(--faint)";
+      }
+
+      renderFinanceRevenueChart();
+      renderFinanceBars();
+      renderFinanceTodayVsYesterday();
+    }
+
+    // Рисует 4 столбца (Выручка/Расходы/Зарплаты/Прибыль) за текущий месяц — стиль как в референсе
+    async function renderFinanceBars() {
+      const el = document.getElementById("financeBarsGrid");
+      const today = new Date();
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+      const fmt = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+
+      const { data: monthBookings } = await sb.from('bookings').select('price, master')
+        .eq('branch_id', currentBranchId)
+        .gte('booking_date', fmt(monthStart)).lte('booking_date', fmt(today))
+        .neq('status', 'cancelled');
+
+      const { data: monthExpenses } = await sb.from('expenses').select('amount')
+        .eq('branch_id', currentBranchId)
+        .gte('expense_date', fmt(monthStart)).lte('expense_date', fmt(today));
+
+      const { data: masters } = await sb.from('masters').select('*').eq('branch_id', currentBranchId);
+
+      const revenue = (monthBookings || []).reduce((s, b) => s + (Number(b.price) || 0), 0);
+      const expenses = (monthExpenses || []).reduce((s, e) => s + (Number(e.amount) || 0), 0);
+
+      const revenueByMaster = {};
+      (monthBookings || []).forEach(b => {
+        if (!b.master) return;
+        revenueByMaster[b.master] = (revenueByMaster[b.master] || 0) + (Number(b.price) || 0);
+      });
+      const salaries = (masters || []).reduce((sum, m) => {
+        const masterRevenue = revenueByMaster[m.name] || 0;
+        const fixed = Number(m.salary_fixed) || 0;
+        const percent = Number(m.salary_percent) || 0;
+        return sum + fixed + Math.round(masterRevenue * percent / 100);
+      }, 0);
+
+      const profit = revenue - expenses - salaries;
+
+      const values = [
+        { label: 'revenue', value: revenue, color: '#1F8A5F' },
+        { label: 'expenses', value: expenses, color: '#5B4FE0' },
+        { label: 'salaries', value: salaries, color: '#D9A02A' },
+        { label: 'profit', value: Math.max(profit, 0), color: '#E2793D' },
+      ];
+
+      const maxVal = Math.max(1, ...values.map(v => v.value));
+
+      const labels = { revenue: 'Выручка', expenses: 'Расходы', salaries: 'Зарплаты', profit: 'Прибыль' };
+
+      el.innerHTML = values.map(v => {
+        const heightPercent = Math.max(20, Math.round((v.value / maxVal) * 100));
+        return `
+          <div class="finance-bar-item" style="position:relative; border-radius:6px; overflow:hidden; background:repeating-linear-gradient(135deg, #35363a, #35363a 4px, #0e0e0f 4px, #0e0e0f 8px); cursor:pointer;" data-label="${labels[v.label]}" data-value="${v.value.toLocaleString('ru-RU')}">
+            <div style="position:absolute; bottom:0; left:0; right:0; height:${heightPercent}%; background:${v.color}; border-radius:6px; display:flex; align-items:flex-start; justify-content:center; padding-top:8px;">
+              <span style="color:#fff; font-size:11px; font-weight:700;">${v.value.toLocaleString('ru-RU')}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      // Тултип при наведении на столбец
+      let tooltip = el.parentElement.querySelector(".finance-bar-tooltip");
+      if (!tooltip) {
+        tooltip = document.createElement("div");
+        tooltip.className = "finance-bar-tooltip";
+        tooltip.style.cssText = "position:absolute; display:none; pointer-events:none; z-index:20; background:rgba(255,255,255,0.95); color:#111; font-size:11px; font-weight:600; padding:6px 10px; border-radius:4px; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,0.15);";
+        el.parentElement.style.position = "relative";
+        el.parentElement.appendChild(tooltip);
+      }
+
+      el.querySelectorAll(".finance-bar-item").forEach(item => {
+        item.addEventListener("mouseenter", () => {
+          tooltip.textContent = `${item.dataset.label}: ${item.dataset.value} ${window.__financeCurrency || '₽'}`;
+          tooltip.style.display = "block";
+        });
+        item.addEventListener("mousemove", (e) => {
+          const rect = el.parentElement.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          tooltip.style.left = x + "px";
+          tooltip.style.top = (y - 36) + "px";
+          tooltip.style.transform = "translateX(-50%)";
+        });
+        item.addEventListener("mouseleave", () => {
+          tooltip.style.display = "none";
+        });
+      });
+    }
+
+    // Круговой индикатор: выручка сегодня против вчера, в стиле "Risk Score" из референса
+    async function renderFinanceTodayVsYesterday() {
+      const fmt = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      const { data: todayBookings } = await sb.from('bookings').select('price')
+        .eq('branch_id', currentBranchId).eq('booking_date', fmt(today)).neq('status', 'cancelled');
+      const { data: yesterdayBookings } = await sb.from('bookings').select('price')
+        .eq('branch_id', currentBranchId).eq('booking_date', fmt(yesterday)).neq('status', 'cancelled');
+
+      const todayRevenue = (todayBookings || []).reduce((s, b) => s + (Number(b.price) || 0), 0);
+      const yesterdayRevenue = (yesterdayBookings || []).reduce((s, b) => s + (Number(b.price) || 0), 0);
+
+      document.getElementById("financeTodayVsYesterdayValue").textContent = todayRevenue.toLocaleString('ru-RU');
+      document.getElementById("financeTodayVsYesterdayCurrency").textContent = window.__financeCurrency || '₽';
+
+      const diffPercent = yesterdayRevenue > 0
+        ? Math.round(((todayRevenue - yesterdayRevenue) / yesterdayRevenue) * 100)
+        : (todayRevenue > 0 ? 100 : 0);
+
+      const subtextEl = document.getElementById("financeGaugeSubtext");
+      subtextEl.textContent = diffPercent >= 0
+        ? `Выручка выросла на +${diffPercent}%`
+        : `Выручка снизилась на ${diffPercent}%`;
+
+      // Шкала дуги: максимум = наибольшее из (сегодня, вчера) с запасом 25%,
+      // чтобы ни заливка, ни маркер "вчера" никогда не доходили до самого конца дуги
+      const scaleMax = Math.max(todayRevenue, yesterdayRevenue, 1) * 1.25;
+      const todayPct = Math.min(100, (todayRevenue / scaleMax) * 100);
+      const yesterdayPct = Math.min(100, (yesterdayRevenue / scaleMax) * 100);
+
+      const svg = document.getElementById("financeGaugeChart");
+      const cx = 100, cy = 100, r = 80;
+      const angleFor = pct => Math.PI - (pct / 100) * Math.PI;
+      const pointFor = pct => {
+        const a = angleFor(pct);
+        return { x: cx + r * Math.cos(a), y: cy - r * Math.sin(a) };
+      };
+      const start = pointFor(0);
+      const todayPoint = pointFor(todayPct);
+      const yesterdayPoint = pointFor(yesterdayPct);
+
+      // Определяем, какая точка ближе к началу дуги (меньшее значение), а какая дальше (большее значение).
+      // Первый сегмент (от 0 до ближней точки) красится в цвет владельца ближней точки,
+      // второй сегмент (от ближней до дальней точки) — в цвет владельца дальней точки.
+      const todayIsNearer = todayPct <= yesterdayPct;
+      const nearPoint = todayIsNearer ? todayPoint : yesterdayPoint;
+      const farPoint = todayIsNearer ? yesterdayPoint : todayPoint;
+      const nearColor = todayIsNearer ? '#34D399' : '#E24B4A';
+      const farColor = todayIsNearer ? '#E24B4A' : '#34D399';
+
+      const nearLabel = todayIsNearer ? 'Сегодня' : 'Вчера';
+      const nearValue = todayIsNearer ? todayRevenue : yesterdayRevenue;
+      const farLabel = todayIsNearer ? 'Вчера' : 'Сегодня';
+      const farValue = todayIsNearer ? yesterdayRevenue : todayRevenue;
+      const currencyLabel = window.__financeCurrency || '₽';
+
+      svg.innerHTML = `
+        <defs>
+          <pattern id="gaugeStripe" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+            <rect width="6" height="6" fill="#0e0e0f"/>
+            <line x1="0" y1="0" x2="0" y2="6" stroke="#35363a" stroke-width="2"/>
+          </pattern>
+        </defs>
+        <path d="M ${cx - r},${cy} A ${r},${r} 0 0 1 ${cx + r},${cy}" fill="none" stroke="url(#gaugeStripe)" stroke-width="22" stroke-linecap="round"/>
+        <path class="gauge-segment" data-label="${nearLabel}" data-value="${nearValue.toLocaleString('ru-RU')}" data-color="${nearColor}" d="M ${start.x},${start.y} A ${r},${r} 0 0 1 ${nearPoint.x},${nearPoint.y}" fill="none" stroke="${nearColor}" stroke-width="22" stroke-linecap="round" style="cursor:pointer; transition:stroke-width .15s ease, filter .15s ease;"/>
+        <path class="gauge-segment" data-label="${farLabel}" data-value="${farValue.toLocaleString('ru-RU')}" data-color="${farColor}" d="M ${nearPoint.x},${nearPoint.y} A ${r},${r} 0 0 1 ${farPoint.x},${farPoint.y}" fill="none" stroke="${farColor}" stroke-width="22" stroke-linecap="round" style="cursor:pointer; transition:stroke-width .15s ease, filter .15s ease;"/>
+        <circle cx="${yesterdayPoint.x}" cy="${yesterdayPoint.y}" r="6" fill="#eef0f5" stroke="#0e0e0f" stroke-width="2"/>
+        <circle cx="${todayPoint.x}" cy="${todayPoint.y}" r="8" fill="#fff"/>
+      `;
+
+      // Тултип + подъём сегмента при наведении
+      const gaugeContainer = svg.parentElement;
+      let gaugeTooltip = gaugeContainer.querySelector(".gauge-tooltip");
+      if (!gaugeTooltip) {
+        gaugeTooltip = document.createElement("div");
+        gaugeTooltip.className = "gauge-tooltip";
+        gaugeTooltip.style.cssText = "position:absolute; display:none; pointer-events:none; z-index:20; background:rgba(255,255,255,0.95); color:#111; font-size:11px; font-weight:600; padding:6px 10px; border-radius:4px; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,0.15);";
+        gaugeContainer.style.position = "relative";
+        gaugeContainer.appendChild(gaugeTooltip);
+      }
+
+      svg.querySelectorAll(".gauge-segment").forEach(seg => {
+        seg.addEventListener("mouseenter", () => {
+          seg.setAttribute("stroke-width", "28");
+          seg.style.filter = `drop-shadow(0 0 4px ${seg.dataset.color})`;
+          gaugeTooltip.textContent = `${seg.dataset.label}: ${seg.dataset.value} ${currencyLabel}`;
+          gaugeTooltip.style.display = "block";
+        });
+        seg.addEventListener("mousemove", (e) => {
+          const rect = gaugeContainer.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          gaugeTooltip.style.left = x + "px";
+          gaugeTooltip.style.top = (y - 36) + "px";
+          gaugeTooltip.style.transform = "translateX(-50%)";
+        });
+        seg.addEventListener("mouseleave", () => {
+          seg.setAttribute("stroke-width", "22");
+          seg.style.filter = "none";
+          gaugeTooltip.style.display = "none";
+        });
+      });
+    }
+
+    document.getElementById("burgerFinance").addEventListener("click", (e) => {
+      e.preventDefault();
+      document.getElementById("burgerMenuOverlay").style.display = "none";
+      document.getElementById("financeModalOverlay").classList.add("show");
+      loadFinance();
+    });
+
+    document.getElementById("financeModalClose").addEventListener("click", () => {
+      document.getElementById("financeModalOverlay").classList.remove("show");
+    });
+
+      document.getElementById("btnCloseFinanceBars").addEventListener("click", () => {
+      document.getElementById("financeModalOverlay").classList.remove("show");
     });
 
 
