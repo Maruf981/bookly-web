@@ -662,15 +662,22 @@
       cursor: pointer;
     }
 
-    .btn-cancel {
-      background: transparent;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      padding: 10px 16px;
-      border-radius: 4px;
-      font-size: 13px;
-      cursor: pointer;
-    }
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--bg);
+  padding: 11px 18px;
+  border-radius: 4px;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+  z-index: 999; /* выше любых модалок, чтобы тост всегда был поверх всего, а не перекрывался белой полосой overlay */
+  max-width: 90vw; /* на всякий случай, чтобы длинный текст тоста не растягивался на весь экран */
+}
 
     .toast {
       position: fixed;
