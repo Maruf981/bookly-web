@@ -266,41 +266,46 @@
       box-shadow: 0 14px 28px -10px var(--accent);
     }
 
-    .hero {
-      position: relative;
-      padding-top: 90px;
-      padding-bottom: 70px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: start;
-      overflow: hidden;
-    }
+.hero {
+  position: relative;
+  padding-top: 90px;
+  padding-bottom: 70px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(52, 211, 153, 0.35), transparent 45%),
+    radial-gradient(circle at 85% 25%, rgba(31, 138, 95, 0.4), transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(15, 90, 70, 0.3), transparent 55%);
+}
 
-    .eyebrow {
-      font-size: 12px;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 800;
-      margin-bottom: 14px;
-    }
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 800;
+  margin-bottom: 14px;
+}
 
-    .hero-title {
-      font-family: 'Fraunces', serif;
-      font-size: 42px;
-      font-weight: 600;
-      letter-spacing: -1px;
-      line-height: 1.1;
-      margin-bottom: 18px;
-    }
+.hero-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+}
 
-    .hero-sub {
-      font-size: 16px;
-      color: var(--muted);
-      max-width: 460px;
-      margin-bottom: 30px;
-    }
+.hero-sub {
+  font-size: 16px;
+  color: var(--ink);
+  max-width: 460px;
+  margin-bottom: 30px;
+}
 
     .hero-actions {
       display: flex;
@@ -310,10 +315,10 @@
       margin-bottom: 14px;
     }
 
-    .hero-note {
-      font-size: 13px;
-      color: var(--faint);
-    }
+.hero-note {
+  font-size: 13px;
+  color: var(--ink);
+}
 
     .demo-wrap {
       position: relative;
@@ -515,12 +520,12 @@
       margin-top: 2px;
     }
 
-    .demo-ticket-price {
-      font-family: 'Fraunces', serif;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--accent);
-    }
+.demo-ticket-price {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent);
+}
 
     .demo-day {
       flex: 1;
@@ -539,16 +544,16 @@
       border-color: var(--accent);
     }
 
-    .demo-time {
-      text-align: center;
-      padding: 7px 0;
-      border-radius: 4px;
-      border: 1px solid var(--line);
-      font-family: 'Fraunces', serif;
-      font-size: 11px;
-      color: var(--ink);
-      transition: all 0.3s;
-    }
+.demo-time {
+  text-align: center;
+  padding: 7px 0;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--ink);
+  transition: all 0.3s;
+}
 
     .demo-time.active {
       background: var(--accent);
@@ -572,12 +577,12 @@
       color: var(--faint);
     }
 
-    .demo-bottombar-price {
-      font-family: 'Fraunces', serif;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--accent);
-    }
+.demo-bottombar-price {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--accent);
+}
 
     .demo-book-btn {
       background: #C4472F;
@@ -612,23 +617,23 @@
       pointer-events: auto;
     }
 
-    .demo-success-check {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      border: 2.5px solid #C4472F;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      color: #C4472F;
-      font-family: 'Fraunces', serif;
-      font-weight: 700;
-      margin-bottom: 12px;
-      position: relative;
-      transform: rotate(-8deg) scale(0);
-    }
+ .demo-success-check {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2.5px solid #C4472F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  color: #C4472F;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  margin-bottom: 12px;
+  position: relative;
+  transform: rotate(-8deg) scale(0);
+}
 
     [data-theme="dark"] .demo-success-check {
       border-color: #E88462;
@@ -1029,14 +1034,15 @@
       margin-bottom: 10px;
     }
 
-    .section-title {
-      font-family: 'Fraunces', serif;
-      font-size: 27px;
-      font-weight: 600;
-      letter-spacing: -0.4px;
-      margin-bottom: 36px;
-      max-width: 540px;
-    }
+.section-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -0.6px;
+  margin-bottom: 36px;
+  max-width: 540px;
+  text-transform: uppercase;
+}
 
     .feature-grid {
       display: grid;
@@ -1537,15 +1543,15 @@
       margin-bottom: 6px;
     }
 
-    .price-mini-amount {
-      font-family: 'Fraunces', serif;
-      font-size: 19px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: baseline;
-      gap: 1px;
-    }
+.price-mini-amount {
+  font-family: 'Inter', sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+}
 
     .price-mini-currency {
       font-size: 11px;
@@ -1782,17 +1788,17 @@
         data-en="An AI assistant that books your clients automatically">ИИ-ассистент, который сам записывает ваших
         клиентов</h1>
       <p class="hero-sub"
-        data-ru="Bookly отвечает на вопросы клиентов, показывает свободное время и подтверждает запись — круглосуточно, без администратора."
-        data-en="Bookly answers client questions, shows open time slots, and confirms bookings — around the clock, without a receptionist.">
-        Bookly отвечает на вопросы клиентов, показывает свободное время и подтверждает запись — круглосуточно, без
+        data-ru="Ваш бот отвечает на вопросы клиентов, показывает свободное время и подтверждает запись — круглосуточно, без администратора."
+        data-en="Your bot answers client questions, shows open time slots, and confirms bookings — around the clock, without a receptionist.">
+        Ваш бот отвечает на вопросы клиентов, показывает свободное время и подтверждает запись — круглосуточно, без
         администратора.
       </p>
       <div class="hero-actions">
         <a href="#" class="btn-accent" id="ctaHero" data-ru="Подключить бота" data-en="Connect your bot">Подключить
           бота</a>
       </div>
-      <div class="hero-note" data-ru="Бесплатно на старте · без банковской карты"
-        data-en="Free to start · no credit card required">Бесплатно на старте · без банковской карты</div>
+      <div class="hero-note" data-ru="Бесплатно на старте"
+        data-en="Free to start ">Бесплатно на старте</div>
     </div>
 
     <div class="demo-wrap">
@@ -2069,6 +2075,34 @@
               <div class="guarantee-mini-sub" data-ru="Отмена в один клик, без вопросов"
                 data-en="Cancel in one click, no questions asked">Отмена в один клик, без вопросов</div>
             </div>
+          </div>
+        </div>
+
+        
+      </div>
+    </div>
+  </section>
+
+    <section class="section-border">
+    <div class="wrap">
+      <div class="section-eyebrow" data-ru="Сколько вы сэкономите" data-en="How much you'll save">Сколько вы сэкономите</div>
+      <div class="section-title" data-ru="Посчитайте свою экономию времени" data-en="Calculate your time savings">Посчитайте свою экономию времени</div>
+
+      <div style="max-width:520px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+          <label style="font-size:14px; color:var(--muted); white-space:nowrap;" data-ru="Записей в день" data-en="Bookings per day">Записей в день</label>
+          <input type="range" min="1" max="40" value="10" step="1" id="calcBookings" style="flex:1; accent-color:var(--accent);" />
+          <span style="font-size:16px; font-weight:700; min-width:28px; text-align:right; color:var(--accent);" id="calcBookingsOut">10</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div style="padding:0;">
+            <div style="font-size:12px; color:var(--faint); margin-bottom:4px;" data-ru="Экономия в день" data-en="Saved per day">Экономия в день</div>
+            <div style="font-family:'Inter',sans-serif; font-size:22px; font-weight:800; color:var(--ink);" id="calcDailyOut">35 мин</div>
+          </div>
+          <div style="padding:0;">
+            <div style="font-size:12px; color:var(--faint); margin-bottom:4px;" data-ru="Экономия в месяц" data-en="Saved per month">Экономия в месяц</div>
+            <div style="font-family:'Inter',sans-serif; font-size:22px; font-weight:800; color:var(--accent);" id="calcMonthlyOut">17.5 ч</div>
           </div>
         </div>
       </div>
@@ -2551,16 +2585,17 @@
 
     let currentLang = "ru";
 
-    document.getElementById("langToggle").addEventListener("click", () => {
-      currentLang = currentLang === "ru" ? "en" : "ru";
-      document.documentElement.lang = currentLang;
-      document.getElementById("langToggle").textContent = currentLang === "ru" ? "EN" : "RU";
+document.getElementById("langToggle").addEventListener("click", () => {
+  currentLang = currentLang === "ru" ? "en" : "ru";
+  document.documentElement.lang = currentLang;
+  document.getElementById("langToggle").textContent = currentLang === "ru" ? "EN" : "RU";
 
-      document.querySelectorAll("[data-ru][data-en]").forEach(el => {
-        el.textContent = el.getAttribute(`data-${currentLang}`);
-      });
-      if (window.__restartChatDemo) window.__restartChatDemo();
-    });
+  document.querySelectorAll("[data-ru][data-en]").forEach(el => {
+    el.textContent = el.getAttribute(`data-${currentLang}`);
+  });
+  if (window.__restartChatDemo) window.__restartChatDemo();
+  if (window.__updateCalc) window.__updateCalc();
+});
 
     const demoCursor = document.getElementById("demoCursor");
     const demoEmp = document.getElementById("demoEmp1");
@@ -2734,6 +2769,32 @@
           badge.style.display = isYearly ? 'inline' : 'none';
         });
       });
+    })();
+
+        (function () {
+      const slider = document.getElementById('calcBookings');
+      const sliderOut = document.getElementById('calcBookingsOut');
+      const dailyOut = document.getElementById('calcDailyOut');
+      const monthlyOut = document.getElementById('calcMonthlyOut');
+      if (!slider) return;
+
+      const minLabelRu = 'мин', hourLabelRu = 'ч';
+      const minLabelEn = 'min', hourLabelEn = 'hr';
+
+      function updateCalc() {
+        const n = parseInt(slider.value, 10);
+        sliderOut.textContent = n;
+        const dailyMinutes = n * 3.5;
+        const monthlyHours = (dailyMinutes * 30) / 60;
+        const minLabel = currentLang === 'en' ? minLabelEn : minLabelRu;
+        const hourLabel = currentLang === 'en' ? hourLabelEn : hourLabelRu;
+        dailyOut.textContent = Math.round(dailyMinutes) + ' ' + minLabel;
+        monthlyOut.textContent = monthlyHours.toFixed(1) + ' ' + hourLabel;
+      }
+
+      slider.addEventListener('input', updateCalc);
+      updateCalc();
+      window.__updateCalc = updateCalc;
     })();
   </script>
 
