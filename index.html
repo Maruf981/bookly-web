@@ -808,12 +808,26 @@
         id: row.id,
         name: row.name,
         meta: row.duration,
-        price: row.price,
+        price: getDiscountedPrice(row),   // цена, которая реально пойдёт в запись и в бота
+        originalPrice: row.price,          // нужна только для зачёркнутого показа
       }));
 
       renderTickets();
       updateBar();
     }
+
+    // Считает цену услуги с учётом скидки (если активна и дата попадает в период действия)
+function getDiscountedPrice(row) {
+  const basePrice = Number(row.price) || 0;
+  if (!row.discount_active || !row.discount_percent) return basePrice;
+
+  const now = new Date();
+  const todayStr = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0") + "-" + String(now.getDate()).padStart(2, "0");
+  if (row.discount_from && todayStr < row.discount_from) return basePrice;
+  if (row.discount_to && todayStr > row.discount_to) return basePrice;
+
+  return basePrice - Math.round(basePrice * row.discount_percent / 100);
+}
 
     let state = { master: null, service: null, day: 0, time: null };
     let CURRENCY = "₽";
@@ -847,7 +861,12 @@
           <div class="ticket-meta">${s.meta}</div>
         </div>
         <div style="display:flex; align-items:center; gap:12px;">
-          <div class="ticket-price">${currency(s.price)}</div>
+          ${s.originalPrice > s.price
+            ? `<div style="display:flex; flex-direction:column; align-items:flex-end;">
+                <span style="font-size:10.5px; color:var(--faint); text-decoration:line-through;">${currency(s.originalPrice)}</span>
+                <div class="ticket-price">${currency(s.price)}</div>
+               </div>`
+            : `<div class="ticket-price">${currency(s.price)}</div>`}
           <div class="check"></div>
         </div>
       </div>
