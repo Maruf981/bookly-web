@@ -1660,6 +1660,40 @@
       color: var(--faint);
     }
 
+        .lumina-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity .6s ease;
+      pointer-events: none;
+    }
+
+    .lumina-slide.active {
+      position: relative;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #luminaSlider {
+      min-height: 200px;
+    }
+
+    .lumina-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      padding: 0;
+      transition: background .2s ease, transform .2s ease;
+    }
+
+    .lumina-dot.active {
+      background: var(--accent);
+      transform: scale(1.3);
+    }
+
     @media (max-width: 900px) {
       .pricing-mini-grid {
         grid-template-columns: 1fr;
@@ -1908,6 +1942,28 @@
       <span class="marquee-item" data-ru="Бесплатно на старте" data-en="Free to start">Бесплатно на старте</span>
     </div>
   </div>
+
+    </div>
+
+  <section class="section-border" style="padding-top:40px;">
+    <div class="wrap">
+      <div id="luminaSlider" style="position:relative; max-width:960px; margin:0 auto; overflow:hidden; border-radius:4px;">
+        <div class="lumina-slide active">
+          <img src="assets/img/Lumina_1.png" alt="Bookly CRM" style="width:100%; height:auto; display:block;">
+        </div>
+        <div class="lumina-slide">
+          <img src="assets/img/Lumina_2.png" alt="Bookly Финансы" style="width:100%; height:auto; display:block;">
+        </div>
+
+        <div id="luminaDots" style="position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:8px; z-index:5;">
+          <button class="lumina-dot active" data-index="0" aria-label="Слайд 1"></button>
+          <button class="lumina-dot" data-index="1" aria-label="Слайд 2"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="contain: layout;">
 
   <section style="contain: layout;">
     <div class="wrap">
@@ -2795,6 +2851,49 @@
       slider.addEventListener('input', updateCalc);
       updateCalc();
       window.__updateCalc = updateCalc;
+    })();
+
+
+        (function () {
+      const slider = document.getElementById('luminaSlider');
+      if (!slider) return;
+
+      const slides = slider.querySelectorAll('.lumina-slide');
+      const dots = slider.querySelectorAll('.lumina-dot');
+      let current = 0;
+      let timer = null;
+      const INTERVAL = 5000;
+
+      function showSlide(index) {
+        slides.forEach((s, i) => s.classList.toggle('active', i === index));
+        dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        current = index;
+      }
+
+      function nextSlide() {
+        showSlide((current + 1) % slides.length);
+      }
+
+      function startTimer() {
+        stopTimer();
+        timer = setInterval(nextSlide, INTERVAL);
+      }
+
+      function stopTimer() {
+        if (timer) clearInterval(timer);
+      }
+
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+          showSlide(Number(dot.dataset.index));
+          startTimer(); // сбрасываем таймер, чтобы не переключилось сразу после клика
+        });
+      });
+
+      slider.addEventListener('mouseenter', stopTimer);
+      slider.addEventListener('mouseleave', startTimer);
+
+      startTimer();
     })();
   </script>
 
