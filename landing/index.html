@@ -1947,7 +1947,7 @@
 
   <section class="section-border" style="padding-top:40px;">
     <div class="wrap">
-      <div id="luminaSlider" style="position:relative; max-width:960px; margin:0 auto; overflow:hidden; border-radius:4px;">
+      <div id="luminaSlider" style="position:relative; max-width:480px; margin:0 auto; overflow:hidden; border-radius:4px;">
         <div class="lumina-slide active">
           <img src="assets/img/CRM.png" alt="Bookly CRM" style="width:50%; height:auto; display:block;">
         </div>
@@ -2854,46 +2854,23 @@
     })();
 
 
-        (function () {
+    (function () {
       const slider = document.getElementById('luminaSlider');
       if (!slider) return;
 
       const slides = slider.querySelectorAll('.lumina-slide');
       const dots = slider.querySelectorAll('.lumina-dot');
-      let current = 0;
-      let timer = null;
-      const INTERVAL = 5000;
 
       function showSlide(index) {
         slides.forEach((s, i) => s.classList.toggle('active', i === index));
         dots.forEach((d, i) => d.classList.toggle('active', i === index));
-        current = index;
-      }
-
-      function nextSlide() {
-        showSlide((current + 1) % slides.length);
-      }
-
-      function startTimer() {
-        stopTimer();
-        timer = setInterval(nextSlide, INTERVAL);
-      }
-
-      function stopTimer() {
-        if (timer) clearInterval(timer);
       }
 
       dots.forEach(dot => {
         dot.addEventListener('click', () => {
           showSlide(Number(dot.dataset.index));
-          startTimer(); // сбрасываем таймер, чтобы не переключилось сразу после клика
         });
       });
-
-      slider.addEventListener('mouseenter', stopTimer);
-      slider.addEventListener('mouseleave', startTimer);
-
-      startTimer();
     })();
   </script>
 
