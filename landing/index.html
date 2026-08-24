@@ -1942,18 +1942,27 @@
       <span class="marquee-item" data-ru="Бесплатно на старте" data-en="Free to start">Бесплатно на старте</span>
     </div>
   </div>
-
     </div>
+
 <section class="section-border">
   <div class="wrap">
-    <div style="display:flex; align-items:stretch; gap:0; width:100%; max-width:680px; margin:0 auto; padding:20px 0;">
-      <div style="flex:0 0 46%; overflow:hidden; border-radius:12px;">
-        <img src="assets/img/CRM.png" alt="Bookly CRM" style="width:100%; height:100%; object-fit:cover; display:block;">
+    <div style="display:flex; gap:24px; margin-bottom:24px; max-width:680px;">
+      <button class="lumina-tab active" data-slide="0" style="background:none; border:none; padding-bottom:10px; border-bottom:2px solid var(--accent); cursor:pointer; font-family:inherit;">
+        <span style="font-size:15px; font-weight:700; color:var(--accent);">CRM</span>
+      </button>
+      <button class="lumina-tab" data-slide="1" style="background:none; border:none; padding-bottom:10px; border-bottom:2px solid transparent; cursor:pointer; font-family:inherit;">
+        <span style="font-size:15px; font-weight:700; color:var(--muted);">Финансы</span>
+      </button>
+    </div>
+
+    <div style="display:flex; align-items:stretch; gap:0; width:100%; max-width:680px; padding-bottom:20px;">
+      <div style="flex:0 0 55%; overflow:hidden; border-radius:12px;">
+        <img id="luminaImg" src="assets/img/CRM.png" alt="Bookly CRM" style="width:100%; height:100%; object-fit:cover; display:block;">
       </div>
       <div style="width:36px; display:flex; align-items:stretch; justify-content:center;">
-        <div style="width:4px; background:var(--line); border-radius:2px;"></div>
+        <div style="width:4px; background:#fff; border-radius:2px; box-shadow:0 0 12px 2px rgba(255,255,255,0.6);"></div>
       </div>
-      <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:16px;">
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:16px;" id="luminaDesc">
         <div style="display:flex; gap:10px;">
           <span style="font-weight:700; color:var(--accent);">1.</span>
           <span style="font-size:14px; color:var(--ink);">Показывает выручку и записи за день</span>
@@ -2863,21 +2872,45 @@
 
 
     (function () {
-      const slider = document.getElementById('luminaSlider');
-      if (!slider) return;
+      const tabs = document.querySelectorAll('.lumina-tab');
+      const img = document.getElementById('luminaImg');
+      if (!tabs.length || !img) return;
 
-      const slides = slider.querySelectorAll('.lumina-slide');
-      const dots = slider.querySelectorAll('.lumina-dot');
+      const slides = [
+        { src: 'assets/img/CRM.png', alt: 'Bookly CRM', points: [
+          'Показывает выручку и записи за день',
+          'Считает средний чек автоматически',
+          'Следит за загрузкой сотрудников'
+        ]},
+        { src: 'assets/img/CRM_Finance.png', alt: 'Bookly Финансы', points: [
+          'Пункт про финансы 1',
+          'Пункт про финансы 2',
+          'Пункт про финансы 3'
+        ]}
+      ];
 
       function showSlide(index) {
-        slides.forEach((s, i) => s.classList.toggle('active', i === index));
-        dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        const slide = slides[index];
+        img.src = slide.src;
+        img.alt = slide.alt;
+
+        const descEl = document.getElementById('luminaDesc');
+        descEl.innerHTML = slide.points.map((text, i) => `
+          <div style="display:flex; gap:10px;">
+            <span style="font-weight:700; color:var(--accent);">${i + 1}.</span>
+            <span style="font-size:14px; color:var(--ink);">${text}</span>
+          </div>
+        `).join('');
+
+        tabs.forEach((tab, i) => {
+          const active = i === index;
+          tab.style.borderBottomColor = active ? 'var(--accent)' : 'transparent';
+          tab.querySelector('span').style.color = active ? 'var(--accent)' : 'var(--muted)';
+        });
       }
 
-      dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-          showSlide(Number(dot.dataset.index));
-        });
+      tabs.forEach((tab, i) => {
+        tab.addEventListener('click', () => showSlide(i));
       });
     })();
   </script>
