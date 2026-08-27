@@ -1366,11 +1366,18 @@
       min-height: 39px;
     }
 
+  .faq-newspaper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 32px;
+    max-width: 900px;
+  }
+
+  @media (max-width: 700px) {
     .faq-newspaper {
-      display: flex;
-      flex-direction: column;
-      max-width: 720px;
+      grid-template-columns: 1fr;
     }
+  }
 
     .faq-news-item {
       padding: 10px 4px;
@@ -1378,33 +1385,26 @@
     }
 
     .faq-news-q {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--ink);
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
 
     .faq-news-a {
-      font-size: 10.5px;
+      font-size: 12.5px;
       color: var(--muted);
-      line-height: 1.4;
+      line-height: 1.5;
       max-width: 560px;
     }
 
-    .faq-newspaper-wrap {
-      cursor: pointer;
-      border-radius: 4px;
-      padding: 16px 20px;
-      max-width: 480px;
-      background: transparent;
-      border: none;
-      transition: border-color .25s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .faq-newspaper-wrap:hover {
-      border-color: var(--accent);
-    }
+  .faq-newspaper-wrap {
+    border-radius: 4px;
+    padding: 16px 20px;
+    max-width: 900px;
+    background: transparent;
+    border: none;
+  }
 
     .faq-news-item:last-child {
       border-bottom: none;
@@ -2638,6 +2638,60 @@
               Сейчас Bookly работает через Telegram — самый популярный мессенджер для такого рода записи в регионе. Мы
               уже работаем над поддержкой WhatsApp и других платформ.</div>
           </div>
+
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="Что если закончится лимит записей на тарифе Старт?"
+              data-en="What happens when I hit the booking limit on the Starter plan?">Что если закончится лимит записей на тарифе Старт?</div>
+            <div class="faq-news-a"
+              data-ru="После 50 записей в месяц бот на тарифе «Старт» перестаёт принимать новые до начала следующего месяца. Чтобы снять ограничение, перейдите на тариф «Профи»."
+              data-en="After 50 bookings in a month, the bot on the Starter plan stops accepting new ones until the next month starts. Upgrading to Pro removes the limit.">
+              После 50 записей в месяц бот на тарифе «Старт» перестаёт принимать новые до начала следующего месяца. Чтобы снять ограничение, перейдите на тариф «Профи».</div>
+          </div>
+
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="Легко ли сменить тариф?"
+              data-en="Is it easy to change plans?">Легко ли сменить тариф?</div>
+            <div class="faq-news-a"
+              data-ru="Да, тариф можно поменять в любой момент прямо в личном кабинете — без обращения в поддержку."
+              data-en="Yes, you can change your plan anytime right from your dashboard — no need to contact support.">
+              Да, тариф можно поменять в любой момент прямо в личном кабинете — без обращения в поддержку.</div>
+          </div>
+
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="Клиент может сам отменить или перенести запись?"
+              data-en="Can clients cancel or reschedule their own booking?">Клиент может сам отменить или перенести запись?</div>
+            <div class="faq-news-a"
+              data-ru="Да, клиент может отменить или перенести запись прямо через бота, без вашего участия."
+              data-en="Yes, clients can cancel or reschedule their booking directly through the bot, without your involvement.">
+              Да, клиент может отменить или перенести запись прямо через бота, без вашего участия.</div>
+          </div>
+
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="Приходят ли клиентам напоминания перед визитом?"
+              data-en="Do clients get reminders before their visit?">Приходят ли клиентам напоминания перед визитом?</div>
+            <div class="faq-news-a"
+              data-ru="Да, бот присылает клиентам напоминание о записи перед визитом, чтобы снизить количество неявок."
+              data-en="Yes, the bot sends clients a reminder before their appointment to reduce no-shows.">
+              Да, бот присылает клиентам напоминание о записи перед визитом, чтобы снизить количество неявок.</div>
+          </div>
+
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="На каких языках отвечает бот?"
+              data-en="What languages does the bot reply in?">На каких языках отвечает бот?</div>
+            <div class="faq-news-a"
+              data-ru="Бот использует ИИ и понимает любой язык, на котором пишет клиент, отвечая ему автоматически на том же языке."
+              data-en="The bot uses AI and understands any language a client writes in, replying automatically in the same language.">
+              Бот использует ИИ и понимает любой язык, на котором пишет клиент, отвечая ему автоматически на том же языке.</div>
+          </div>
+
+          <div class="faq-news-item">
+            <div class="faq-news-q" data-ru="Можно ли подключить несколько филиалов или сотрудников?"
+              data-en="Can I connect multiple locations or staff members?">Можно ли подключить несколько филиалов или сотрудников?</div>
+            <div class="faq-news-a"
+              data-ru="Да, на тарифе «Бизнес» доступно неограниченное количество сотрудников и филиалов."
+              data-en="Yes, the Business plan supports an unlimited number of staff members and locations.">
+              Да, на тарифе «Бизнес» доступно неограниченное количество сотрудников и филиалов.</div>
+          </div>
         </div>
       </div>
       <!-- Маленькая газета: конец -->
@@ -2645,74 +2699,6 @@
     </div>
   </section>
 
-  <!-- Большая газета: полноэкранный оверлей, показывающий тот же список крупнее -->
-  <div class="faq-zoom-overlay" id="faqZoomOverlay">
-    <div class="faq-zoom-card" id="faqZoomCard">
-      <div class="faq-newspaper faq-newspaper-big">
-        <div class="faq-news-item">
-          <div class="faq-news-q" data-ru="Это точно бесплатно?" data-en="Is it really free?">Это точно бесплатно?
-          </div>
-          <div class="faq-news-a"
-            data-ru="Да, подключение бота, личный кабинет и приём записей бесплатны на старте. Никаких скрытых платежей."
-            data-en="Yes — connecting your bot, the dashboard, and receiving bookings are free to start. No hidden fees.">
-            Да, подключение бота, личный кабинет и приём записей бесплатны на старте. Никаких скрытых платежей.</div>
-        </div>
-
-        <div class="faq-news-item">
-          <div class="faq-news-q" data-ru="Нужна ли банковская карта для регистрации?"
-            data-en="Do I need a credit card to sign up?">Нужна ли банковская карта для регистрации?</div>
-          <div class="faq-news-a"
-            data-ru="Нет. Регистрация занимает пару минут — только email и пароль, карта не требуется."
-            data-en="No. Sign-up takes a couple of minutes — just email and password, no card required.">Нет.
-            Регистрация занимает пару минут — только email и пароль, карта не требуется.</div>
-        </div>
-
-        <div class="faq-news-item">
-          <div class="faq-news-q" data-ru="Я не программист — смогу ли подключить бота сам?"
-            data-en="I'm not a developer — can I set this up myself?">Я не программист — смогу ли подключить бота сам?
-          </div>
-          <div class="faq-news-a"
-            data-ru="Да. Весь процесс — несколько кликов в Telegram и вставка одного кода в личном кабинете. Пошаговая инструкция есть прямо на этом сайте."
-            data-en="Yes. The whole process is a few clicks in Telegram plus pasting one code into your dashboard. A step-by-step guide is right here on this page.">
-            Да. Весь процесс — несколько кликов в Telegram и вставка одного кода в личном кабинете. Пошаговая
-            инструкция
-            есть прямо на этом сайте.</div>
-        </div>
-
-        <div class="faq-news-item">
-          <div class="faq-news-q" data-ru="Что происходит с моими данными и данными клиентов?"
-            data-en="What happens to my data and my clients' data?">Что происходит с моими данными и данными клиентов?
-          </div>
-          <div class="faq-news-a"
-            data-ru="Данные хранятся в защищённой базе и доступны только вам через ваш личный кабинет. Мы не передаём их третьим лицам."
-            data-en="Your data is stored securely and only accessible to you through your dashboard. We never share it with third parties.">
-            Данные хранятся в защищённой базе и доступны только вам через ваш личный кабинет. Мы не передаём их
-            третьим
-            лицам.</div>
-        </div>
-
-        <div class="faq-news-item">
-          <div class="faq-news-q" data-ru="Могу ли я отключить бота или удалить аккаунт?"
-            data-en="Can I disable my bot or delete my account?">Могу ли я отключить бота или удалить аккаунт?</div>
-          <div class="faq-news-a"
-            data-ru="Да, в любой момент — прямо из личного кабинета, без каких-либо условий и обязательств."
-            data-en="Yes, at any time — right from your dashboard, with no conditions or commitments.">Да, в любой
-            момент — прямо из личного кабинета, без каких-либо условий и обязательств.</div>
-        </div>
-
-        <div class="faq-news-item">
-          <div class="faq-news-q" data-ru="Работает ли это не только в Telegram?"
-            data-en="Does this work outside of Telegram?">Работает ли это не только в Telegram?</div>
-          <div class="faq-news-a"
-            data-ru="Сейчас Bookly работает через Telegram — самый популярный мессенджер для такого рода записи в регионе. Мы уже работаем над поддержкой WhatsApp и других платформ."
-            data-en="Right now Bookly runs through Telegram — the most popular messenger for this kind of booking in the region. We're already working on adding WhatsApp and other platforms.">
-            Сейчас Bookly работает через Telegram — самый популярный мессенджер для такого рода записи в регионе. Мы
-            уже
-            работаем над поддержкой WhatsApp и других платформ.</div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="wrap">
     <div class="cta-band">
@@ -2792,26 +2778,7 @@
         });
       });
     });
-    const faqZoomOverlay = document.getElementById("faqZoomOverlay");
-    const faqZoomCard = document.getElementById("faqZoomCard");
-    const faqNewsWrap = document.getElementById("faqNewsWrap");
 
-    faqNewsWrap.addEventListener("click", () => {
-      if (window.innerWidth <= 760) return;
-      faqZoomOverlay.classList.add("show");
-      setTimeout(() => {
-        faqZoomOverlay.classList.add("lit");
-        faqZoomCard.classList.add("lit");
-      }, 10);
-    });
-
-    faqZoomOverlay.addEventListener("click", () => {
-      faqZoomOverlay.classList.remove("lit");
-      faqZoomCard.classList.remove("lit");
-      setTimeout(() => {
-        faqZoomOverlay.classList.remove("show");
-      }, 400);
-    });
 
     let currentLang = "ru";
 
