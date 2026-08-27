@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /landing/
+Disallow: /admin/
+
+Sitemap: https://maruf981.github.io/bookly-web/landing/sitemap.xml
