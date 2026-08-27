@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bookly — AI-бот для записи клиентов</title>
-  <meta name="description" content="ИИ-ассистент в Telegram, который сам записывает ваших клиентов: отвечает на вопросы, показывает свободное время и подтверждает запись — 24/7, без администратора.">
-  <meta property="og:title" content="Bookly — AI-бот для записи клиентов">
-  <meta property="og:description" content="ИИ-ассистент в Telegram, который сам записывает ваших клиентов — 24/7, без администратора.">
+  <title data-ru="Bookly — AI-бот для записи клиентов" data-en="Bookly — AI assistant for booking clients">Bookly — AI-бот для записи клиентов</title>
+  <meta name="description" data-ru="ИИ-ассистент в Telegram, который сам записывает ваших клиентов: отвечает на вопросы, показывает свободное время и подтверждает запись — 24/7, без администратора." data-en="An AI assistant in Telegram that books your clients on its own: it answers questions, shows open time slots, and confirms bookings — 24/7, no receptionist needed." content="ИИ-ассистент в Telegram, который сам записывает ваших клиентов: отвечает на вопросы, показывает свободное время и подтверждает запись — 24/7, без администратора.">
+  <meta property="og:title" data-ru="Bookly — AI-бот для записи клиентов" data-en="Bookly — AI assistant for booking clients" content="Bookly — AI-бот для записи клиентов">
+  <meta property="og:description" data-ru="ИИ-ассистент в Telegram, который сам записывает ваших клиентов — 24/7, без администратора." data-en="An AI assistant in Telegram that books your clients automatically — 24/7, no receptionist needed." content="ИИ-ассистент в Telegram, который сам записывает ваших клиентов — 24/7, без администратора.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Bookly">
   <meta property="og:image" content="https://maruf981.github.io/bookly-web/landing/assets/img/CRM.jpg">
@@ -1915,7 +1915,7 @@
 
   <header>
     <div class="wrap header-row">
-      <button class="burger-toggle" id="burgerToggle" aria-label="Меню">
+      <button class="burger-toggle" id="burgerToggle" aria-label="Меню" data-arialabel-ru="Меню" data-arialabel-en="Menu">
         <span></span><span></span><span></span>
       </button>
       <div class="logo" style="display:flex; align-items:center; gap:8px;">
@@ -1932,7 +1932,7 @@
       </nav>
       <div class="header-actions">
         <button class="lang-toggle" id="langToggle">EN</button>
-        <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+        <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему" data-arialabel-ru="Переключить тему" data-arialabel-en="Toggle theme">
 
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round">
@@ -1980,7 +1980,7 @@
         <a href="#" class="btn-accent" id="ctaHero" data-ru="Подключить бота" data-en="Connect your bot">Подключить
           бота</a>
       </div>
-      <div class="hero-note" data-ru="Бесплатно на старте" data-en="Free to start ">Бесплатно на старте</div>
+      <div class="hero-note" data-ru="Бесплатно на старте" data-en="Free to start">Бесплатно на старте</div>
     </div>
 
     <div class="demo-wrap">
@@ -2001,11 +2001,11 @@
             <div class="demo-label" data-ru="Сотрудник" data-en="Staff">Сотрудник</div>
             <div style="display:flex; gap:7px;">
               <div id="demoEmp1" class="demo-emp">
-                <div class="demo-avatar">АР</div>
-                <div class="demo-emp-name">Артур</div>
+                <div class="demo-avatar" data-ru="АР" data-en="AR">АР</div>
+                <div class="demo-emp-name" data-ru="Артур" data-en="Arthur">Артур</div>
               </div>
               <div id="demoEmp2" class="demo-emp">
-                <div class="demo-avatar">АЛ</div>
+                <div class="demo-avatar" data-ru="АЛ" data-en="AL">АЛ</div>
                 <div class="demo-emp-name" data-ru="Александр" data-en="Alex">Александр</div>
               </div>
             </div>
@@ -2064,7 +2064,7 @@
 
   <div class="marquee-wrap">
     <div class="marquee-track">
-      <span class="marquee-item">ИИ-ассистент</span>
+      <span class="marquee-item" data-ru="ИИ-ассистент" data-en="AI assistant">ИИ-ассистент</span>
       <span class="marquee-dot">·</span>
       <span class="marquee-item" data-ru="Отмена и перенос записи" data-en="Cancel and reschedule">Отмена и перенос
         записи</span>
@@ -2080,7 +2080,7 @@
       <span class="marquee-dot">·</span>
       <span class="marquee-item" data-ru="Бесплатно на старте" data-en="Free to start">Бесплатно на старте</span>
       <span class="marquee-dot">·</span>
-      <span class="marquee-item">ИИ-ассистент</span>
+      <span class="marquee-item" data-ru="ИИ-ассистент" data-en="AI assistant">ИИ-ассистент</span>
       <span class="marquee-dot">·</span>
       <span class="marquee-item" data-ru="Отмена и перенос записи" data-en="Cancel and reschedule">Отмена и перенос
         записи</span>
@@ -2099,14 +2099,14 @@
   </div>
   </div>
 
-  <!-- ЗАМЕНА блока с CRM/Финансы (весь текущий <section> с lumina-tab) -->
+  <!-- LUMINA block replacement: CRM / Finance / Calendar / Mini App slides -->
   <section class="section-border" id="features">
     <div class="wrap">
       <div class="lumina-chips" style="display:flex; gap:20px; margin-bottom:24px; flex-wrap:wrap;">
-        <button class="lumina-chip active" data-slide="0">CRM</button>
-        <button class="lumina-chip" data-slide="1">Финансы</button>
-        <button class="lumina-chip" data-slide="2">Calandar</button>
-        <button class="lumina-chip" data-slide="3">Mini App</button>
+        <button class="lumina-chip active" data-slide="0" data-ru="CRM" data-en="CRM">CRM</button>
+        <button class="lumina-chip" data-slide="1" data-ru="Финансы" data-en="Finance">Финансы</button>
+        <button class="lumina-chip" data-slide="2" data-ru="Календарь" data-en="Calendar">Календарь</button>
+        <button class="lumina-chip" data-slide="3" data-ru="Mini App" data-en="Mini App">Mini App</button>
       </div>
 
       <div class="lumina-split" style="display:flex; align-items:stretch; gap:24px; width:100%; padding-bottom:20px;">
@@ -2118,27 +2118,27 @@
             style="position:absolute; left:12px; top:8px; font-family:'Inter', sans-serif; font-size:90px; font-weight:600; color:#1C1B1F; opacity:.35; line-height:1; pointer-events:none; text-shadow:0 2px 8px rgba(0,0,0,.4);">1</span>
         </div>
         <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:14px;">
-          <div class="lumina-desc-item" data-slide="0"><span class="lumina-desc-num">–</span><span>Карточки-счётчики: записи, выручка, средний чек, % отмен</span></div>
-          <div class="lumina-desc-item" data-slide="0"><span class="lumina-desc-num">–</span><span>График записей по неделям</span></div>
-          <div class="lumina-desc-item" data-slide="0"><span class="lumina-desc-num">–</span><span>Популярные услуги в виде диаграммы</span></div>
-          <div class="lumina-desc-item" data-slide="0"><span class="lumina-desc-num">–</span><span>Статусы записей: принято, отменено, не принято</span></div>
-          <div class="lumina-desc-item" data-slide="0"><span class="lumina-desc-num">–</span><span>Рейтинг сотрудников по выручке</span></div>
+          <div class="lumina-desc-item" data-slide="0"><span class="lumina-desc-num">–</span><span data-ru="Карточки-счётчики: записи, выручка, средний чек, % отмен" data-en="Stat cards: bookings, revenue, average ticket, % cancellations">Карточки-счётчики: записи, выручка, средний чек, % отмен</span></div>
+          <div class="lumina-desc-item" data-slide="0"><span class="lumina-desc-num">–</span><span data-ru="График записей по неделям" data-en="Bookings chart by week">График записей по неделям</span></div>
+          <div class="lumina-desc-item" data-slide="0"><span class="lumina-desc-num">–</span><span data-ru="Популярные услуги в виде диаграммы" data-en="Popular services as a chart">Популярные услуги в виде диаграммы</span></div>
+          <div class="lumina-desc-item" data-slide="0"><span class="lumina-desc-num">–</span><span data-ru="Статусы записей: принято, отменено, не принято" data-en="Booking statuses: accepted, cancelled, unconfirmed">Статусы записей: принято, отменено, не принято</span></div>
+          <div class="lumina-desc-item" data-slide="0"><span class="lumina-desc-num">–</span><span data-ru="Рейтинг сотрудников по выручке" data-en="Staff ranking by revenue">Рейтинг сотрудников по выручке</span></div>
 
-          <div class="lumina-desc-item" data-slide="1" style="display:none;"><span class="lumina-desc-num">–</span><span>Категории: выручка, расходы, зарплаты, прибыль</span></div>
-          <div class="lumina-desc-item" data-slide="1" style="display:none;"><span class="lumina-desc-num">–</span><span>График выручки по месяцам</span></div>
-          <div class="lumina-desc-item" data-slide="1" style="display:none;"><span class="lumina-desc-num">–</span><span>Шкала свободных средств с ростом в %</span></div>
-          <div class="lumina-desc-item" data-slide="1" style="display:none;"><span class="lumina-desc-num">–</span><span>Настройка скидок на услуги</span></div>
-          <div class="lumina-desc-item" data-slide="1" style="display:none;"><span class="lumina-desc-num">–</span><span>Учёт расходов за месяц</span></div>
+          <div class="lumina-desc-item" data-slide="1" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Категории: выручка, расходы, зарплаты, прибыль" data-en="Categories: revenue, expenses, salaries, profit">Категории: выручка, расходы, зарплаты, прибыль</span></div>
+          <div class="lumina-desc-item" data-slide="1" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="График выручки по месяцам" data-en="Revenue chart by month">График выручки по месяцам</span></div>
+          <div class="lumina-desc-item" data-slide="1" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Шкала свободных средств с ростом в %" data-en="Free cash scale with % growth">Шкала свободных средств с ростом в %</span></div>
+          <div class="lumina-desc-item" data-slide="1" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Настройка скидок на услуги" data-en="Set discounts on services">Настройка скидок на услуги</span></div>
+          <div class="lumina-desc-item" data-slide="1" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Учёт расходов за месяц" data-en="Monthly expense tracking">Учёт расходов за месяц</span></div>
 
-          <div class="lumina-desc-item" data-slide="2" style="display:none;"><span class="lumina-desc-num">–</span><span>Календарь на весь месяц по дням недели</span></div>
-          <div class="lumina-desc-item" data-slide="2" style="display:none;"><span class="lumina-desc-num">–</span><span>Выходные выделены отдельным цветом</span></div>
-          <div class="lumina-desc-item" data-slide="2" style="display:none;"><span class="lumina-desc-num">–</span><span>Дни с записями отмечены точками</span></div>
-          <div class="lumina-desc-item" data-slide="2" style="display:none;"><span class="lumina-desc-num">–</span><span>Текущий день подсвечен</span></div>
+          <div class="lumina-desc-item" data-slide="2" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Календарь на весь месяц по дням недели" data-en="Full-month calendar by weekday">Календарь на весь месяц по дням недели</span></div>
+          <div class="lumina-desc-item" data-slide="2" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Выходные выделены отдельным цветом" data-en="Weekends highlighted in a separate color">Выходные выделены отдельным цветом</span></div>
+          <div class="lumina-desc-item" data-slide="2" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Дни с записями отмечены точками" data-en="Days with bookings marked with dots">Дни с записями отмечены точками</span></div>
+          <div class="lumina-desc-item" data-slide="2" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Текущий день подсвечен" data-en="Current day is highlighted">Текущий день подсвечен</span></div>
 
-          <div class="lumina-desc-item" data-slide="3" style="display:none;"><span class="lumina-desc-num">–</span><span>Выбор сотрудника — аватар и имя</span></div>
-          <div class="lumina-desc-item" data-slide="3" style="display:none;"><span class="lumina-desc-num">–</span><span>Список услуг с ценой и длительностью</span></div>
-          <div class="lumina-desc-item" data-slide="3" style="display:none;"><span class="lumina-desc-num">–</span><span>Выбор дня и свободного времени</span></div>
-          <div class="lumina-desc-item" data-slide="3" style="display:none;"><span class="lumina-desc-num">–</span><span>Управление своими записями — перенос и отмена</span></div>
+          <div class="lumina-desc-item" data-slide="3" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Выбор сотрудника — аватар и имя" data-en="Staff selection — avatar and name">Выбор сотрудника — аватар и имя</span></div>
+          <div class="lumina-desc-item" data-slide="3" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Список услуг с ценой и длительностью" data-en="Service list with price and duration">Список услуг с ценой и длительностью</span></div>
+          <div class="lumina-desc-item" data-slide="3" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Выбор дня и свободного времени" data-en="Pick a day and free time slot">Выбор дня и свободного времени</span></div>
+          <div class="lumina-desc-item" data-slide="3" style="display:none;"><span class="lumina-desc-num">–</span><span data-ru="Управление своими записями — перенос и отмена" data-en="Manage your bookings — reschedule and cancel">Управление своими записями — перенос и отмена</span></div>
         </div>
       </div>
     </div>
@@ -2547,11 +2547,12 @@
             <svg class="guide-illustration" viewBox="0 0 300 140" fill="none">
               <rect x="20" y="20" width="260" height="100" rx="14" fill="var(--surface)" stroke="var(--line)" />
               <rect x="40" y="36" width="220" height="22" rx="7" fill="var(--surface-2)" stroke="var(--line)" />
-              <text x="52" y="51" fill="var(--faint)" font-size="12" font-family="monospace">Токен от
+              <text x="52" y="51" fill="var(--faint)" font-size="12" font-family="monospace"
+                data-ru="Токен от @BotFather" data-en="Token from @BotFather">Токен от
                 @BotFather</text>
               <rect x="40" y="66" width="140" height="26" rx="8" fill="var(--accent)" />
               <text x="110" y="83" text-anchor="middle" fill="#fff" font-size="13" font-weight="700"
-                font-family="-apple-system,sans-serif">Сохранить</text>
+                font-family="-apple-system,sans-serif" data-ru="Сохранить" data-en="Save">Сохранить</text>
               <circle class="pulse d2" cx="235" cy="79" r="10" fill="var(--accent-soft)" stroke="var(--accent)"
                 stroke-width="1.2" />
             </svg>
@@ -2567,14 +2568,14 @@
     </div>
   </section>
 
-  <!-- ===== БЛОК FAQ — НАЧАЛО ===== -->
+  <!-- ===== FAQ BLOCK — BEGIN ===== -->
   <section class="section-border" id="faq">
     <div class="wrap">
       <div class="tag-badge">FAQ</div>
 
       <div class="section-title" data-ru="Частые вопросы" data-en="Frequently asked questions">Частые вопросы</div>
 
-      <!-- Маленькая газета: кликабельная обёртка вокруг всего списка -->
+      <!-- Clickable newspaper wrap around the whole list -->
       <div class="faq-newspaper-wrap" id="faqNewsWrap">
         <div class="faq-newspaper">
           <div class="faq-news-item">
@@ -2694,7 +2695,7 @@
           </div>
         </div>
       </div>
-      <!-- Маленькая газета: конец -->
+      <!-- Clickable newspaper wrap: end -->
 
     </div>
   </section>
@@ -2788,7 +2789,15 @@
       document.getElementById("langToggle").textContent = currentLang === "ru" ? "EN" : "RU";
 
       document.querySelectorAll("[data-ru][data-en]").forEach(el => {
-        el.textContent = el.getAttribute(`data-${currentLang}`);
+        const val = el.getAttribute(`data-${currentLang}`);
+        if (el.hasAttribute('content')) {
+          el.setAttribute('content', val);
+        } else {
+          el.textContent = val;
+        }
+      });
+      document.querySelectorAll("[data-arialabel-ru][data-arialabel-en]").forEach(el => {
+        el.setAttribute('aria-label', el.getAttribute(`data-arialabel-${currentLang}`));
       });
       if (window.__restartChatDemo) window.__restartChatDemo();
       if (window.__updateLumina) window.__updateLumina();
@@ -2943,7 +2952,7 @@
       setTimeout(playChatDemo, 700);
     })();
 
-    // Переключатель тарифов
+    // Billing period toggle (monthly / yearly)
     (function () {
       const toggle = document.getElementById('billingToggle');
       const labelMonthly = document.getElementById('labelMonthly');
@@ -2975,17 +2984,17 @@
       if (!chips.length || !img) return;
 
       const slides = [
-        { src: 'assets/img/CRM.jpg', alt: 'Bookly CRM' },
-        { src: 'assets/img/Finance.jpg', alt: 'Bookly Финансы' },
-        { src: 'assets/img/Calandar.jpg', alt: 'Bookly Calandar' },
-        { src: 'assets/img/MiniApp.jpg', alt: 'Bookly Mini App' }
+        { src: 'assets/img/CRM.jpg', altRu: 'Bookly CRM', altEn: 'Bookly CRM' },
+        { src: 'assets/img/Finance.jpg', altRu: 'Bookly Финансы', altEn: 'Bookly Finance' },
+        { src: 'assets/img/Calandar.jpg', altRu: 'Bookly Календарь', altEn: 'Bookly Calendar' },
+        { src: 'assets/img/MiniApp.jpg', altRu: 'Bookly Mini App', altEn: 'Bookly Mini App' }
       ];
 
       const descItems = document.querySelectorAll('.lumina-desc-item');
 
       function showSlide(index) {
         img.src = slides[index].src;
-        img.alt = slides[index].alt;
+        img.alt = currentLang === 'en' ? slides[index].altEn : slides[index].altRu;
         bigNum.textContent = index + 1;
         chips.forEach((chip, i) => chip.classList.toggle('active', i === index));
         descItems.forEach(item => {
@@ -2994,6 +3003,7 @@
       }
 
       chips.forEach((chip, i) => chip.addEventListener('click', () => showSlide(i)));
+      window.__updateLumina = showSlide;
       showSlide(0);
     })();
   </script>
