@@ -25,7 +25,7 @@
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/112009625" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
   <!-- /Yandex.Metrika counter -->
-   
+
   <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
@@ -279,6 +279,25 @@
       .burger-toggle {
         display: flex;
       }
+
+      .header-row {
+        gap: 12px;
+      }
+
+      .logo {
+        margin-right: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .lumina-split {
+        flex-direction: column !important;
+      }
+
+      .lumina-img-wrap {
+        flex: none !important;
+        height: 240px !important;
+      }
     }
 
     .lang-toggle {
@@ -296,6 +315,21 @@
     .lang-toggle:hover {
       border-color: var(--accent);
       color: var(--ink);
+    }
+
+        @media (max-width: 900px) {
+      .lang-toggle {
+        border: none;
+        padding: 6px 4px;
+      }
+
+      .link-quiet {
+        font-size: 12px;
+      }
+
+      #ctaTop {
+        display: none;
+      }
     }
 
     .theme-toggle {
@@ -339,6 +373,7 @@
       font-size: 14px;
       font-weight: 700;
       color: var(--accent);
+      white-space: nowrap;
     }
 
     .btn-primary {
@@ -349,6 +384,7 @@
       font-size: 14px;
       font-weight: 700;
       display: inline-block;
+      white-space: nowrap;
       transition: transform .15s ease;
     }
 
@@ -1879,6 +1915,9 @@
 
   <header>
     <div class="wrap header-row">
+      <button class="burger-toggle" id="burgerToggle" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
       <div class="logo" style="display:flex; align-items:center; gap:8px;">
         <svg width="20" height="20" viewBox="0 0 44 44">
           <path d="M10 8 L10 36 L18 30 L18 8 Z" fill="var(--accent)" />
@@ -1892,9 +1931,6 @@
         <a href="#faq" data-ru="FAQ" data-en="FAQ">FAQ</a>
       </nav>
       <div class="header-actions">
-        <button class="burger-toggle" id="burgerToggle" aria-label="Меню">
-          <span></span><span></span><span></span>
-        </button>
         <button class="lang-toggle" id="langToggle">EN</button>
         <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
 
@@ -2073,9 +2109,9 @@
         <button class="lumina-chip" data-slide="3">Mini App</button>
       </div>
 
-      <div style="display:flex; align-items:stretch; gap:24px; width:100%; padding-bottom:20px;">
+      <div class="lumina-split" style="display:flex; align-items:stretch; gap:24px; width:100%; padding-bottom:20px;">
 
-        <div style="flex:0 0 60%; border-radius:4px; overflow:hidden; position:relative; height:450px;">
+        <div class="lumina-img-wrap" style="flex:0 0 60%; border-radius:4px; overflow:hidden; position:relative; height:450px;">
           <img id="luminaImg" src="assets/img/CRM.jpg" alt="Bookly CRM"
             style="width:100%; height:100%; object-fit:cover; display:block;">
           <span id="luminaBigNum"
